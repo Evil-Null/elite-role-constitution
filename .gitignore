@@ -1,0 +1,16 @@
+# OS artifacts
+.DS_Store
+Thumbs.db
+*.tmp
+
+# Editor artifacts
+*~
+*.swp
+*.swo
+.vscode/
+.idea/
+*.sublime-*
+
+# Backup files
+*.bak
+*.orig
