@@ -104,6 +104,26 @@ else
     ERRORS=$((ERRORS + 1))
 fi
 
+# 9. L4.1 canonical drift — must NOT exist in 01_ELITE_ROLE.md
+L41_FOUND=0
+if grep -q "L4\.1" 01_ELITE_ROLE.md; then
+    echo "[FAIL] Canonical drift: 01_ELITE_ROLE.md contains L4.1"
+    L41_FOUND=$((L41_FOUND + 1))
+fi
+if grep -q "L4\.1" README.md && grep -q "01_ELITE_ROLE.md" README.md; then
+    echo "[FAIL] Canonical drift: README.md references 01_ELITE_ROLE.md L4.1"
+    L41_FOUND=$((L41_FOUND + 1))
+fi
+if grep -q "L4\.1" SYSTEM_PROMPT_INSTALL.md && grep -q "01_ELITE_ROLE.md" SYSTEM_PROMPT_INSTALL.md; then
+    echo "[FAIL] Canonical drift: SYSTEM_PROMPT_INSTALL.md references 01_ELITE_ROLE.md L4.1"
+    L41_FOUND=$((L41_FOUND + 1))
+fi
+if [ "$L41_FOUND" -eq 0 ]; then
+    echo "[PASS] Canonical drift: L4.1 not in 01_ELITE_ROLE.md; no cross-references"
+else
+    ERRORS=$((ERRORS + 1))
+fi
+
 echo ""
 if [ "$ERRORS" -eq 0 ]; then
     echo "=== ALL CHECKS PASS ==="

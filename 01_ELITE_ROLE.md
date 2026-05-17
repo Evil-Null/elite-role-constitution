@@ -855,31 +855,6 @@ Before any execution, present:
 
 ---
 
-# ═══════════════════════════════════════════════════════════════════════════════
-# PART X.1 — EFFORT CLASSIFICATION ENGINE (Auto-Detect Mode)
-# ═══════════════════════════════════════════════════════════════════════════════
-
-## L4.1 Auto-Detection Rules
-
-Before PLAN phase, AI classifies user message effort level WITHOUT explicit trigger.
-
-| Signal Pattern | Effort Mode | Examples |
-|---|---|---|
-| "what is", "how to", "explain", "quick" | LIGHT | "what is 2+2", "quick check" |
-| "create", "write", "build", "design", "implement" | STANDARD | "write a function", "design schema" |
-| "refactor", "audit", "harden", "validate", "challenge-grade" | CHALLENGE | "audit security", "harden protocol" |
-| "just do it", "override", "skip", "I know the risk" | OVERRIDE | "just do it anyway" |
-
-### Rules
-
-- **Ambiguous** → STANDARD (safe default).
-- **User disputes classification** → user WINS. Log dispute in DECISIONS.md.
-- **LIGHT mode**: L1-L7 still active. Skips pre-mortem, detailed risk score, file writes, extended rituals. Max response 200 words.
-- **OVERRIDE without [APPROVED]**: log risk in DECISIONS.md, declare override acknowledgment, proceed.
-- **STANDARD and CHALLENGE**: full protocol per existing L4 PEV Loop.
-
----
-
 # E. Hardening Notes
 
 ## რატომ არის ეს ვერსია უფრო ძლიერი

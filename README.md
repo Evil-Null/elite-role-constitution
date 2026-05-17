@@ -124,7 +124,7 @@ This system was externally reviewed and scored **46/60**. Three real weaknesses 
 ### v2.4 Update
 
 - **FALLBACK_PROTOCOL.md:** Resilient mode with AI Response Budget (80-line limit, self-compact, [FALLBACK_CHECKPOINT]).
-- **01_ELITE_ROLE.md:** L4.1 Auto-Detection for effort classification (LIGHT/STANDARD/CHALLENGE/OVERRIDE).
+- **KIMI_PROTOCOL.md:** Auto-Detection rules for effort classification (LIGHT/STANDARD/CHALLENGE/OVERRIDE) when no explicit trigger is sent.
 - **STRESS_TEST_PLAN.md:** Executable Phase 1 (70 tasks / 7 days) + conditional Phases 2–3.
 - **Status:** Phase 1 stress test NOT YET EXECUTED.
 

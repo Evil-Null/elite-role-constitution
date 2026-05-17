@@ -266,6 +266,25 @@ IS:   Human-AI Collaboration Protocol with static role + manual triggers + file 
 
 **Default Behavior (no trigger):** Standard mode — core laws + plan-gate for non-routine tasks + verification before delivery + response contract.
 
+## Auto-Detection Rules (No Explicit Trigger)
+
+When user sends a message WITHOUT an explicit trigger phrase, AI classifies effort level from signal patterns:
+
+| Signal Pattern | Effort Mode | Examples |
+|---|---|---|
+| "what is", "how to", "explain", "quick" | LIGHT | "what is 2+2", "quick check" |
+| "create", "write", "build", "design", "implement" | STANDARD | "write a function", "design schema" |
+| "refactor", "audit", "harden", "validate", "challenge-grade" | CHALLENGE | "audit security", "harden protocol" |
+| "just do it", "override", "skip", "I know the risk" | OVERRIDE | "just do it anyway" |
+
+### Classification Rules
+
+- **Ambiguous** → STANDARD (safe default).
+- **User disputes classification** → user WINS. Log dispute in DECISIONS.md.
+- **LIGHT mode**: L1-L7 still active. Skips pre-mortem, detailed risk score, file writes, extended rituals. Max response 200 words.
+- **OVERRIDE without [APPROVED]**: log risk in DECISIONS.md, declare override acknowledgment, proceed.
+- **STANDARD and CHALLENGE**: full protocol per existing L4 PEV Loop.
+
 ---
 
 # G. Turn Protocol

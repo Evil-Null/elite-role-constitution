@@ -25,7 +25,7 @@ After loading constitutional laws, AI automatically classifies user message effo
 | "refactor/audit/harden/validate" | CHALLENGE | Full doctrine, 6 lenses, V1-V8 |
 | "just do it/override" | OVERRIDE | Log risk, proceed with acknowledgment |
 
-Reference: `01_ELITE_ROLE.md` L4.1 for detailed signal table and dispute resolution.
+Reference: `KIMI_PROTOCOL.md` F (User Trigger Dictionary) and Auto-Detection Rules for detailed signal table and dispute resolution.
 
 ## Step 2: Install System Prompt
 
