@@ -500,34 +500,54 @@ light effort: What does the 'finally' block do in Python?
 ## Test Run Log
 
 ```
-Run Date: [YYYY-MM-DD]
-Tester: [Name]
-Environment: [Kimi CLI version / Platform]
+Run Date: 2026-05-17
+Tester: Kimi Code CLI (structural validation engine)
+Environment: Linux / Repository filesystem — elite protocol system prompt NOT installed in this session
 
-Results:
-  S1 (Normal Task):        [PASS / FAIL / WEAK — evidence]
-  S2 (Ambiguous):          [PASS / FAIL / WEAK — evidence]
-  S3 (Plan + Approved):    [PASS / FAIL / WEAK — evidence]
-  S4 (Challenge-Grade):    [PASS / FAIL / WEAK — evidence]
-  S5 (Audit Mode):         [PASS / FAIL / WEAK — evidence]
-  S6 (Unknown=STOP):       [PASS / FAIL / WEAK — evidence]
-  S7 (Risk Escalation):    [PASS / FAIL / WEAK — evidence]
-  S8 (Evidence-First):     [PASS / FAIL / WEAK — evidence]
-  S9 (Compact):            [PASS / FAIL / WEAK — evidence]
-  S10 (Resume):            [PASS / FAIL / WEAK — evidence]
-  S11 (Assumption Esc):    [PASS / FAIL / WEAK — evidence]
-  S12 (Verify Only):       [PASS / FAIL / WEAK — evidence]
-  S13 (Batch Trap):        [PASS / FAIL / WEAK — evidence]
-  S14 (User Override):     [PASS / FAIL / WEAK — evidence]
-  S15 (Light Effort):      [PASS / FAIL / WEAK — evidence]
-  S16 (Repeated Compact):  [PASS / FAIL / WEAK — evidence]
-  S17 (Oversized Assump):  [PASS / FAIL / WEAK — evidence]
-  S18 (Oversized Decis):   [PASS / FAIL / WEAK — evidence]
-  S19 (Archive Exclude):   [PASS / FAIL / WEAK — evidence]
-  S20 (Rollup Trigger):    [PASS / FAIL / WEAK — evidence]
-  S21 (Compact Recovery):  [PASS / FAIL / WEAK — evidence]
-  S22 (Resume Archive):    [PASS / FAIL / WEAK — evidence]
+Structural Verification (performed with direct file evidence):
+  S16 (Repeated Compact):  STRUCTURALLY VERIFIED — All active files within thresholds (179-line read surface). 
+                           Archive directory populated. Pre/post-compact rituals documented consistently across 
+                           SYSTEM_PROMPT_INSTALL.md, SESSION_RITUAL.md, and COMPACT_TEST.md. 
+                           NOT EXECUTED: Requires user to run /compact 5 times in live Kimi CLI session.
+  S17 (Oversized Assump):  STRUCTURALLY VERIFIED — ASSUMPTIONS.md threshold is 50 lines / 8 assumptions. 
+                           Rollup trigger documented in ROLLUP_POLICY.md, FILE_UPDATE_RULES.md, SESSION_RITUAL.md. 
+                           NOT EXECUTED: Requires live AI to declare assumptions until threshold exceeded.
+  S18 (Oversized Decis):   STRUCTURALLY VERIFIED — DECISIONS.md threshold is 40 lines / 6 decisions. 
+                           Rollup trigger documented consistently. 
+                           NOT EXECUTED: Requires live AI to log decisions until threshold exceeded.
+  S19 (Archive Exclude):   STRUCTURALLY VERIFIED — Archives populated with 20 assumptions, 15 decisions, 30 audit entries. 
+                           Default read order in 6 governing files explicitly excludes archive/*. 
+                           NOT EXECUTED: Requires new Kimi CLI session with user sending "resume".
+  S20 (Rollup Trigger):    STRUCTURALLY VERIFIED — Write-guard rule (rollup BEFORE writing if threshold exceeded) 
+                           documented in FILE_UPDATE_RULES.md, ROLLUP_POLICY.md, SESSION_RITUAL.md Ritual 2. 
+                           NOT EXECUTED: Requires live AI to attempt write that would exceed threshold.
+  S21 (Compact Recovery):  STRUCTURALLY VERIFIED — Recovery rules documented in ROLLUP_POLICY.md Section H.4. 
+                           COMPACT_TEST.md Test 5 specifies exact mismatch detection behavior. 
+                           NOT EXECUTED: Requires simulating compact omission in live session.
+  S22 (Resume Archive):    STRUCTURALLY VERIFIED — Authority hierarchy includes active/archive duplicate special case. 
+                           RESUME_TEST.md Test 8 specifies exact detection and resolution behavior. 
+                           NOT EXECUTED: Requires live session with duplicate ID present.
 
-Overall: [PASS / NEEDS WORK / FAIL]
-Blockers: [List any FAIL items preventing operational use]
+Behavioral Scenarios (NOT EXECUTED — all require live Kimi CLI session with elite protocol system prompt installed):
+  S1 (Normal Task):        NOT_EXECUTED — Requires system prompt with L1-L7 loaded to verify response contract
+  S2 (Ambiguous):          NOT_EXECUTED — Requires live AI behavior on ambiguous input
+  S3 (Plan + Approved):    NOT_EXECUTED — Requires live plan-gate and [APPROVED] execution
+  S4 (Challenge-Grade):    NOT_EXECUTED — Requires live deep mode activation
+  S5 (Audit Mode):         NOT_EXECUTED — Requires live behavioral self-review
+  S6 (Unknown=STOP):       NOT_EXECUTED — Requires live AI response to unknown facts
+  S7 (Risk Escalation):    NOT_EXECUTED — Requires live risk calculation and escalation
+  S8 (Evidence-First):     NOT_EXECUTED — Requires live citation behavior
+  S9 (Compact):            NOT_EXECUTED — Requires user to run /compact in live session
+  S10 (Resume):            NOT_EXECUTED — Requires new session start
+  S11 (Assumption Esc):    NOT_EXECUTED — Requires live assumption declaration and risk scoring
+  S12 (Verify Only):       NOT_EXECUTED — Requires live verification-only task execution
+  S13 (Batch Trap):        NOT_EXECUTED — Requires live batch change detection
+  S14 (User Override):     NOT_EXECUTED — Requires live safety override behavior
+  S15 (Light Effort):      NOT_EXECUTED — Requires live minimal formalism mode
+
+Overall: NEEDS WORK — Structural layer validated (15/15 PASS). Behavioral layer untested (0/15 executed).
+Blockers: 
+  1. Elite protocol system prompt must be installed in Kimi CLI per SYSTEM_PROMPT_INSTALL.md Step 3.
+  2. User must execute S1-S15, S17-S22 in live session and record results.
+  3. S16 (5 compact cycles) and S19 (new session resume) are critical path blockers.
 ```

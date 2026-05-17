@@ -10,35 +10,24 @@
 
 ## Current Task
 
-**Goal:** Deploy and validate the Elite Role Protocol System in Kimi CLI.
-**Status:** EXECUTING
+**Goal:** Execute validation suite and transition system to OPERATIONALLY READY.
+**Status:** VERIFYING
 **Started:** 2026-05-17T03:52+04:00
-**Updated:** 2026-05-17T06:15+04:00
+**Updated:** 2026-05-17T06:45+04:00
 
 ## Progress
 
-**Last:** Completed bounded-memory architecture hardening (v2.0).
-**Next:** Commit all changes and push to remote.
-**Blocked By:** None
+**Last:** Completed structural validation of all 15 architectural V-IDs.
+**Next:** User must execute behavioral validation (S1-S22) in live Kimi CLI session.
+**Blocked By:** Cannot behavioral-test without elite protocol system prompt installed.
 
-## Active Registry
+## Validation Results
 
-- **Assumptions:** A1-A5 (see ASSUMPTIONS.md)
-- **Decisions:** D1-D4 (see DECISIONS.md). D4 updated: bounded multi-layer memory structure.
-- **Risks ≥7:** R1 (score 12), R2 (score 10)
+- **Structural V-IDs (PASS):** V-16, V-17, V-18, V-19, V-20, V-21, V-22, V-23, V-24, V-25, V-26, V-27, V-28, V-29, V-30
+- **Behavioral V-IDs (MISSING):** V-01 through V-15
+- **Archive populated:** 20 assumptions, 15 decisions, 30 audit entries
+- **Active files:** All within thresholds. Read surface: 179 lines.
 
-## Files in Scope
+## Blockers
 
-```
-[NEW] memory/ROLLUP_POLICY.md, memory/archive/* (4 files)
-[MOD] memory/README.md, ASSUMPTIONS.md, DECISIONS.md, AUDIT_LOG.md, CONTEXT.md, RESUME.md, COMPACT_STATE.md
-[MOD] FILE_UPDATE_RULES.md, SESSION_RITUAL.md, OPERATING_RULES.md, SYSTEM_PROMPT_INSTALL.md
-[MOD] SYSTEM_PLAN.md, COMPACT_TEST.md, RESUME_TEST.md, TEST_SCENARIOS.md, VALIDATION_MATRIX.md
-```
-
-## Notes
-
-- Bounded memory v2.0 deployed: active/archive split with thresholds
-- Default read surface now ≤ 300 lines regardless of project history
-- 30 validation items READY_FOR_TEST (25 original + 5 new bounded-memory)
-- All active files within thresholds per ROLLUP_POLICY.md
+Live session testing required. System prompt must be installed per SYSTEM_PROMPT_INSTALL.md Step 3.

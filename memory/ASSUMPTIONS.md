@@ -33,6 +33,6 @@ Every session start: flag ACTIVE assumptions > 7 days old as STALE.
 
 ## Archive Reference
 
-- **Archived assumptions:** 0
+- **Archived assumptions:** 20
 - **Archive location:** `memory/archive/assumptions_archive.md`
 - **Last rollup:** N/A

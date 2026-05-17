@@ -27,6 +27,6 @@ When encountering a similar situation:
 
 ## Archive Reference
 
-- **Archived decisions:** 0
+- **Archived decisions:** 15
 - **Archive location:** `memory/archive/decisions_archive.md`
 - **Last rollup:** N/A
