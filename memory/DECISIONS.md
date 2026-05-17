@@ -11,10 +11,10 @@
 ## Active Decisions
 
 ```
-D1: Protocol approach over runtime architecture — ACTIVE — 2026-05-17
-D2: File-based memory over context-only continuity — ACTIVE — 2026-05-17
-D3: Validation-first deployment — ACTIVE — 2026-05-17
 D4: Bounded multi-layer memory structure (active + archive + policy) — ACTIVE — 2026-05-17
+D5: Adversarial hardening execution over cognitive shortcuts — ACTIVE — 2026-05-17
+D6: Live behavioral evidence required for all WEAK→PASS transitions — ACTIVE — 2026-05-17
+D7: Archive oldest entries when no stale status exists but threshold exceeded — ACTIVE — 2026-05-17
 ```
 
 ## Usage Rule
@@ -27,6 +27,6 @@ When encountering a similar situation:
 
 ## Archive Reference
 
-- **Archived decisions:** 15
+- **Archived decisions:** 18
 - **Archive location:** `memory/archive/decisions_archive.md`
-- **Last rollup:** N/A
+- **Last rollup:** 2026-05-17T11:35+04:00

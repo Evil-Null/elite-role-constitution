@@ -11,16 +11,22 @@
 ## Active Assumptions
 
 ```
-A1: Kimi CLI supports static system prompt loading via manual paste or project config
-  Declared: 2026-05-17T04:00+04:00  Status: ACTIVE  Score: P2×I5=10
-A2: Tool use (read/write files) is available in Kimi CLI for memory file operations
-  Declared: 2026-05-17T04:00+04:00  Status: ACTIVE  Score: P2×I5=10
-A3: User will run validation tests before declaring system operational
-  Declared: 2026-05-17T04:00+04:00  Status: ACTIVE  Score: P3×I4=12
-A4: Context window (~128K tokens) is sufficient for system prompt + task execution
-  Declared: 2026-05-17T04:00+04:00  Status: ACTIVE  Score: P3×I4=12
 A5: Memory file read/write latency is acceptable for turn-by-turn workflow
   Declared: 2026-05-17T04:00+04:00  Status: ACTIVE  Score: P2×I3=6
+A6: Challenge-grade response will fit within context window with system prompt loaded
+  Declared: 2026-05-17T11:35+04:00  Status: ACTIVE  Score: P3×I3=9
+A7: User has permission to create/edit files in working directory
+  Declared: 2026-05-17T11:35+04:00  Status: ACTIVE  Score: P2×I4=8
+A8: Archive files maintain append-only integrity across rollups
+  Declared: 2026-05-17T11:35+04:00  Status: ACTIVE  Score: P2×I3=6
+A12: Default read surface remains ≤300 lines after multiple rollups
+  Declared: 2026-05-17T11:35+04:00  Status: ACTIVE  Score: P2×I4=8
+A13: Session continuity survives user-initiated /compact commands
+  Declared: 2026-05-17T11:35+04:00  Status: ACTIVE  Score: P2×I4=8
+A14: New session resume correctly restores task state from RESUME.md
+  Declared: 2026-05-17T11:35+04:00  Status: ACTIVE  Score: P3×I4=12
+A15: Rollup trigger activates before write when threshold is exceeded
+  Declared: 2026-05-17T11:35+04:00  Status: ACTIVE  Score: P2×I3=6
 ```
 
 ## Risk Score Rules
@@ -33,6 +39,6 @@ Every session start: flag ACTIVE assumptions > 7 days old as STALE.
 
 ## Archive Reference
 
-- **Archived assumptions:** 20
+- **Archived assumptions:** 27
 - **Archive location:** `memory/archive/assumptions_archive.md`
-- **Last rollup:** N/A
+- **Last rollup:** 2026-05-17T11:35+04:00

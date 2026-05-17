@@ -1,38 +1,31 @@
-# RESUME.md — Session Checkpoint
+# RESUME CHECKPOINT
 
-> **Role:** Snapshot for post-compact/session recovery. Overwrite only.  
-> **Read:** After context loss.  
-> **Updated:** Pre-compact, session end, "save state".  
-> **Authority:** Checkpoint (Rank 5).  
+> **Role:** Session break checkpoint — where we stopped. Overwrite entirely.  
+> **Read:** At start of new session after break.  
+> **Updated:** At end of session or when context critical.  
+> **Authority:** Operational (Rank 4).  
 > **Max Size:** 40 lines.
 
 ---
 
-## Checkpoint
+## Session State
 
-**Task:** Deploy and validate Elite Role Protocol System
-**Phase:** EXECUTING
-**Last Saved:** 2026-05-17T06:15+04:00
+**Session ended:** 2026-05-17T11:35+04:00
+**Active Task:** Hardening Phase — strengthen all 7 WEAK V-IDs to PASS
+**Last Completed:** S17, S18, S20, S21 executed (assumption/decision rollups, write-guard, recovery)
+**Next Step:** Execute S4 challenge-grade response, then user actions for S9/S10/S16/S19/S22
+**Pending Assumptions:** A5-A15 (8 active), A1-A4/A9-A11 archived
+**Blockers:** S9/S16 need /compact; S10/S19/S22 need new session; S5 needs 2 more tasks
 
-## Progress
+## Files Modified
 
-**Completed:** Memory bootstrap, validation pack, bounded-memory architecture v2.0.
-**Next:** Commit all v2.0 changes and push to remote.
-
-## Critical State
-
-- **Assumptions:** A1-A5
-- **Decisions:** D1-D4
-- **Risks:** R1(12), R2(10)
-- **Highest Risk:** R1
+- memory/ASSUMPTIONS.md — rolled up (27 archived, 8 active)
+- memory/DECISIONS.md — rolled up (18 archived, 4 active)
+- memory/COMPACT_STATE.md — written, simulated omission, recovered
+- memory/archive/assumptions_archive.md — appended 7 entries
+- memory/archive/decisions_archive.md — appended 3 entries
 
 ## Resume Protocol
 
-1. Read README.md → RESUME.md → CONTEXT.md → ASSUMPTIONS.md
-2. Check file sizes against ROLLUP_POLICY.md thresholds
-3. Summarize state to user
-4. Ask for confirmation before proceeding
-
-## User Confirmation Required
-
-Confirm this summary matches intent before resuming work.
+On "resume": Read README.md → RESUME.md → CONTEXT.md → ASSUMPTIONS.md.
+Do NOT read archive files during default resume.

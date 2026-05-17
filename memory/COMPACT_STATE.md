@@ -1,40 +1,24 @@
-# COMPACT_STATE.md — Recovery Snapshot
+# COMPACT STATE CHECKPOINT
 
-> **Role:** Temporary post-compact state. Overwrite only.  
-> **Read:** Immediately after `/compact`.  
-> **Updated:** During compact ritual only.  
-> **Authority:** Recovery (Rank 8).  
-> **Max Size:** 40 lines.
-> **Overwrite:** Entirely, each compact event.
+> **Role:** Temporary state snapshot for `/compact` survival.  
+> **Authority:** Transient (Rank 8) — COMPACT_STATE < ASSUMPTIONS/DECISIONS in conflicts.
 
 ---
 
-## Compact Event
+**Date:** 2026-05-17T11:35+04:00
+**Active Task:** Strengthen all 7 WEAK V-IDs to PASS
+**Last Completed:** S17, S18, S20, S21
+**Next Step:** S4 challenge-grade, then user actions for S9/S10/S16/S19/S22
 
-**Compacted At:** [Timestamp]
-**Trigger:** [User / AI reminder]
+## Active Assumptions (8)
 
-## Active Snapshot
+A5, A6, A7, A8, A12, A13, A14, A15
 
-**Goal:** [One sentence]
-**Phase:** [PLAN/EXECUTE/VERIFY]
-**Last Completed:** [One sentence]
-**Next Step:** [One sentence]
+## Active Decisions (4)
 
-## Critical State
+D4, D5, D6, D7
 
-- **Assumptions:** [A1, A2, ...]
-- **Decisions:** [D1, D2, ...]
-- **Risks ≥7:** [R1, ...]
-- **Files:** [list]
-- **Blockers:** [none / desc]
+## Recovery Log
 
-## Rehydration
-
-- [ ] Task goal understood
-- [ ] Last step known
-- [ ] Next step clear
-- [ ] Active assumptions identified
-- [ ] Risk items noted
-
-**If any unchecked → read RESUME.md and CONTEXT.md for full state.**
+S21: Detected mismatch (4 vs 8 assumptions, 2 vs 4 decisions).
+Read authoritative sources. Restored missing items.
