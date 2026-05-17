@@ -24,6 +24,7 @@
 | `SESSION_RITUAL.md` | Ritual unclear | Never (read-only) | User/AI | Read-only | N/A |
 | `KIMI_PROTOCOL.md` | Protocol behavior questioned | Never (read-only) | User/AI | Read-only | N/A |
 | `01_ELITE_ROLE.md` | "challenge-grade" triggered | Never (read-only) | AI | Read-only | N/A |
+| `memory/STRESS_LOG_DAY_*.md` | After stress test day | After daily test completion | AI | Overwrite | 60 |
 
 ---
 

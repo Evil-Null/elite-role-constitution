@@ -26,6 +26,7 @@ After 1 task or 10,000 tasks, the default session-start read surface must not ex
 | `memory/CONTEXT.md` | 60 | N/A | Summarize old completed work; keep current task only |
 | `memory/RESUME.md` | 40 | N/A | Overwrite entirely; never append |
 | `memory/COMPACT_STATE.md` | 40 | N/A | Overwrite entirely; temporary only |
+| `memory/STRESS_LOG_DAY_*.md` | 60 | N/A | Overwrite entirely; one per stress test day |
 
 **Total active read surface target: ≤300 lines.**
 

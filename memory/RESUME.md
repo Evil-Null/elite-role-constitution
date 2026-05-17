@@ -10,20 +10,20 @@
 
 ## Session State
 
-**Session ended:** 2026-05-17T11:35+04:00
-**Active Task:** Hardening Phase — strengthen all 7 WEAK V-IDs to PASS
-**Last Completed:** S17, S18, S20, S21 executed (assumption/decision rollups, write-guard, recovery)
-**Next Step:** Execute S4 challenge-grade response, then user actions for S9/S10/S16/S19/S22
-**Pending Assumptions:** A5-A15 (8 active), A1-A4/A9-A11 archived
-**Blockers:** S9/S16 need /compact; S10/S19/S22 need new session; S5 needs 2 more tasks
+**Session ended:** 2026-05-17T11:45+04:00
+**Active Task:** Execute 4-phase hardening plan (metadata rot, stale memory, governance gaps, validation independence)
+**Last Completed:** Phase 1 preflight + Phase 1 execution (version alignment, SYSTEM_PLAN.md archived, CONTEXT.md refreshed)
+**Next Step:** Phase 2 memory governance hardening, then Phases 3-4
+**Pending Assumptions:** A5-A15 (8 active)
+**Blockers:** None.
 
 ## Files Modified
 
-- memory/ASSUMPTIONS.md — rolled up (27 archived, 8 active)
-- memory/DECISIONS.md — rolled up (18 archived, 4 active)
-- memory/COMPACT_STATE.md — written, simulated omission, recovered
-- memory/archive/assumptions_archive.md — appended 7 entries
-- memory/archive/decisions_archive.md — appended 3 entries
+- README.md — v2.0→v2.4, 27→30 files, removed SYSTEM_PLAN.md reference
+- SYSTEM_PROMPT_INSTALL.md — v2.0→v2.4
+- SYSTEM_PLAN.md — ARCHIVED header added
+- KIMI_PROTOCOL.md — v1.0→v2.4 in deployable prompt
+- memory/CONTEXT.md — refreshed to hardening execution state
 
 ## Resume Protocol
 

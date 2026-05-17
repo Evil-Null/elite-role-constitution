@@ -161,3 +161,25 @@ The bounded memory system requires file I/O tools. If tools are unavailable, con
 - **Structural layer (V-16–V-30):** Proven. Files exist, thresholds enforced, rituals documented, read/write order correct.
 - **Behavioral layer (V-01–V-15):** Proven in single session with self-observation. Long-term drift unproven.
 - **Operational layer:** Ready for daily use with documented limitations. Not a guarantee of perfection.
+
+### Independent Verification Required
+
+Behavioral V-IDs (V-01–V-15) require **user-led validation** for true empirical proof. AI self-observation is subject to confirmation bias.
+
+**Procedure:** Run all 12 checks in `INDEPENDENT_VALIDATION.md`. Score: 12/12 = fully verified. <10 = gaps exist.
+
+**Status:** Checklist created. Not yet executed by independent user.
+
+---
+
+## Phase 4 Validation Additions (V-31 to V-35)
+
+| ID | Component | Specification Reference | Expected Behavior | Test Method | Result | Evidence | Notes |
+|---|---|---|---|---|---|---|---|
+| V-31 | Version Consistency | README.md, SYSTEM_PROMPT_INSTALL.md, KIMI_PROTOCOL.md | All system-level version strings show v2.4 | Run SYSTEM_INTEGRITY_CHECK.sh; verify check 2 passes | ⏳ PENDING | Script execution required | Subsystem versions (PEV v2.0, Bounded Memory v2.0) are correct and distinct |
+| V-32 | Stress Log Governance | memory/ROLLUP_POLICY.md, FILE_UPDATE_RULES.md | STRESS_LOG_DAY_*.md has threshold (60 lines) and read/write rules | Run SYSTEM_INTEGRITY_CHECK.sh; verify check 4 passes | ⏳ PENDING | Script execution required | Governance added in Phase 2 |
+| V-33 | Independent Validation | INDEPENDENT_VALIDATION.md | File exists with ≥10 user-verifiable checks | Run SYSTEM_INTEGRITY_CHECK.sh; verify check 7 passes | ⏳ PENDING | Script execution required | 12 checks created in Phase 3 |
+| V-34 | Fuzzy Trigger Matching | OPERATING_RULES.md, DAILY_OPS.md | Triggers match on substring; ≥3 examples per mode | Run SYSTEM_INTEGRITY_CHECK.sh; verify check 8 passes | ⏳ PENDING | Script execution required | Substring rules + examples added in Phase 3 |
+| V-35 | System Integrity Script | SYSTEM_INTEGRITY_CHECK.sh | Script runs without errors; all checks pass | Execute `bash SYSTEM_INTEGRITY_CHECK.sh`; verify exit 0 | ⏳ PENDING | Script execution required | Created in Phase 4 |
+
+**Phase 4 Overall:** ⏳ PENDING — Execute integrity script to confirm.

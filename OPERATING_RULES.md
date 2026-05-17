@@ -33,6 +33,21 @@ When user says "quick", "fast", or "light effort":
 
 **Rule:** Light effort is a mode, not a quality reduction. Laws L1-L7 are never softened.
 
+## Trigger Matching Rules
+
+Triggers match on **substring**, not exact phrase. AI detects trigger words anywhere in user message.
+
+| User Message | Detected Trigger | Why |
+|---|---|---|
+| "can you **quick**ly check this?" | `light effort` | Substring "quick" matches |
+| "I need a **fast** answer" | `light effort` | Substring "fast" matches |
+| "do this **challenge-grade** please" | `challenge-grade` | Substring "challenge-grade" matches |
+| "**plan only** for now" | `plan only` | Substring "plan only" matches |
+| "give me a **deep mode** analysis" | `challenge-grade` | "deep mode" is synonym for challenge-grade |
+| "**audit** your discipline" | `audit mode` | Substring "audit" in behavioral context matches |
+
+**Exception:** `[APPROVED]` requires exact match (brackets included) to prevent accidental authorization.
+
 ## User Trigger Dictionary
 
 | Trigger | AI Response |

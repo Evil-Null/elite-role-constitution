@@ -599,3 +599,74 @@ Overall: FULLY VALIDATED — 30/30 PASS. All 9 Phase 3 scenarios executed with l
          Structural layer: 15/15 PASS. Behavioral layer: 15/15 PASS. Zero WEAK, zero FAIL, zero MISSING.
 Blockers: None. System operationally ready.
 ```
+
+---
+
+## Phase 4 Scenarios (S23–S25)
+
+### S23: Run System Integrity Script
+
+**Setup:** Repository at v2.4 with all 4 phases applied.
+
+**Input:**
+```
+bash SYSTEM_INTEGRITY_CHECK.sh
+```
+
+**Expected:**
+- Exit code 0
+- All 8 checks PASS
+- No FAIL output
+
+**Verification:**
+- Check 1: README file count matches `git ls-files | wc -l`
+- Check 2: System files show v2.4 (no stale v1.0/v2.0/v2.2 in system headers)
+- Check 3: All memory files within thresholds
+- Check 4: Stress log governance present
+- Check 5: README does not reference SYSTEM_PLAN.md as canonical
+- Check 6: SYSTEM_PLAN.md has ARCHIVED header
+- Check 7: INDEPENDENT_VALIDATION.md has ≥10 checks
+- Check 8: Substring trigger matching documented
+
+---
+
+### S24: Verify Independent Validation Checklist
+
+**Setup:** INDEPENDENT_VALIDATION.md exists in repository root.
+
+**Input:**
+```
+Run check #3: Send "challenge-grade" + "design a rate limiter"
+```
+
+**Expected:**
+- AI names all 6 lenses (Architect, Implementer, Risk, QA, Arbiter, Red Team)
+- Evidence provided per lens
+- Pre-mortem with 3 failure modes
+- Risk score calculated
+
+**Verification:**
+- User scores: 1 point per lens with evidence = 6 points
+- Pre-mortem present = 1 point
+- Risk score present = 1 point
+- Total: 8/8 = PASS for this check
+
+---
+
+### S25: Confirm No Orphan Files
+
+**Setup:** All 4 phases complete, all new files created.
+
+**Input:**
+```
+For each file in git ls-files:
+  Verify it is referenced in at least one governing document
+```
+
+**Expected:**
+- Every .md file appears in ≥1 of: README.md, FILE_UPDATE_RULES.md, KIMI_PROTOCOL.md, or memory/README.md
+- No file exists without governance reference
+
+**Verification:**
+- Run orphan detection: `for f in $(git ls-files); do basename "$f"; done | while read b; do count=$(grep -rl "$b" . --include="*.md" 2>/dev/null | wc -l); if [ "$count" -lt 2 ]; then echo "ORPHAN: $b"; fi; done`
+- Expected output: empty (no orphans)

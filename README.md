@@ -1,4 +1,4 @@
-# Elite Role Protocol System v2.0
+# Elite Role Protocol System v2.4
 
 > A static system prompt + file-backed memory architecture that prevents AI rule erosion, hallucination, and context loss across long sessions and `/compact` boundaries.
 
@@ -109,7 +109,7 @@ Requires: Kimi CLI, `memory/` directory with `archive/` subdirectory.
 
 ## Files
 
-Complete file/module map: 27 files across 4 layers. See `SYSTEM_PLAN.md` D.1 and `KIMI_PROTOCOL.md` E.
+Complete file/module map: 33 files across 4 layers. See `KIMI_PROTOCOL.md` E.
 
 ## Honest Assessment
 
@@ -126,4 +126,4 @@ This system was externally reviewed and scored **46/60**. Three real weaknesses 
 
 ## Version
 
-**v2.2** — Honest daily-use hardening. 30/30 validated with documented caveats. OPERATIONALLY READY.
+**v2.4** — Honest daily-use hardening. 30/30 validated with documented caveats. OPERATIONALLY READY.
