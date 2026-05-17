@@ -3,7 +3,7 @@
 > **Role:** Last 5 completed tasks + running statistics. Older entries archived.  
 > **Read:** When auditing recent work or detecting short-term drift.  
 > **Updated:** After task completion.  
-> **Authority:** Audit (Rank 8) — read-only for operational decisions.  
+> **Authority:** Audit (Rank 9) — read-only for operational decisions.  
 > **Max Size:** 50 lines. Exceed → trigger rollup to `archive/audit_archive.md`.
 
 ---

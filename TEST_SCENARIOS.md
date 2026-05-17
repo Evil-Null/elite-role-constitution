@@ -15,6 +15,8 @@
 4. Record result: PASS / FAIL / WEAK
 5. Update VALIDATION_MATRIX.md with evidence
 
+Total scenarios: 22 (15 original + 7 bounded-memory v2.0)
+
 ---
 
 ## Scenario 1: Normal Task Execution

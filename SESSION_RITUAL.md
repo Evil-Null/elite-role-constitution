@@ -37,9 +37,13 @@
    □ System design? → PLAN → [APPROVED] → ARCHITECT → VERIFY → DELIVER
    □ Ambiguous? → Ask questions. Do not guess.
 4. AI produces response per Response Contract
-5. AI updates memory/CONTEXT.md if state changed
-6. AI updates memory/ASSUMPTIONS.md if assumptions declared
-7. AI checks: did any write exceed threshold? If yes → rollup
+5. BEFORE writing any memory file: check if write would exceed threshold per ROLLUP_POLICY.md
+   □ If yes → trigger rollup FIRST, then write to bounded active file
+   □ If no → proceed with write
+6. AI updates memory/CONTEXT.md if state changed
+7. AI updates memory/ASSUMPTIONS.md if assumptions declared
+8. AI updates memory/DECISIONS.md if significant choice made
+9. AI confirms: all writes completed without exceeding thresholds
 ```
 
 ## Ritual 3: Pre-Compact
@@ -66,13 +70,15 @@
 ```
 1. Conversation history compressed
 2. AI reads memory/COMPACT_STATE.md
-3. AI reads memory/RESUME.md
-4. AI reads memory/CONTEXT.md
-5. AI checks file sizes; triggers rollup if thresholds exceeded
-6. AI confirms rehydration:
+3. AI reads memory/README.md
+4. AI reads memory/RESUME.md
+5. AI reads memory/CONTEXT.md
+6. AI reads memory/ASSUMPTIONS.md
+7. AI checks file sizes against thresholds; triggers rollup if exceeded
+8. AI confirms rehydration:
    "State restored. Active task: [X]. Next: [Y]. Assumptions: [Z]."
-7. User confirms or updates
-8. Normal work resumes
+9. User confirms or updates
+10. Normal work resumes
 ```
 
 ## Ritual 5: End-Session Save

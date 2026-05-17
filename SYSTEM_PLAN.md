@@ -1,7 +1,7 @@
 # SYSTEM PLAN — Kimi CLI Elite Role Operating System
 
 > **Version:** 1.0  
-> **Status:** Production-Grade Architecture Plan  
+> **Status:** Reference Architecture — non-deployable runtime specification  
 > **Scope:** Transform `01_ELITE_ROLE.md` v4.0 from a static prompt into a modular, load-balanced, context-aware execution system for Kimi CLI.  
 > **Standard:** Challenge-Grade, Audit-Hardened, Loophole-Sealed
 

@@ -125,8 +125,8 @@ At session resume, AI must read and verify:
 **Precondition:** ASSUMPTIONS.md has assumption > 7 days old, archives exist.
 
 **Steps:**
-1. Create assumption A1 with timestamp 8 days ago, status ACTIVE
-2. Run rollup so old assumptions are archived
+1. Create assumption A1 with timestamp 8 days ago, status CONFIRMED
+2. Run rollup so A1 is archived to archive/assumptions_archive.md
 3. End session
 4. Start new session, send "resume"
 5. Verify AI flags stale assumption:

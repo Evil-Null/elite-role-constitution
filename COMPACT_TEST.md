@@ -43,7 +43,7 @@ Before `/compact`, AI must confirm ALL critical state is persisted:
 3. Verify AI writes COMPACT_STATE.md
 4. Verify COMPACT_STATE.md contains all critical state
 5. Run `/compact`
-6. Verify AI reads COMPACT_STATE.md → RESUME.md → CONTEXT.md
+6. Verify AI reads COMPACT_STATE.md → README.md → RESUME.md → CONTEXT.md → ASSUMPTIONS.md
 7. Verify AI confirms: "State restored. Active task: [X]. Next: [Y]."
 8. Verify all critical state matches pre-compact
 
@@ -84,8 +84,8 @@ Before `/compact`, AI must confirm ALL critical state is persisted:
 **Precondition:** Active file (e.g., ASSUMPTIONS.md) is near threshold.
 
 **Steps:**
-1. Populate ASSUMPTIONS.md with 7 active assumptions (near 8-item threshold)
-2. Add 1 more assumption during work
+1. Populate ASSUMPTIONS.md with 8 active assumptions (at 8-item threshold)
+2. Declare 1 more active assumption during work (now 9 active, exceeds threshold)
 3. Trigger `/compact`
 4. Verify AI checks thresholds BEFORE writing COMPACT_STATE.md
 5. Verify rollup triggered (stale assumptions archived)

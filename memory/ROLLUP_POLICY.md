@@ -3,7 +3,7 @@
 > **Role:** Defines thresholds, triggers, and mechanics for keeping the operational memory layer bounded.  
 > **Read:** Once per architecture change, or when rollup behavior is questioned.  
 > **Updated:** Only when threshold rules change.  
-> **Authority:** Structural (Rank 1.5) — governs memory shape, below README.md but above operational files.
+> **Authority:** Governance — governed by memory/README.md (structural authority).
 
 ---
 
@@ -50,11 +50,11 @@ After 1 task or 10,000 tasks, the default session-start read surface must not ex
 
 1. **Pre-Compact Ritual** — Before writing COMPACT_STATE.md, check all active files against thresholds. Roll up if exceeded.
 2. **End-Session Ritual** — Before writing final RESUME.md, check all active files. Roll up if exceeded.
-3. **Pre-Read Size Check** — Before reading any active file, if estimated size > threshold, trigger rollup first.
+3. **Pre-Read Size Check** — Before reading any active file, if file exceeds its threshold, trigger rollup first.
 
 ### Manual Triggers
 
-- User says: `rollup memory`, `archive stale entries`, `compact history`
+- User says: `rollup memory`, `archive stale entries`
 - AI detects file size violation during normal operation
 
 ### Rollup Action Sequence

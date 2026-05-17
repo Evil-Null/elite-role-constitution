@@ -24,7 +24,7 @@
 ## Active Registry
 
 - **Assumptions:** A1-A5 (see ASSUMPTIONS.md)
-- **Decisions:** D1-D4 (see DECISIONS.md)
+- **Decisions:** D1-D4 (see DECISIONS.md). D4 updated: bounded multi-layer memory structure.
 - **Risks ≥7:** R1 (score 12), R2 (score 10)
 
 ## Files in Scope

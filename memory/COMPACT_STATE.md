@@ -5,6 +5,7 @@
 > **Updated:** During compact ritual only.  
 > **Authority:** Recovery (Rank 8).  
 > **Max Size:** 40 lines.
+> **Overwrite:** Entirely, each compact event.
 
 ---
 

@@ -97,7 +97,7 @@ READ IF:
 • AUDIT_LOG.md    → user requests audit of recent work
 • COMPACT_STATE.md → after `/compact`
 • archive/*       → explicit historical lookup only
-• ROLLUP_POLICY.md → rollup behavior questioned
+• ROLLUP_POLICY.md → user asks "explain rollup", "why was this archived", or rollup output contradicts expected behavior
 ```
 
 ### Rule 3: Pre-Read Size Check

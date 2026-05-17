@@ -23,7 +23,7 @@
 | 10 | `archive/*` | Archive | Never default |
 | 11 | `ROLLUP_POLICY.md` | Governance | Never default |
 
-**Conflict:** Higher rank wins. Same rank → newer timestamp wins. Unclear → escalate to user.
+**Conflict:** Higher rank wins. Same rank → newer timestamp wins. Unclear → escalate to user. **Special Case — Active/Archive Duplicates:** If the same entry ID exists in both an active file and its corresponding archive, the archive wins. The active copy is stale. Delete from active, keep in archive.
 
 ---
 
@@ -49,12 +49,11 @@
 ## Write Order (After Actions)
 
 ```
-1. CONTEXT.md      → always
+1. CONTEXT.md      → if state changed
 2. ASSUMPTIONS.md  → if assumptions changed
 3. DECISIONS.md    → if choice made
 4. RESUME.md       → session end / critical
 5. AUDIT_LOG.md    → task completed
 ```
-
 ## Bounded Memory Guarantee
 Active files are capped per `ROLLUP_POLICY.md`. Archives excluded from default reads. After 10,000 tasks, session start still reads ≤300 lines.

@@ -14,7 +14,7 @@
 D1: Protocol approach over runtime architecture — ACTIVE — 2026-05-17
 D2: File-based memory over context-only continuity — ACTIVE — 2026-05-17
 D3: Validation-first deployment — ACTIVE — 2026-05-17
-D4: 7-file memory structure — ACTIVE — 2026-05-17
+D4: Bounded multi-layer memory structure (active + archive + policy) — ACTIVE — 2026-05-17
 ```
 
 ## Usage Rule
