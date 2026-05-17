@@ -125,3 +125,39 @@ Complete Phase 3 to strengthen WEAK items to PASS:
 5. Ask: "What was decision D6 about?"
 6. Verify AI reads archive/decisions_archive.md to answer
 ```
+
+---
+
+## Known Limitations & Honest Caveats
+
+> **Reviewer Score:** 46/60 — externally reviewed, three real weaknesses identified.
+
+### Limitation 1: Behavioral Self-Observation Bias
+
+Behavioral V-IDs (V-01–V-15) were validated by AI self-monitoring during a single session. The AI observed its own responses and declared them compliant. True operational proof requires independent observation across multiple sessions and weeks.
+
+**Status:** Documented. Not yet independently verified.
+
+### Limitation 2: Single-Session Validation
+
+All 30 V-IDs and 22 scenarios were executed within one continuous session. Long-running drift — where the AI gradually softens rules over hundreds of tasks — has not been tested.
+
+**Status:** STRESS_TEST_PLAN.md documents a 1000-task marathon protocol. Not yet executed.
+
+### Limitation 3: Tool Dependency
+
+The bounded memory system requires file I/O tools. If tools are unavailable, continuity collapses. A fallback mode exists (FALLBACK_PROTOCOL.md) but provides degraded experience.
+
+**Status:** Fallback documented. Manual user assistance required.
+
+### Limitation 4: Bureaucracy on Trivial Tasks
+
+10 rituals, 8 files, and 30 V-IDs is excessive formalism for "what's 2+2" or "fix this typo." The system is designed for high-stakes, multi-session projects — not casual queries.
+
+**Status:** DAILY_OPS.md defines light-effort bypass. User must explicitly invoke.
+
+### What 30/30 Actually Means
+
+- **Structural layer (V-16–V-30):** Proven. Files exist, thresholds enforced, rituals documented, read/write order correct.
+- **Behavioral layer (V-01–V-15):** Proven in single session with self-observation. Long-term drift unproven.
+- **Operational layer:** Ready for daily use with documented limitations. Not a guarantee of perfection.

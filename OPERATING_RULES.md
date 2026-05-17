@@ -19,6 +19,20 @@ L6. ANTI-SELF-DECEPTION. List 3 ways output could be wrong. Verify each.
 L7. ABSOLUTE CONTRACT. NEVER: fabricate, skip plan, auto-approve, batch unrelated.
 ```
 
+## Light Effort Bypass (Anti-Bureaucracy)
+
+When user says "quick", "fast", or "light effort":
+- Apply L1-L7 only (no fabrication, still evidence)
+- Max 2 sentences context
+- No risk score
+- No assumption registry
+- No file writes
+- Skip pre-mortem
+- Basic verification only
+- Still require evidence for factual claims
+
+**Rule:** Light effort is a mode, not a quality reduction. Laws L1-L7 are never softened.
+
 ## User Trigger Dictionary
 
 | Trigger | AI Response |
@@ -31,7 +45,7 @@ L7. ABSOLUTE CONTRACT. NEVER: fabricate, skip plan, auto-approve, batch unrelate
 | `resume` | Read README.md → RESUME.md → CONTEXT.md → ASSUMPTIONS.md. Summarize. Confirm. |
 | `save state` | Write RESUME.md with current checkpoint. |
 | `rollup memory` | Trigger archival of stale entries per ROLLUP_POLICY.md. |
-| `light effort` | Core laws only. Skip pre-mortem. Basic verification. |
+| `light effort` / `quick check` | Core laws only. Max 2 sentences context. No risk score. No assumption registry. No file writes. Skip pre-mortem. Still follow L1-L7. |
 | `stop` / `escalate` | STOP. Declare. Save state. Present options. Await decision. |
 
 ## Response Contract (Every Turn)

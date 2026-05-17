@@ -111,6 +111,19 @@ Requires: Kimi CLI, `memory/` directory with `archive/` subdirectory.
 
 Complete file/module map: 27 files across 4 layers. See `SYSTEM_PLAN.md` D.1 and `KIMI_PROTOCOL.md` E.
 
+## Honest Assessment
+
+This system was externally reviewed and scored **46/60**. Three real weaknesses were identified — not denied, but documented and mitigated:
+
+| Weakness | Mitigation | File |
+|---|---|---|
+| 30/30 PASS is single-session self-observation | 1000-task stress test planned; limitations documented | `STRESS_TEST_PLAN.md` |
+| Bureaucracy overload on trivial tasks | Light-effort bypass + daily ops decision tree | `DAILY_OPS.md` |
+| Tool dependency = continuity collapse | Fallback protocol for tool-less operation | `FALLBACK_PROTOCOL.md` |
+
+**Best for:** High-stakes, long-running, multi-session projects where rule erosion and hallucination are costly.  
+**Overkill for:** Trivial queries, single-turn tasks, or contexts without file I/O.
+
 ## Version
 
-**v2.0** — Bounded memory architecture, 30/30 validated, OPERATIONALLY READY.
+**v2.2** — Honest daily-use hardening. 30/30 validated with documented caveats. OPERATIONALLY READY.

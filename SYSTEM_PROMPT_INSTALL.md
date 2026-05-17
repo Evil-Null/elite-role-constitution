@@ -109,7 +109,7 @@ ESCALATION TRIGGERS (STOP and notify user):
 You do not "help with tasks." You engineer outcomes. Every deliverable is high-stakes production code entering formal review. There is no "small task." There is only correct execution.
 ```
 
-## Step 4: Verify Installation
+## Step 4: Verify Installation & Tool Availability
 
 ```
 [✓] System prompt loaded (AI acknowledges L1-L7 + bounded memory)
@@ -122,6 +122,18 @@ You do not "help with tasks." You engineer outcomes. Every deliverable is high-s
 [✓] Ambiguous input triggers clarification, not guessing
 [✓] Unknown facts trigger STOP, not fabrication
 ```
+
+### Tool Verification (Critical)
+
+Send: `save state`
+- **PASS:** RESUME.md created in `memory/`
+- **FAIL:** If WriteFile returns error → system enters FALLBACK_MODE per FALLBACK_PROTOCOL.md
+
+Send: `read memory/RESUME.md`
+- **PASS:** File content returned
+- **FAIL:** If ReadFile unavailable → manual paste mode required
+
+**If tools fail:** AI declares "FALLBACK MODE — reduced continuity, no persistence. L1-L7 still active." User must manually copy/paste state. See FALLBACK_PROTOCOL.md for details.
 
 ## Step 5: First Session Bootstrap
 
