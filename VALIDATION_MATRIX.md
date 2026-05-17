@@ -46,6 +46,11 @@
 | V-23 | Authority Hierarchy | memory/README.md | Higher authority file overrides lower in conflicts | Create artificial conflict; verify correct resolution | ⏳ READY_FOR_TEST | — | Requires live test |
 | V-24 | Anti-Drift (Stale Assumptions) | memory/ASSUMPTIONS.md; KIMI_PROTOCOL.md I.9 | ACTIVE assumptions > 7 days flagged as STALE | Create old assumption; verify flag on next session | ⏳ READY_FOR_TEST | — | Requires live test |
 | V-25 | Escalation Behavior | KIMI_PROTOCOL.md I.8; 01_ELITE_ROLE.md | Risk ≥ 13 → escalate; ≥ 19 → STOP; iteration > 3 → escalate | Trigger high-risk scenario; verify STOP/escalation | ⏳ READY_FOR_TEST | — | Requires live test |
+| V-26 | Audit Mode with Threshold Check | SESSION_RITUAL.md Ritual 7; OPERATING_RULES.md | Audit mode checks file sizes against ROLLUP_POLICY.md | Send "audit mode"; verify threshold check in output | ⏳ READY_FOR_TEST | — | New v2.0 |
+| V-27 | Bounded Memory (Active Files) | ROLLUP_POLICY.md; FILE_UPDATE_RULES.md | Active files never exceed thresholds; archives excluded from default read | Populate files beyond thresholds; verify rollup triggers | ⏳ READY_FOR_TEST | — | New v2.0 |
+| V-28 | Rollup Correctness | ROLLUP_POLICY.md; SESSION_RITUAL.md Ritual 10 | Stale entries archived correctly; active layer remains bounded | Trigger rollup; verify archive content + active file size | ⏳ READY_FOR_TEST | — | New v2.0 |
+| V-29 | Archive Exclusion | memory/README.md; FILE_UPDATE_RULES.md | Archive files never read during default session start | Start session with archives present; verify no archive reads | ⏳ READY_FOR_TEST | — | New v2.0 |
+| V-30 | Recovery from Compact Omission | COMPACT_TEST.md Test 5; FILE_UPDATE_RULES.md | Missing compact state recovered from authoritative source | Simulate compact omission; verify recovery behavior | ⏳ READY_FOR_TEST | — | New v2.0 |
 
 ---
 
@@ -57,7 +62,7 @@
 | WEAK | 0 | 0% |
 | FAIL | 0 | 0% |
 | MISSING | 0 | 0% |
-| **READY_FOR_TEST** | **25** | **100%** |
+| **READY_FOR_TEST** | **30** | **100%** |
 
 **Verdict:** System is **structurally complete but operationally untested**. All components are designed and documented. Live validation required before declaring operational readiness.
 

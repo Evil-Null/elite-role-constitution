@@ -1,54 +1,39 @@
-# COMPACT_STATE.md — Post-Compact Recovery Snapshot
+# COMPACT_STATE.md — Recovery Snapshot
 
-> **Role:** Temporary recovery state after `/compact`. Bridges compressed context.  
-> **Read:** Immediately after `/compact` command.  
-> **Updated:** Only during `/compact` ritual.  
-> **Authority:** Recovery (Rank 8) — temporary, superseded by RESUME.md and CONTEXT.md after rehydration.
+> **Role:** Temporary post-compact state. Overwrite only.  
+> **Read:** Immediately after `/compact`.  
+> **Updated:** During compact ritual only.  
+> **Authority:** Recovery (Rank 8).  
+> **Max Size:** 40 lines.
 
 ---
 
 ## Compact Event
 
 **Compacted At:** [Timestamp]
-**Context Before:** [Approximate usage %]
 **Trigger:** [User / AI reminder]
 
-## Active Task Snapshot
+## Active Snapshot
 
-**Goal:** [One sentence — must survive compact]
-**Phase:** [PLAN / EXECUTE / VERIFY]
+**Goal:** [One sentence]
+**Phase:** [PLAN/EXECUTE/VERIFY]
 **Last Completed:** [One sentence]
 **Next Step:** [One sentence]
 
-## Critical State Preservation
+## Critical State
 
-```
-What was active before compact:
-  • Task: [summary]
-  • Pending assumptions: [A1, A2]
-  • Pending decisions: [D1]
-  • Risk items (≥7): [R1]
-  • Modified files: [list]
-  • Blockers: [none / description]
-```
+- **Assumptions:** [A1, A2, ...]
+- **Decisions:** [D1, D2, ...]
+- **Risks ≥7:** [R1, ...]
+- **Files:** [list]
+- **Blockers:** [none / desc]
 
-## Rehydration Checklist
-
-After `/compact`, read this file and confirm:
+## Rehydration
 
 - [ ] Task goal understood
-- [ ] Last completed step known
+- [ ] Last step known
 - [ ] Next step clear
 - [ ] Active assumptions identified
 - [ ] Risk items noted
-- [ ] No blockers forgotten
 
 **If any unchecked → read RESUME.md and CONTEXT.md for full state.**
-
-## Post-Compact Confirmation
-
-```
-Rehydrated At: [timestamp]
-AI Confirm: [State restored. Active task: X. Next: Y.]
-User Confirm: [YES / Correction: ...]
-```
