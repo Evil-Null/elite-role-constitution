@@ -159,11 +159,41 @@ D19: Manual archive only — no automatic rollup
   Alternatives Rejected: Automatic threshold-driven rollup (later chosen)
   Risk Accepted: Files grow unbounded; user must remember to archive
   Related Assumptions: None
+
+D1: Protocol approach over runtime architecture
+  Date: 2026-05-17T04:00+04:00
+  Status: SUPERSEDED
+  Context: Initial system design debate
+  Decision: Protocol approach over runtime architecture
+  Reasoning: Kimi CLI is sequential chat, not agent runtime
+  Alternatives Rejected: Runtime architecture with module loader
+  Risk Accepted: Less automation, more user collaboration
+  Related Assumptions: None
+
+D2: File-based memory over context-only continuity
+  Date: 2026-05-17T04:00+04:00
+  Status: ACTIVE→ARCHIVED
+  Context: Session continuity design
+  Decision: File-based memory over context-only continuity
+  Reasoning: New sessions start blank; files provide handoff
+  Alternatives Rejected: Context-only (lost on restart)
+  Risk Accepted: File I/O latency, user must manage files
+  Related Assumptions: None
+
+D3: Validation-first deployment
+  Date: 2026-05-17T04:00+04:00
+  Status: ACTIVE→ARCHIVED
+  Context: Deployment strategy
+  Decision: Validation-first deployment
+  Reasoning: Prove system works before claiming readiness
+  Alternatives Rejected: Deploy-then-fix
+  Risk Accepted: Delayed deployment if validation fails
+  Related Assumptions: None
 ```
 
 ## Archive Metadata
 
 - **Created:** 2026-05-17
-- **Last Rollup:** 2026-05-17T06:30+04:00
-- **Total Archived:** 15
+- **Last Rollup:** 2026-05-17T11:35+04:00
+- **Total Archived:** 18
 - **Source File:** memory/DECISIONS.md
