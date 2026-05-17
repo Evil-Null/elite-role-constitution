@@ -1,7 +1,7 @@
 # KIMI PROTOCOL
 ## Human-AI Collaboration Protocol for Kimi CLI under the Elite Role Constitution
 
-> **Version:** 1.0  
+> **Version:** 2.0  
 > **Type:** Deployable Protocol (Not Runtime Architecture)  
 > **Standard:** Challenge-Grade, Constitutionally Faithful, Kimi-Native  
 > **Status:** Production-ready for immediate use  

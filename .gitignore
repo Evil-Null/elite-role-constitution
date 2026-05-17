@@ -14,3 +14,18 @@ Thumbs.db
 # Backup files
 *.bak
 *.orig
+
+# Environment & dependencies
+.env
+.env.*
+.venv/
+venv/
+node_modules/
+__pycache__/
+*.pyc
+
+# Logs
+*.log
+
+# Stale session chronicles (personal data risk)
+MEMORY.md
