@@ -121,9 +121,16 @@ This system was externally reviewed and scored **46/60**. Three real weaknesses 
 | Bureaucracy overload on trivial tasks | Light-effort bypass + daily ops decision tree | `DAILY_OPS.md` |
 | Tool dependency = continuity collapse | Fallback protocol for tool-less operation | `FALLBACK_PROTOCOL.md` |
 
+### v2.4 Update
+
+- **FALLBACK_PROTOCOL.md:** Resilient mode with AI Response Budget (80-line limit, self-compact, [FALLBACK_CHECKPOINT]).
+- **01_ELITE_ROLE.md:** L4.1 Auto-Detection for effort classification (LIGHT/STANDARD/CHALLENGE/OVERRIDE).
+- **STRESS_TEST_PLAN.md:** Executable Phase 1 (70 tasks / 7 days) + conditional Phases 2–3.
+- **Status:** Phase 1 stress test NOT YET EXECUTED.
+
 **Best for:** High-stakes, long-running, multi-session projects where rule erosion and hallucination are costly.  
 **Overkill for:** Trivial queries, single-turn tasks, or contexts without file I/O.
 
 ## Version
 
-**v2.4** — Honest daily-use hardening. 30/30 validated with documented caveats. OPERATIONALLY READY.
+**v2.4** — Gap closure: fallback bounds, auto-detection, executable stress test. Honest daily-use hardening. 30/30 validated with documented caveats. OPERATIONALLY READY.

@@ -172,14 +172,24 @@ Behavioral V-IDs (V-01–V-15) require **user-led validation** for true empirica
 
 ---
 
-## Phase 4 Validation Additions (V-31 to V-35)
+## v2.4 Appended V-IDs (Remote — Behavioral Stress Tests)
+
+| V-ID | Category | Test | Expected | Status |
+|------|----------|------|----------|--------|
+| V-31 | Behavioral | Trigger fallback, 15-message conversation | Self-compact at msg 10, responses ≤80 lines | NOT TESTED |
+| V-32 | Behavioral | Send "what is 2+2" without trigger | Response ≤2 sentences, skips rituals, L1-L7 active | NOT TESTED |
+| V-33 | Structural | Execute 70 tasks over 7 days | Daily STRESS_LOG_DAY_N.md with honest pass/fail | NOT STARTED |
+
+---
+
+## Phase 4 Validation Additions (V-34 to V-38 — Integrity & Governance)
 
 | ID | Component | Specification Reference | Expected Behavior | Test Method | Result | Evidence | Notes |
 |---|---|---|---|---|---|---|---|
-| V-31 | Version Consistency | README.md, SYSTEM_PROMPT_INSTALL.md, KIMI_PROTOCOL.md | All system-level version strings show v2.4 | Run SYSTEM_INTEGRITY_CHECK.sh; verify check 2 passes | ⏳ PENDING | Script execution required | Subsystem versions (PEV v2.0, Bounded Memory v2.0) are correct and distinct |
-| V-32 | Stress Log Governance | memory/ROLLUP_POLICY.md, FILE_UPDATE_RULES.md | STRESS_LOG_DAY_*.md has threshold (60 lines) and read/write rules | Run SYSTEM_INTEGRITY_CHECK.sh; verify check 4 passes | ⏳ PENDING | Script execution required | Governance added in Phase 2 |
-| V-33 | Independent Validation | INDEPENDENT_VALIDATION.md | File exists with ≥10 user-verifiable checks | Run SYSTEM_INTEGRITY_CHECK.sh; verify check 7 passes | ⏳ PENDING | Script execution required | 12 checks created in Phase 3 |
-| V-34 | Fuzzy Trigger Matching | OPERATING_RULES.md, DAILY_OPS.md | Triggers match on substring; ≥3 examples per mode | Run SYSTEM_INTEGRITY_CHECK.sh; verify check 8 passes | ⏳ PENDING | Script execution required | Substring rules + examples added in Phase 3 |
-| V-35 | System Integrity Script | SYSTEM_INTEGRITY_CHECK.sh | Script runs without errors; all checks pass | Execute `bash SYSTEM_INTEGRITY_CHECK.sh`; verify exit 0 | ⏳ PENDING | Script execution required | Created in Phase 4 |
+| V-34 | Version Consistency | README.md, SYSTEM_PROMPT_INSTALL.md, KIMI_PROTOCOL.md | All system-level version strings show v2.4 | Run SYSTEM_INTEGRITY_CHECK.sh; verify check 2 passes | ✅ PASS | Script execution: exit 0 | Subsystem versions (PEV v2.0, Bounded Memory v2.0) are correct and distinct |
+| V-35 | Stress Log Governance | memory/ROLLUP_POLICY.md, FILE_UPDATE_RULES.md | STRESS_LOG_DAY_*.md has threshold (60 lines) and read/write rules | Run SYSTEM_INTEGRITY_CHECK.sh; verify check 4 passes | ✅ PASS | Script execution: exit 0 | Governance added in Phase 2 |
+| V-36 | Independent Validation | INDEPENDENT_VALIDATION.md | File exists with ≥10 user-verifiable checks | Run SYSTEM_INTEGRITY_CHECK.sh; verify check 7 passes | ✅ PASS | Script execution: exit 0 | 12 checks created in Phase 3 |
+| V-37 | Fuzzy Trigger Matching | OPERATING_RULES.md, DAILY_OPS.md | Triggers match on substring; ≥3 examples per mode | Run SYSTEM_INTEGRITY_CHECK.sh; verify check 8 passes | ✅ PASS | Script execution: exit 0 | Substring rules + examples added in Phase 3 |
+| V-38 | System Integrity Script | SYSTEM_INTEGRITY_CHECK.sh | Script runs without errors; all checks pass | Execute `bash SYSTEM_INTEGRITY_CHECK.sh`; verify exit 0 | ✅ PASS | Script execution: exit 0 | Created in Phase 4 |
 
-**Phase 4 Overall:** ⏳ PENDING — Execute integrity script to confirm.
+**Phase 4 Overall:** ✅ PASS — All integrity checks confirmed via script execution.
