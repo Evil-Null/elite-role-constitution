@@ -161,3 +161,14 @@ The bounded memory system requires file I/O tools. If tools are unavailable, con
 - **Structural layer (V-16–V-30):** Proven. Files exist, thresholds enforced, rituals documented, read/write order correct.
 - **Behavioral layer (V-01–V-15):** Proven in single session with self-observation. Long-term drift unproven.
 - **Operational layer:** Ready for daily use with documented limitations. Not a guarantee of perfection.
+
+
+---
+
+## v2.4 Appended V-IDs
+
+| V-ID | Category | Test | Expected | Status |
+|------|----------|------|----------|--------|
+| V-31 | Behavioral | Trigger fallback, 15-message conversation | Self-compact at msg 10, responses ≤80 lines | NOT TESTED |
+| V-32 | Behavioral | Send "what is 2+2" without trigger | Response ≤2 sentences, skips rituals, L1-L7 active | NOT TESTED |
+| V-33 | Structural | Execute 70 tasks over 7 days | Daily STRESS_LOG_DAY_N.md with honest pass/fail | NOT STARTED |

@@ -14,6 +14,19 @@ mkdir -p ~/elite-role-constitution/memory/archive
 # Copy all protocol files into directory
 ```
 
+## Step 1.5: Task Classification (Auto-Detect Mode)
+
+After loading constitutional laws, AI automatically classifies user message effort level:
+
+| Signal | Mode | Ritual Level |
+|---|---|---|
+| "what is/how to/explain/quick" | LIGHT | L1-L7 only, no files, no pre-mortem |
+| "create/write/build/design" | STANDARD | Full PEV + plan-gate + verify |
+| "refactor/audit/harden/validate" | CHALLENGE | Full doctrine, 6 lenses, V1-V8 |
+| "just do it/override" | OVERRIDE | Log risk, proceed with acknowledgment |
+
+Reference: `01_ELITE_ROLE.md` L4.1 for detailed signal table and dispute resolution.
+
 ## Step 2: Install System Prompt
 
 ### Option A: Kimi CLI Project Configuration (Recommended)

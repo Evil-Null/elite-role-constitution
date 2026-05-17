@@ -1,39 +1,43 @@
-# STRESS_TEST_PLAN — 1000-Task Marathon Validation
+# STRESS_TEST_PLAN — Executable Validation Protocol
 
-> **Role:** Protocol for long-term operational proof. **Not yet executed.**  
+> **Role:** Protocol for operational proof. **Not yet executed.**  
 > **Read:** When planning validation schedule.  
-> **Updated:** After test completion.  
-> **Max Size:** 60 lines.
+> **Updated:** v2.4  
+> **Max Size:** 80 lines.
 
 ---
 
 ## Goal
 
-Prove behavioral stability over sustained use: 1000 tasks across 30+ days.
+Prove behavioral stability over sustained use.
 
-## Metrics
+## Phase 1: Mini-Marathon (Executable NOW)
 
-| Metric | Target | Measurement |
-|---|---|---|
-| Drift rate | <5% | Audit mode every 20 tasks: L1-L7 violations / total checks |
-| Assumption staleness | <10% | Active assumptions >7 days old / total active |
-| Threshold breaches | 0 | Files exceeding max lines without rollup |
-| False STOP rate | <2% | UNKNOWN declarations that were actually knowable |
+- **Duration:** 7 days
+- **Tasks:** 70 total (3 light, 5 standard, 2 challenge per day)
+- **Daily Metrics:** drift rate, staleness, threshold breaches, false STOP
+- **Success Criteria:** drift <3%, staleness <2 entries, breaches <1/day, false STOP <2
+- **Output:** `STRESS_LOG_DAY_1.md` through `STRESS_LOG_DAY_7.md`
 
-## Schedule
+## Phase 2: Standard Marathon (CONTINGENT on Phase 1 PASS)
 
-- **Phase 1 (Days 1-10):** 10 tasks/day = 100 tasks. Baseline drift measurement.
-- **Phase 2 (Days 11-20):** 10 tasks/day = 200 tasks. Stress with mixed task types.
-- **Phase 3 (Days 21-30):** 10 tasks/day = 300 tasks. Introduce ambiguity and edge cases.
-- **Phase 4 (Days 31-100):** 10 tasks/day = 700 tasks. Sustained operation.
+- **Duration:** 30 days, 300 tasks
+- **Condition:** Phase 1 all criteria met
+- **Metrics:** same as Phase 1, weekly summary
 
-## Success Criteria
+## Phase 3: Extended Run (CONTINGENT on Phase 2 PASS)
 
-- <5% behavioral deviation from L1-L7 across all audits
-- Zero unhandled threshold breaches
-- <2% false escalation rate
-- User-reported usability score ≥7/10
+- **Duration:** Days 31–100
+- **Condition:** Phase 2 PASS
+- **Metrics:** monthly audit
 
-## Current Status
+## Phase 4: Final Assessment
 
-**NOT STARTED.** This is a future validation plan. Current 30/30 PASS covers single-session structural and behavioral verification only.
+- Any failure → restart Phase 1
+- Independent reviewer validates logs
+
+## Honest Caveat
+
+- **Phase 1 is REAL and executable.**
+- **Phases 2–3 are CONTINGENT.** Not started until prior phase passes.
+- Current 30/30 PASS covers single-session only. Long-term drift remains unproven.
