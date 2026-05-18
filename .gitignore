@@ -29,3 +29,6 @@ __pycache__/
 
 # Stale session chronicles (personal data risk)
 MEMORY.md
+
+# Hook-generated audit trail (kept locally, not committed)
+.kimi/audit/
