@@ -41,6 +41,8 @@ If any gate is not applicable, say so explicitly. Silent skips are L7 violations
 
 ## Memory Protocol (Kimi 1.43+ native)
 
+**Scope (added 2026-05-18 per D10):** This memory layer is **project-scoped** to `/root/elite-role-constitution/`. Sessions started in other cwds (e.g. `/var/www/dedoplistsqaro-marketplace`, `/tmp/*`) run **without** these files. Hooks registered in `~/.kimi/config.toml` with absolute paths **do** fire host-wide; the memory layer **does not**. Full discussion: `KIMI_PROTOCOL.md` §H.0.
+
 Cross-session continuity is provided by Kimi's native session persistence (`--continue` / `--session`). Memory **files** in `memory/` are the *human-readable* projection of state, not the primary storage:
 
 - `memory/CONTEXT.md` — current task state. Auto-written by `SessionEnd` hook; you may rewrite it during the turn when state shifts materially.

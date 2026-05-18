@@ -424,6 +424,24 @@ Every response MUST follow this structure:
 
 # H. Context Continuity Protocol
 
+## H.0 Doctrine Scope — Project vs Host (added 2026-05-18 per ROADMAP_ELITE_v2 §5.A.A7 Option γ)
+
+Hooks registered in `~/.kimi/config.toml` use **absolute paths** to scripts under `/root/elite-role-constitution/.kimi/hooks/`. They fire for **every kimi session on this host**, regardless of current working directory. Implications:
+
+- **Security guards (L7) are HOST-WIDE.** Writes to `.env` / `id_rsa` / `.tfstate` / kubeconfig are blocked from any cwd, not only from within this repo.
+- **The audit log at `.kimi/audit/post-tool-use-YYYYMMDD.log` collects EVERY tool call on this host**, not only calls from within `elite-role-constitution/`. Foreign-cwd work (marketplace, /var/www, /tmp scripts) is logged here.
+
+By contrast, the **doctrine memory layer (`memory/*.md`) is PROJECT-SCOPED**. It lives inside this repo and is only loaded when kimi sessions start in this work_dir. Sessions in other cwds run **outside the doctrine memory layer**: no `SessionStart` autoload of `RESUME.md`/`CONTEXT.md`/`ASSUMPTIONS.md`, no `COMPACT_STATE.md` ritual, no doctrinal checkpoint on session end. Those sessions rely solely on Kimi's native session persistence (`--continue` / `--session` files under `~/.kimi/sessions/`).
+
+This is an **explicit design choice** (decision D10, recorded 2026-05-18). Per ROADMAP_ELITE_v2.md §5.A.A7 Option γ, the project chooses honest scope over universal coverage: doctrine attaches to repos that explicitly opt in via `install.sh`, not to every host operation.
+
+**Consequence for foreign work_dirs (marketplace, /var/www, etc.):**
+- ✅ Security hooks DO cover them (L7 absolute contract).
+- ❌ Doctrinal compact ritual, CONTEXT.md / RESUME.md / ASSUMPTIONS.md DO NOT cover them.
+- ❌ Runtime compact in those cwds rotates `context.jsonl` without doctrinal snapshot. Loss of task continuity across compact is the operator's responsibility.
+
+**If a foreign work_dir ever needs full doctrine protection:** `bash install.sh --target <path>` (Phase B introduces this flag) would deploy sibling `.kimi/hooks/` + `memory/` there. Until then, the operator MUST treat those cwds as outside the doctrinal safety net.
+
 ## H.1 When Context Is Normal
 
 - AI operates with full conversation history available
