@@ -79,7 +79,7 @@ On-Demand: Full doctrine (~3000 tokens) triggered by user phrase "challenge-grad
 | Behavioral | 15 V-IDs (L1-L7 enforcement, trigger dictionary, response contract, continuity) | 15/15 PASS |
 | **Total** | **30 V-IDs + 22 execution scenarios (S1–S22)** | **30/30 PASS within scope; +3 pending (V-31/V-32/V-33)** |
 
-Evidence: `VALIDATION_MATRIX.md`, `TEST_SCENARIOS.md`, commit `70c9cb9`. The three appended behavioral-stress V-IDs (V-31/V-32/V-33) are PLANNED — they require multi-day or live-fallback execution and are deliberately outside the 30/30 single-session scope.
+Evidence: `VALIDATION_MATRIX.md`, `tests/TEST_SCENARIOS.md`, commit `70c9cb9`. The three appended behavioral-stress V-IDs (V-31/V-32/V-33) are PLANNED — they require multi-day or live-fallback execution and are deliberately outside the 30/30 single-session scope.
 
 ## Installation
 
