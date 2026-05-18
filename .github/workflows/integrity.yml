@@ -23,8 +23,43 @@ jobs:
       - name: Verify shellcheck is available
         run: shellcheck --version
 
-      - name: Static-analyze SYSTEM_INTEGRITY_CHECK.sh
-        run: shellcheck SYSTEM_INTEGRITY_CHECK.sh
+      - name: Static-analyze every shell script in the repo
+        run: shellcheck SYSTEM_INTEGRITY_CHECK.sh install.sh .kimi/hooks/*.sh
+
+      - name: Verify every hook is executable
+        run: |
+          set -e
+          for h in .kimi/hooks/*.sh; do
+            if [ ! -x "$h" ]; then
+              echo "FAIL: $h missing +x bit (Kimi cannot invoke it)"
+              exit 1
+            fi
+          done
+          echo "All hooks executable."
+
+      - name: Smoke-test each hook with a minimal payload
+        run: |
+          set -e
+          # Inputs that should be allowed (exit 0)
+          echo '{}' | .kimi/hooks/session-start.sh > /dev/null
+          echo '{}' | .kimi/hooks/session-end.sh
+          echo '{}' | .kimi/hooks/pre-compact.sh > /dev/null
+          echo '{}' | .kimi/hooks/stop.sh > /dev/null
+          echo '{}' | .kimi/hooks/notification.sh
+          echo '{"tool_name":"WriteFile","tool_input":{"file_path":"README.md","content":"safe"}}' \
+            | .kimi/hooks/pre-tool-use.sh > /dev/null
+          echo '{"tool_name":"Shell","tool_input":{"command":"ls -la"}}' \
+            | .kimi/hooks/pre-shell.sh > /dev/null
+          # Inputs that MUST block (exit 2)
+          if echo '{"tool_name":"WriteFile","tool_input":{"file_path":".env"}}' \
+             | .kimi/hooks/pre-tool-use.sh > /dev/null 2>&1; then
+            echo "FAIL: pre-tool-use.sh did not block .env"; exit 1
+          fi
+          if echo '{"tool_name":"Shell","tool_input":{"command":"echo TOKEN > .env"}}' \
+             | .kimi/hooks/pre-shell.sh > /dev/null 2>&1; then
+            echo "FAIL: pre-shell.sh did not block redirect to .env"; exit 1
+          fi
+          echo "All hook smoke tests pass."
 
       - name: Run integrity checks
         run: bash SYSTEM_INTEGRITY_CHECK.sh
