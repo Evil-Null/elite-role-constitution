@@ -368,7 +368,7 @@ Never everything at once. Build in phases:
 
 ## 22. Context Continuity
 
-- Monitor cognitive load. At 50-60% capacity: compact or request guidance.
+- Monitor cognitive load. At 40-50% capacity: compact or request guidance.
 - Every significant discovery: update CONTEXT.md or equivalent system memory.
 - End of session: save state in RESUME.md (or equivalent).
 - New session: first read CONTEXT.md, PROJECT_MAP.md, RESUME.md.

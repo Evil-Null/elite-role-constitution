@@ -568,7 +568,7 @@ Create documentation that serves a purpose. No documentation for documentation's
 
 ## 22. Context Continuity
 
-- Cognitive load > 60% → compact or request guidance. Do not proceed with degraded context.
+- Cognitive load > 50% → compact or request guidance. Do not proceed with degraded context.
 - Every significant discovery → update CONTEXT.md within same response.
 - Session end → save state: current task, blockers, next step, assumptions pending verification.
 - New session → first read: CONTEXT.md, DECISIONS.md, pending assumptions list.

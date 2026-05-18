@@ -15,6 +15,7 @@ D4: Bounded multi-layer memory structure (active + archive + policy) — ACTIVE 
 D5: Adversarial hardening execution over cognitive shortcuts — ACTIVE — 2026-05-17
 D6: Live behavioral evidence required for all WEAK→PASS transitions — ACTIVE — 2026-05-17
 D7: Archive oldest entries when no stale status exists but threshold exceeded — ACTIVE — 2026-05-17
+D8: Compact thresholds tightened — runtime 0.85→0.70, doctrine warning 60%→50% (KIMI_PROTOCOL.md H.2). Rationale: 25% buffer at 0.85 was sufficient but tight; 0.70 gives AI doctrinal ritual a real chance to complete before runtime forcibly rotates. — ACTIVE — 2026-05-18
 ```
 
 ## Usage Rule
