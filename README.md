@@ -180,7 +180,7 @@ Three real weaknesses remain documented (not hidden):
 
 ---
 
-## Repo map (57 files across 4 layers)
+## Repo map (58 files across 4 layers)
 
 ```
 agent/                     ← Kimi 1.43+ deployment entry
@@ -217,6 +217,7 @@ SYSTEM_PROMPT_INSTALL.md   ← Step-by-step deploy guide v3.0
 SYSTEM_INTEGRITY_CHECK.sh  ← The self-audit (10/10 PASS contract)
 FORENSIC_AUDIT.md          ← Historical audit + A.0 revision
 IMPROVEMENT_PLAN.md        ← Post-audit roadmap (v1.1, Phase A-E shipped)
+ROADMAP_ELITE_v2.md        ← Strategic roadmap (v2.0 PROPOSED, structural)
 INDEPENDENT_VALIDATION.md  ← 12-check independent-reviewer list
 VALIDATION_MATRIX.md       ← 30 V-IDs + V-31/V-32/V-33 scope notes
 STRESS_TEST_PLAN.md        ← Phase 1 protocol
