@@ -109,7 +109,7 @@ Requires: Kimi CLI, `memory/` directory with `archive/` subdirectory.
 
 ## Files
 
-Complete file/module map: 35 files across 4 layers (including `.github/workflows/integrity.yml` CI). See `KIMI_PROTOCOL.md` E.
+Complete file/module map: 37 files across 4 layers (including `.github/workflows/integrity.yml` CI and the `agent/` deployment files). See `KIMI_PROTOCOL.md` E.
 
 ## Honest Assessment
 

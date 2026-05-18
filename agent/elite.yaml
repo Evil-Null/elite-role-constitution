@@ -1,0 +1,55 @@
+version: 1
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Elite Role Agent — Kimi CLI 1.43+ deployment of 01_ELITE_ROLE.md
+#
+# Usage:
+#   kimi --agent-file agent/elite.yaml
+#   kimi --agent-file agent/elite.yaml --print "challenge-grade audit of foo.py"
+#
+# This file is the entry point for the doctrine described in
+# 01_ELITE_ROLE.md and the surrounding governance files. The actual
+# system prompt content lives in elite.system.md (sibling file); skills
+# are auto-discovered from `skills/elite-role/` and `~/.kimi/skills/`.
+# Mechanical enforcement (V1-V8 hooks, memory autosave) lives under
+# `.kimi/hooks/` (configured in `.kimi/config.toml`).
+#
+# See: IMPROVEMENT_PLAN.md §3 Phase E, KIMI_PROTOCOL.md §C (v2026-05-18).
+# ─────────────────────────────────────────────────────────────────────────────
+
+agent:
+  name: elite-role
+  extend: default
+  system_prompt_path: ./elite.system.md
+
+  # The doctrine is meant to run with the full default tool surface; we
+  # do not narrow the tool list because L4 (PEV loop) and L5 (quantified
+  # risk) both presuppose that the agent can read, write, search, and
+  # ask the user. EnterPlanMode/ExitPlanMode and TaskList are kept so
+  # the PEV `[APPROVED]` gate can be expressed natively.
+  #
+  # If a deployer wants a stricter sandbox (e.g., for unattended runs),
+  # override with `exclude_tools` in a downstream agent file that does
+  # `extend: ./elite.yaml`.
+
+  system_prompt_args:
+    DOCTRINE_VERSION: "v2.4 + Phase E"
+    ROLE_VERSION: "01_ELITE_ROLE.md v4.0"
+    DEPLOYMENT_DATE: "2026-05-18"
+
+  subagents:
+    # 5-Eye / 6-Lens lenses. Each subagent runs in isolated context and
+    # reports back. The doctrine requires that at least one objection
+    # from any lens blocks the output (per 01_ELITE_ROLE.md §5).
+    #
+    # We map to the three built-in subagent types where the tool policy
+    # already fits the lens role, instead of authoring new YAML for each:
+    #
+    #   - Architect lens → `plan`    (read-only, no Shell, no mutations)
+    #   - Developer lens → `coder`   (full tool surface)
+    #   - Security/QA/Tech-Lead/Red-Team lenses → `explore` (read-only +
+    #       web; suitable for adversarial reading without state changes)
+    #
+    # The orchestration (which lens to run, in what order) is delegated
+    # to the main agent's PEV loop. See skills/elite-role/references/
+    # 5-eye-review.md for the operating procedure.
