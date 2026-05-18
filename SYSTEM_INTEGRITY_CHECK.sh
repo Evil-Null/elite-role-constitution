@@ -124,6 +124,26 @@ else
     ERRORS=$((ERRORS + 1))
 fi
 
+# 10. Root-level Max Size enforcement (P1.1 from 2026-05-18 audit)
+# Closes the enforcement vacuum where root-level *.md files self-declared
+# a `Max Size:` cap but the integrity script ignored them.
+ROOT_THRESHOLD_FAIL=0
+for file in *.md; do
+    if grep -qP '^> \*\*Max Size:\*\* \d+ lines' "$file" 2>/dev/null; then
+        LINES=$(wc -l < "$file")
+        MAX=$(grep -oP '(?<=^> \*\*Max Size:\*\* )\d+(?= lines)' "$file" | head -1)
+        if [ "$LINES" -gt "$MAX" ]; then
+            echo "[FAIL] $file: $LINES lines > $MAX max (root-level)"
+            ROOT_THRESHOLD_FAIL=$((ROOT_THRESHOLD_FAIL + 1))
+        fi
+    fi
+done
+if [ "$ROOT_THRESHOLD_FAIL" -eq 0 ]; then
+    echo "[PASS] Root-level Max Size thresholds: all declared files within limits"
+else
+    ERRORS=$((ERRORS + 1))
+fi
+
 echo ""
 if [ "$ERRORS" -eq 0 ]; then
     echo "=== ALL CHECKS PASS ==="
