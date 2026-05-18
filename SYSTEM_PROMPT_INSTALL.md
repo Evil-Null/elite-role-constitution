@@ -15,8 +15,8 @@ v3.0 therefore deploys the doctrine as **native Kimi artifacts** instead of a pa
 
 - `agent/elite.yaml` — the agent file (`kimi --agent-file …`)
 - `agent/elite.system.md` — the deployable system-prompt kernel
-- `skills/elite-role/` — auto-discovered skill with reference files
-- `skills/{audit-mode,challenge-grade,save-state}/` — Flow Skills
+- `.kimi/skills/elite-role/` — auto-discovered skill with reference files
+- `.kimi/skills/{audit-mode,challenge-grade,save-state}/` — Flow Skills
 - `.kimi/hooks/*.sh` + `.kimi/hooks.example.toml` — mechanical enforcement
 
 A **paste-in fallback** is still provided in §6 for environments where the project files are unavailable or the Kimi version is older.
@@ -58,12 +58,13 @@ What this does:
 2. Inherits the `default` agent's tool surface (Shell, ReadFile,
    WriteFile, Glob, Grep, Agent, AskUserQuestion, SetTodoList,
    EnterPlanMode/ExitPlanMode, etc.).
-3. Auto-discovers `skills/elite-role/SKILL.md` from the project root
-   (Kimi's project-level skill search scans `.kimi/skills/`,
-   `.claude/skills/`, `.agents/skills/` as well, so the in-repo
-   `skills/` is picked up directly).
-4. Auto-discovers the three Flow Skills under `skills/audit-mode/`,
-   `skills/challenge-grade/`, `skills/save-state/`.
+3. Auto-discovers `.kimi/skills/elite-role/SKILL.md` from the
+   project root (Kimi's project-level skill search scans only
+   `.kimi/skills/`, `.claude/skills/`, `.codex/skills/`, and
+   `.agents/skills/` — not bare `skills/`, which is why the
+   skill bundle lives under `.kimi/skills/`).
+4. Auto-discovers the three Flow Skills under
+   `.kimi/skills/{audit-mode,challenge-grade,save-state}/`.
 
 Verification (in the Kimi session):
 
@@ -74,6 +75,38 @@ plan only                 → AI replies with a PLAN, does not execute
 challenge-grade audit foo → AI runs the 6-Lens flow with evidence
 [APPROVED]                → AI proceeds with the most recent plan
 save state                → AI writes memory/RESUME.md + CONTEXT.md
+```
+
+---
+
+## Step 2.5 — Optional: install skills user-wide
+
+By default the four Flow Skills (`elite-role`, `audit-mode`,
+`challenge-grade`, `save-state`) are auto-discovered **only when
+Kimi is launched from this repo's root** (project-local discovery
+under `.kimi/skills/`). If you want them available in *every*
+project — same way as your other `~/.kimi/skills/` entries — symlink
+the four skill directories into your user-level skills folder:
+
+```bash
+mkdir -p ~/.kimi/skills
+for s in elite-role audit-mode challenge-grade save-state; do
+  ln -sf "$(pwd)/.kimi/skills/$s" "$HOME/.kimi/skills/$s"
+done
+```
+
+Trade-off: skills do not carry the `agent/`, `.kimi/hooks/`, and
+`memory/` infrastructure with them. If you invoke
+`/flow:save-state` outside this repo, the memory-write step will
+fail with "missing memory/CONTEXT.md" — which is the desired
+behaviour (do not silently invent memory state in a foreign repo).
+
+To uninstall the user-level symlinks:
+
+```bash
+for s in elite-role audit-mode challenge-grade save-state; do
+  rm -f "$HOME/.kimi/skills/$s"
+done
 ```
 
 ---

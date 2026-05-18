@@ -26,7 +26,7 @@ Commits: c553301 (E.1 honest correction), b281bc1 (E.2+E.3 agent + system prompt
 
 End-to-end test: `kimi --agent-file agent/elite.yaml --print --version` → 1.43.0 OK; all 8 hooks smoke-tested with sample JSON; `pre-tool-use.sh` correctly exits 2 on `.env` payload.
 
-**Open work:** R6 (Phase 0 independent reviewer) **still deferred** — Phase E doubled the artifact surface that needs second-eye review. Recommend an external pass on IMPROVEMENT_PLAN.md + agent/elite.system.md + skills/elite-role/SKILL.md before publishing.
+**Open work:** R6 (Phase 0 independent reviewer) **still deferred** — Phase E doubled the artifact surface that needs second-eye review. Recommend an external pass on IMPROVEMENT_PLAN.md + agent/elite.system.md + .kimi/skills/elite-role/SKILL.md before publishing.
 
 ## Running Statistics
 
