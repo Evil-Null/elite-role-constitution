@@ -10,37 +10,39 @@
 
 ## Current Task
 
-**Goal:** Execute approved 4-phase hardening plan to fix metadata rot, stale memory, governance gaps, and validation independence.
-**Status:** IN PROGRESS — Phase 1 executing
-**Started:** 2026-05-17T11:45+04:00
-**Updated:** 2026-05-17T11:45+04:00
+**Goal:** Execute ROADMAP_ELITE_v2.md Phase A (quick hygiene cleanup A1-A7) preceding drift-elimination Phase B.
+**Status:** IN PROGRESS — user `[APPROVED] A` on 2026-05-18; A2/A3/A4/A5 shipped; A1 (this file) + A6 + A7 in this same session.
+**Started:** 2026-05-18
+**Updated:** 2026-05-18
 
 ## Progress
 
-**Last:** Phase 1 preflight complete. 30 files tracked. STRESS_LOG_DAY_1.md untracked.
-**Next:** Complete Phases 1-4 sequentially.
-**Blocked By:** None.
+**Last:** Foundation shipped — runtime compact 0.85→0.70 (D8), doctrine warning 60→50%, ROADMAP_ELITE_v2 PROPOSED + APPROVED Phase A. A2 (README hook count), A3 (SYSTEM_PROMPT_INSTALL), A4 (install.sh), A5 (AUDIT_LOG metadata) shipped this session.
+**Next:** A6 — registration of ROADMAP across README inventory, FILE_UPDATE_RULES matrix, AUDIT_LOG E11, DECISIONS D9, archive E7 rollup. Then A7 — user-mediated decision on marketplace doctrine deployment (Option α/β/γ).
+**Blocked By:** None for A1-A6. A7 requires user input.
 
-## Validation Results
+## Validation Results (current, 2026-05-18)
 
-- **Structural V-IDs (PASS):** V-16 through V-30 (15/15)
-- **Behavioral V-IDs (PASS):** V-01 through V-15 (15/15)
-- **Phase 3 Scenarios (PASS):** S9, S10, S16, S17, S18, S19, S20, S21, S22 (9/9)
-- **Day 1 Stress Test:** 10/10 tasks, 0/0/0/0 metrics
-- **Overall Verdict:** 30/30 PASS + Day 1 clean — FULLY VALIDATED
+- Structural V-IDs: 15/15 PASS (V-16..V-30)
+- Behavioral V-IDs: 15/15 PASS (V-01..V-15, self-monitored)
+- Phase 3 Scenarios: 9/9 PASS (S9..S22)
+- Day 1 Stress: 10/10 PASS; DAY 2-7 pending (ROADMAP §5.E)
+- IND1 R6 mitigation: Tier-3 score 15→6; Tier-2 pending (ROADMAP §5.D)
+- SYSTEM_INTEGRITY_CHECK: currently 1 FAIL (README 57 vs git 58) — expected, fixed by A6.
 
-## File State
+## File State (post-foundation, mid-Phase-A)
 
 | File | Lines | Threshold | Status |
 |---|---|---|---|
-| README.md | 116 | N/A | ✅ |
-| RESUME.md | 31 | 40 | ✅ |
-| CONTEXT.md | 48 | 60 | ✅ |
+| memory/README.md | 59 | 60 | ✅ |
+| RESUME.md | 33 | 40 | ✅ |
+| CONTEXT.md | this turn | 60 | overwriting |
 | ASSUMPTIONS.md | 44 | 50 | ✅ |
-| DECISIONS.md | 32 | 40 | ✅ |
-| AUDIT_LOG.md | 36 | 50 | ✅ |
-| COMPACT_STATE.md | 24 | 40 | ✅ |
+| DECISIONS.md | 33 | 40 | ✅ (D8 added; D9 pending A6) |
+| AUDIT_LOG.md | 46 | 50 | ✅ (A5 +1 line; E11 pending A6) |
+| COMPACT_STATE.md | 27 | 40 | ✅ |
+| ROADMAP_ELITE_v2.md | 623 | 700 | ✅ NEW (commit bdf40f8) |
 
 ## Blockers
 
-None. System FULLY VALIDATED. All thresholds respected.
+A7 awaits user choice between Option α (deploy doctrine to /var/www/dedoplistsqaro-marketplace), Option β (global ~/.kimi/memory fallback), or Option γ (honest scope, document limitation). See ROADMAP_ELITE_v2.md §5.A.A7.
