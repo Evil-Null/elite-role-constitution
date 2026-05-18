@@ -24,17 +24,22 @@ Five amendments forced by self-Red-Team challenge (Attacks #1-#6 in challenge lo
 
 Close the gaps identified by the 2026-05-18 audit while preserving the v2.4 contract surface (L1-L7, V1-V8, 6-Lens, Bounded Memory). The plan does **not** redesign the system; it ships disciplined, reversible patches with regression protection.
 
-## 2. Evidence Base (every claim verified this session, reproducible)
+## 2. Evidence Base
 
-| Claim | Verification command | Result |
-|---|---|---|
-| `FALLBACK_PROTOCOL.md` violates its own `Max Size: 80 lines` | `wc -l FALLBACK_PROTOCOL.md` | **92 lines** — confirmed |
-| `SYSTEM_INTEGRITY_CHECK.sh` ignores root-level Max Size | Script line 44 loops only `memory/*.md` | Confirmed vacuum |
-| 33 git-tracked files | `git ls-files \| wc -l` | 33 matches README |
-| Phase 1 stress test only Day 1 logged | `ls memory/STRESS_LOG_DAY_*.md` | Only Day 1 |
-| V-31/V-32/V-33 NOT TESTED | `VALIDATION_MATRIX.md` lines 178-182 | Confirmed |
-| `Max Size:` format is uniform | `grep -nP '^>?\s*\*?\*?Max Size' *.md memory/*.md` | 11/11 use `> **Max Size:** N lines.` |
-| `memory/` paths are hard-pinned by doctrine | `memory/README.md` lines 14-26 + Default Read Order | Rank chain + Mandatory load list |
+> **Evidence collected at:** v1.0 draft on 2026-05-18 (pre-Phase-A); refreshed
+> 2026-05-18 (post-Phase-E, post-IND1) — both timestamps preserved so
+> the historical motivation and the current state are visible side-by-side.
+> The "verified by" column below is now reproducible TODAY.
+
+| Claim (v1.0 motivation) | Verification command | Result at v1.0 draft | Result NOW (post-Phase-A/E) |
+|---|---|---|---|
+| `FALLBACK_PROTOCOL.md` violates its own `Max Size: 80 lines` | `wc -l FALLBACK_PROTOCOL.md` | **92 lines** — violated | **77 lines** — fixed by Phase A.3 (686d5e9) |
+| `SYSTEM_INTEGRITY_CHECK.sh` ignores root-level Max Size | Script line 44 loops only `memory/*.md` | Vacuum confirmed | **Closed** by Phase A.1 (e942ec4) — check #10 now scans root |
+| Repo file count matches README inventory | `git ls-files \| wc -l` vs README "N files across" | 33 = 33 | **54 = 54** (README + git both 54 after Phase E additions) |
+| Phase 1 stress test only Day 1 logged | `ls memory/STRESS_LOG_DAY_*.md` | Only Day 1 | **Still only Day 1** — Days 2-7 still pending (real elapsed time required) |
+| V-31/V-32/V-33 NOT TESTED | `VALIDATION_MATRIX.md` lines 178-182 | Confirmed NOT TESTED | **Re-labelled** by Phase B.2 (6904634) → "PLANNED — outside 30/30 scope" |
+| `Max Size:` format is uniform | `grep -lE '^> \*\*Max Size:\*\* [0-9]+ lines' *.md memory/*.md` | 11/11 files conform | **11/11** — still conforms (no new files declare `Max Size:`) |
+| `memory/` paths are hard-pinned by doctrine | `memory/README.md` lines 14-26 + Default Read Order | Rank chain + Mandatory load list | **Unchanged** — Phase C.2 permanently STRUCK based on this |
 
 ---
 
@@ -208,7 +213,7 @@ After approval, execution proceeds in §4 order. Each completed phase produces a
 
 When this plan is approved and the implementation begins, the following must also occur:
 
-- **README.md inventory** updated: `33 files across` → `34 files across` (or current count after additions).
+- **README.md inventory** updated: regex-driven increment of the `N files across` value to reflect the post-commit `git ls-files | wc -l`. (Historical trajectory: 33 → 34 at v1.0 registration → 35 after CI workflow → 37 after agent/ → 42 after skill bundle → 51 after hooks → 54 after Flow Skills.)
 - **`FILE_UPDATE_RULES.md`** gets a new entry for `IMPROVEMENT_PLAN.md` lifecycle: editable only while `Status: PROPOSED`; archives to `archive/improvement_plans/` once all phases ship or are abandoned.
 - **`memory/AUDIT_LOG.md`** receives one entry recording v1.0→v1.1 transition and Phase 0 outcome.
 
