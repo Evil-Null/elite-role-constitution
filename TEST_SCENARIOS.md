@@ -624,7 +624,7 @@ bash SYSTEM_INTEGRITY_CHECK.sh
 - Check 3: All memory files within thresholds
 - Check 4: Stress log governance present
 - Check 5: README does not reference SYSTEM_PLAN.md as canonical
-- Check 6: SYSTEM_PLAN.md has ARCHIVED header
+- Check 6: archive/SYSTEM_PLAN.md exists and has ARCHIVED header
 - Check 7: INDEPENDENT_VALIDATION.md has ≥10 checks
 - Check 8: Substring trigger matching documented
 
