@@ -1,5 +1,7 @@
 # STRESS LOG — Day 1 — 2026-05-17
 
+> **Max Size:** 60 lines (per FILE_UPDATE_RULES.md `memory/STRESS_LOG_DAY_*.md` row).
+
 ## Tasks Completed: 10/10
 
 | # | Task Type | Task Summary | Drift | Staleness | Breach | False STOP |
