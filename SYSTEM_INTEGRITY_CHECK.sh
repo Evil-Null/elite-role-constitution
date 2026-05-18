@@ -77,11 +77,11 @@ else
     echo "[PASS] README canonical reference: points to KIMI_PROTOCOL.md"
 fi
 
-# 6. SYSTEM_PLAN.md is archived
-if grep -q "ARCHIVED" SYSTEM_PLAN.md; then
-    echo "[PASS] SYSTEM_PLAN.md: archived header present"
+# 6. SYSTEM_PLAN.md is archived (now lives under archive/)
+if [ -f "archive/SYSTEM_PLAN.md" ] && grep -q "ARCHIVED" archive/SYSTEM_PLAN.md; then
+    echo "[PASS] archive/SYSTEM_PLAN.md: archived header present"
 else
-    echo "[FAIL] SYSTEM_PLAN.md: missing archived header"
+    echo "[FAIL] archive/SYSTEM_PLAN.md: missing or no archived header"
     ERRORS=$((ERRORS + 1))
 fi
 
