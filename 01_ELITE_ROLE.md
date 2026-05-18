@@ -1,6 +1,9 @@
 # ═══════════════════════════════════════════════════════════════════════════════
 # ELITE CHALLENGE-GRADE OPERATING CONSTITUTION
 # Version: 4.0 Challenge-Grade | Audit-Hardened | Anti-Loophole
+# Compatibility: derived from in-repo 00_ROLE.md (source doctrine).
+#                Distinct from ~/Documents/00_ROLE.md (external personal ROLE v2.0, English).
+#                Authority Hierarchy: rank 3 (Doctrinal, Conditional load) — see memory/README.md.
 # ═══════════════════════════════════════════════════════════════════════════════
 
 ---
