@@ -74,17 +74,25 @@ Authority Hierarchy and conflict resolution: `memory/README.md`.
 - `/flow:challenge-grade` → full 6-lens challenge with anti-self-deception check
 - `/flow:save-state` → memory autosave ritual (also runs on `SessionEnd`)
 
-## Hooks (mechanical enforcement, not "you should remember")
+## Hooks (best-effort mechanical reinforcement)
 
-Located under `.kimi/hooks/`, configured in `.kimi/config.toml`. They run automatically; do not skip them, do not work around them. If a hook fails the turn, treat its message as binding.
+Located under `.kimi/hooks/`, configured in `~/.kimi/config.toml` (see `.kimi/hooks.example.toml` for the template). The hooks are **Beta** in Kimi 1.43+ — Kimi documents that timeouts fail-open and configuration shape may change. Treat them as *reinforcement* of the agent's own discipline, not as the only line of defense.
 
-- `SessionStart` — loads memory files into context.
-- `SessionEnd` — writes RESUME.md and CONTEXT.md.
-- `PreCompact` / `PostCompact` — write and verify COMPACT_STATE.md.
-- `PreToolUse` (WriteFile/StrReplaceFile) — V3 security check + protected-file guard.
-- `PostToolUse` — append AUDIT_LOG entry.
-- `Stop` — checks that L6 (3-ways-wrong) appeared in this turn for non-trivial mutations.
-- `Notification` — surfaces STOP-level escalations (L5 ≥ 19) to the user.
+| Hook | Matcher | What it actually does | What the agent must still do |
+|---|---|---|---|
+| `SessionStart` | (any) | Reads `memory/{README,RESUME,CONTEXT,ASSUMPTIONS}.md` and prints them into the new session's context. | Verify the loaded state matches the task; re-read on demand. |
+| `SessionEnd` | (any) | Updates a single `**Last hook autosave:**` timestamp line in `memory/RESUME.md` (only if within cap). | Write the substantive RESUME.md and CONTEXT.md content yourself before the session ends — the hook is a touch, not a save. |
+| `PreCompact` | (any) | Emits a reminder of the compact ritual into context. Does **not** write any file. | Perform Ritual 3 from SESSION_RITUAL.md: write `memory/COMPACT_STATE.md` before `/compact` proceeds. |
+| `PostCompact` | (any) | **Exits 2 (BLOCK)** if `memory/COMPACT_STATE.md` is missing. Warns on size or task-mismatch. | Author the snapshot before relying on it. |
+| `PreToolUse` | `WriteFile\|StrReplaceFile\|MultiEdit` | Fails closed on parse error; resolves symlinks; case-insensitive protected-file match against `.env / id_rsa / credentials / .pem / kubeconfig / .tfstate` and more; V3 secret-pattern scan on content. | Do not try to bypass — the right path for a sensitive file is to edit it manually. |
+| `PreToolUse` | `Shell` | (`pre-shell.sh`) Parses the command with python shlex; blocks if any redirection/copy/move/sed target matches the protected pattern set. | Don't rely on `> .env` to evade the WriteFile guard — same rules apply. |
+| `PostToolUse` | `WriteFile\|StrReplaceFile\|Shell` | Appends one line to `.kimi/audit/post-tool-use-YYYYMMDD.log` (NOT `memory/AUDIT_LOG.md` — the audit log file is for semantic E<N> entries the agent writes). | Write the doctrinal AUDIT_LOG entry yourself when a task is completed. |
+| `Stop` | (any) | Emits a reminder that L6 (anti-self-deception) needs to appear in the response. Cannot read the response; cannot verify. | Actually output the 3-ways-wrong block when the turn mutated state. |
+| `Notification` | (any) | Sends a desktop notification via `notify-send` (Linux), `osascript` argv (macOS, injection-safe), or stderr fallback. | Treat the notification body as a user-facing message — do not pad it with implementation noise. |
+
+The above is the **complete and verified** list of hooks bound by this kernel. Kimi 1.43+ also exposes `UserPromptSubmit`, `PostToolUseFailure`, `StopFailure`, `SubagentStart`, `SubagentStop` — these are intentionally **not bound** here. If a future need arises, register them in `~/.kimi/config.toml` and document the binding in this table.
+
+If a hook fails (exit 2 + stderr), treat the message as a correction and adjust accordingly. If a hook silently times out at 30s (Kimi fail-open default), proceed cautiously — the safety guarantee is reinforcement, not absolute.
 
 ## Deference Order (when sources conflict)
 
