@@ -23,8 +23,25 @@ jobs:
       - name: Verify shellcheck is available
         run: shellcheck --version
 
+      - name: Install python yaml for generator
+        run: python3 -m pip install --quiet pyyaml
+
       - name: Static-analyze every shell script in the repo
-        run: shellcheck SYSTEM_INTEGRITY_CHECK.sh install.sh .kimi/hooks/*.sh
+        run: shellcheck SYSTEM_INTEGRITY_CHECK.sh install.sh generate.sh .kimi/hooks/*.sh
+
+      - name: Verify canon and derived files are in sync
+        run: |
+          set -e
+          bash generate.sh --check
+          # Belt-and-braces: assert no diff after a real run.
+          bash generate.sh
+          if ! git diff --exit-code; then
+            echo "FAIL: generate.sh produced uncommitted diffs."
+            echo "Run 'bash generate.sh' locally and commit the result,"
+            echo "or revert manual edits to canon-generated blocks."
+            exit 1
+          fi
+          echo "Canon to derived parity: OK."
 
       - name: Verify every hook is executable
         run: |
