@@ -1,0 +1,68 @@
+# hooks.example.toml — Elite Role hook registry for Kimi CLI 1.43+
+#
+# Append the [[hooks]] blocks below to your ~/.kimi/config.toml.
+# Each block points at one shell script under .kimi/hooks/ that
+# implements one doctrine check. The scripts are project-relative
+# so they only fire when you launch Kimi inside this repo.
+#
+# Make sure the scripts are executable (`chmod +x .kimi/hooks/*.sh`)
+# before relying on them. The integrity check in CI does not verify
+# the +x bit — it is left to the install procedure.
+#
+# Hook protocol summary:
+#   stdin:  JSON event payload
+#   exit 0: allow (stdout appended to agent context)
+#   exit 2: block (stderr fed back to the LLM as correction)
+#   other:  allow with stderr logged only
+
+[[hooks]]
+event = "SessionStart"
+matcher = ""
+command = ".kimi/hooks/session-start.sh"
+timeout = 10
+
+[[hooks]]
+event = "SessionEnd"
+matcher = ""
+command = ".kimi/hooks/session-end.sh"
+timeout = 10
+
+[[hooks]]
+event = "PreCompact"
+matcher = ""
+command = ".kimi/hooks/pre-compact.sh"
+timeout = 10
+
+[[hooks]]
+event = "PostCompact"
+matcher = ""
+command = ".kimi/hooks/post-compact.sh"
+timeout = 10
+
+# V3 security + protected-file guard. Add tools to matcher as needed.
+[[hooks]]
+event = "PreToolUse"
+matcher = "WriteFile|StrReplaceFile"
+command = ".kimi/hooks/pre-tool-use.sh"
+timeout = 15
+
+# Lightweight audit trail
+[[hooks]]
+event = "PostToolUse"
+matcher = "WriteFile|StrReplaceFile|Shell"
+command = ".kimi/hooks/post-tool-use.sh"
+timeout = 5
+
+# L6 anti-self-deception reminder at turn end
+[[hooks]]
+event = "Stop"
+matcher = ""
+command = ".kimi/hooks/stop.sh"
+timeout = 5
+
+# Surface STOP escalations / permission prompts to the desktop
+[[hooks]]
+event = "Notification"
+matcher = ""
+command = ".kimi/hooks/notification.sh"
+timeout = 5
