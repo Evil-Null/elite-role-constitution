@@ -11,7 +11,7 @@
 ## Recent Entries (Last 5)
 
 ```
-E11: ROADMAP_ELITE_v2.md inception + Phase A execution — strategic plan supplementing v1.1 (structural scope) + 7 housekeeping commits — 2026-05-18 — PROPOSED→APPROVED A, A1-A6 shipped this session
+E11: ROADMAP_ELITE_v2.md v2.0 + Phase A (A1-A7) + Phase B (B1-B9) + post-audit hotfix — strategic structural roadmap shipped; 8 doctrine drift surfaces closed (hook count, protected patterns, secret regexes, L1-L7 §-mapping, file count, audit-log metadata, scope honesty, SC2034 in generated code) — 2026-05-18 — APPROVED A + B; C-G pending — 19 commits total
 IND1: R6 mitigation — 4 parallel independent subagent reviewers — 2026-05-18 — 24 findings (9 CRITICAL) → 7 follow-up commits → R6 score 15→6
 E10: Phase E — Kimi 1.43+ native deployment — 2026-05-18 — PASS:10/10 — Risk:R6=15 (now mitigated by IND1)
 E9: IMPROVEMENT_PLAN v1.1 — Phases A+B+C.1+D shipped — 2026-05-18 — PASS:10/10 — Risk:R6=15 — Files:35
@@ -43,4 +43,4 @@ Live re-test post-fix: kimi recall of L6 still verbatim PASS. R6 score now P3×I
 - **Archive location:** `memory/archive/audit_archive.md`
 - **Index location:** `memory/archive/audit_index.md`
 - **Last rollup:** 2026-05-17T06:45+04:00
-- **Last metadata check:** 2026-05-18 — E11 added (ROADMAP v2 inception); E7 dropped from active set per "Last 5" rule (note: archived E7 from 2026-05-10 in audit_archive.md is a pre-existing E-number collision unrelated to this active-set entry; no re-archive performed).
+- **Last metadata check:** 2026-05-18 evening — E11 entry text refreshed to span Phase A + Phase B + hotfix (single combined entry rather than adding E12 to avoid reopening pre-existing E-number collision with archived E8 from 2026-05-10). Statistics below reflect total commits, not entry count.

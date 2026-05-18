@@ -1,7 +1,7 @@
 # ROADMAP_ELITE_v2 — Strategic Architectural Roadmap
 
 > **Role:** Doctrine-compliant strategic plan to close *architectural* gaps identified by the 2026-05-18 elite-grade deep audit. Builds on `IMPROVEMENT_PLAN.md` v1.1 (shipped) and supersedes its scope.
-> **Status:** `PROPOSED` — no file in this repo is modified by phases B–G until the user replies with `[APPROVED] <phase scope>`. Phase A items A1–A6 are pre-approved housekeeping (see §1).
+> **Status:** Phase **A** ✅ shipped 2026-05-18 (commits 472f54d…382bdd8 + bdf40f8). Phase **B** ✅ shipped 2026-05-18 (commits eeec1fb…93ef2bb + 1a92fc5 hotfix). Phases C–G remain `PROPOSED` — no further file in this repo is modified by phases C–G until the user replies with `[APPROVED] <phase scope>`.
 > **Read:** Before opening any commit attributed to this roadmap. Re-read at the start of each phase.
 > **Updated:** Only while `Status: PROPOSED`. Once any phase commits land, this file is the contract — amendments require an explicit change-log entry (§12) and `[APPROVED]`.
 > **Authority:** Protocol (Rank 2) — governed by `01_ELITE_ROLE.md` (Rank 3 Doctrine) and `memory/README.md` (Authority Map).
