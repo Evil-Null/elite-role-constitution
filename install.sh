@@ -175,6 +175,16 @@ if [ "$DO_HOOKS" -eq 1 ]; then
     elif ask_yn "Append the elite-role hook block to $USER_CONF? (a backup is made first)"; then
         cp "$USER_CONF" "$USER_CONF.bak.$(date +%Y%m%d_%H%M%S)"
         ok "Backup created."
+        # TOML conflict guard: `hooks = []` (array form) and `[[hooks]]`
+        # (table-array form) cannot coexist in the same TOML file.
+        # Newer Kimi config templates use `hooks = []` by default; comment
+        # it out before appending our table-array block. This was caught
+        # in live testing on the first deploy.
+        if grep -qE '^hooks[[:space:]]*=[[:space:]]*\[\]' "$USER_CONF"; then
+            sed -i.tmp -E 's|^hooks[[:space:]]*=[[:space:]]*\[\]|# &   # commented out by elite-role install.sh — conflicts with [[hooks]] table-array form below|' "$USER_CONF"
+            rm -f "$USER_CONF.tmp"
+            ok "Commented out the existing 'hooks = []' line to avoid TOML conflict."
+        fi
         {
             printf '\n# ─── Elite Role Constitution hooks (added by install.sh on %s) ───\n' "$(date -Iseconds)"
             # Rewrite project-relative paths to absolute paths for the user config

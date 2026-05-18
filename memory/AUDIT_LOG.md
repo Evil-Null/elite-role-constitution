@@ -11,32 +11,31 @@
 ## Recent Entries (Last 5)
 
 ```
-E10: Phase E — Kimi 1.43+ native deployment — 2026-05-18 — PASS:10/10 — Risk:R6=15 still deferred — Iter:1 — Files:54 tracked / 7 new commits
-E9: IMPROVEMENT_PLAN v1.1 — Phases A+B+C.1+D shipped — 2026-05-18 — PASS:10/10 — Risk:R6=15 unmitigated — Iter:1 — Files:35
-E8: Hardening phase — all 7 WEAK→PASS, all 9 Phase 3 executed — 2026-05-17 — PASS:30/WEAK:0/FAIL:0 — Risk:5 — Iter:1
-E7: Behavioral validation suite (V-01 to V-15) — 2026-05-17 — PASS:8/WEAK:7/FAIL:0 — Risk:5 — Iter:1
-E6: Validation environment setup and structural verification — 2026-05-17 — PASS — Risk:3 — Iter:1
+IND1: R6 mitigation — 4 parallel independent subagent reviewers — 2026-05-18 — 24 findings (9 CRITICAL) → 7 follow-up commits → R6 score 15→6
+E10: Phase E — Kimi 1.43+ native deployment — 2026-05-18 — PASS:10/10 — Risk:R6=15 (now mitigated by IND1)
+E9: IMPROVEMENT_PLAN v1.1 — Phases A+B+C.1+D shipped — 2026-05-18 — PASS:10/10 — Risk:R6=15 — Files:35
+E8: Hardening phase — all 7 WEAK→PASS, all 9 Phase 3 executed — 2026-05-17 — PASS:30/WEAK:0/FAIL:0 — Risk:5
+E7: Behavioral validation suite (V-01 to V-15) — 2026-05-17 — PASS:8/WEAK:7/FAIL:0 — Risk:5
 ```
 
-## E10 Detail — Phase E Kimi 1.43+ Adaptation (2026-05-18, 7 commits)
+## IND1 Detail — Independent Review Cycle (2026-05-18, post-Phase E)
 
-Live verification of Kimi CLI 1.43.0 showed `KIMI_PROTOCOL.md` §C "Kimi cannot do X" claims were largely outdated. Phase E re-derived the deployment as native Kimi artifacts: agent file, Anthropic-compatible Skill + 4 references, 3 Flow Skills, 8 hooks, install guide v3.0.
+Four subagent reviewers run in isolated contexts: general-purpose (doctrine consistency), code-reviewer (hook security), silent-failure-hunter (silent failures), Explore (live-test reproducibility). Per `independent-validation.md`, this counts as Tier 3 (same-vendor different-session) — lower than human peer but a real R6 mitigation.
 
-Commits: c553301 (E.1), b281bc1 (E.2+E.3), acfd79c (E.4), b834fb9 (E.5), 590a424 (E.6), 0d392fa (E.7), b672dde (E.8), 567fd6a (skills-path fix).
+Findings: 24 total, 9 CRITICAL (P×I≥15). Headline issues — L1-L7 phantom labels in canon (Obj #1), osascript command injection (R2 #1), Shell-tool bypass of file guard (R3 #3), PreToolUse fail-open on parse error (R3 #1), doctrine misclaiming what hooks do (R3 #4), stale IMPROVEMENT_PLAN evidence (Obj #3).
 
-**LIVE runtime verification (Kimi 1.43.0, post-`567fd6a`):** alive probe → "ALIVE"; skill auto-discovery → all 4 skills listed; doctrine recall → L1-L7 recited verbatim; PEV gate → `plan only` produced [PLAN]+P×I+[STOP] with no mutation (verified `test.txt` not created).
+Fix commits: a8b0f3d (L1-L7 mapping + P×I align + lens names), 537eb54 (plan evidence refresh), 3427980 (osascript + protected-file + Shell + secrets), 66a1f61 (memory Max Size declarations + integrity hardening), a106909 (honest hook claims), ed46877 (CI lint+smoke hooks), 60bc7c9 (medium fixes), [this commit] (IND1 entry + TOML conflict fix).
 
-**Open:** R6 (Phase 0 independent reviewer) **still deferred** — recommend external pass on IMPROVEMENT_PLAN.md + agent/elite.system.md + .kimi/skills/elite-role/SKILL.md.
+Live re-test post-fix: kimi recall of L6 still verbatim PASS. R6 score now P3×I2=6 (low) — single-eye-author bias remains, but the 4-reviewer cycle has filed and addressed all CRITICAL findings.
 
 ## Running Statistics
 
 | Metric | Value |
 |---|---|
-| Total entries (all time) | 10 |
-| Recent pass rate | 100% (10/10) |
-| Average iterations | 1.0 |
-| Average risk score | 6.4 |
-| Escalation rate | 20% (E9 + E10 both surfaced L5-zone R6 deferral) |
+| Total entries | 11 (10 task + 1 IND) |
+| Recent pass rate | 100% (11/11) |
+| Average risk score | 6.0 (R6 dropped 15→6) |
+| Escalation rate | 18% (E9+E10 hit L5, IND1 closed) |
 
 ## Archive Reference
 
