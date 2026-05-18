@@ -109,7 +109,7 @@ Requires: Kimi CLI, `memory/` directory with `archive/` subdirectory.
 
 ## Files
 
-Complete file/module map: 33 files across 4 layers. See `KIMI_PROTOCOL.md` E.
+Complete file/module map: 34 files across 4 layers. See `KIMI_PROTOCOL.md` E.
 
 ## Honest Assessment
 
