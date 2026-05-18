@@ -33,8 +33,12 @@ TIMESTAMP=$(date -Iseconds)
 
 # If RESUME.md has a "**Last hook autosave:**" line, update it; otherwise
 # append one line (only if doing so stays under the declared cap).
-MAX=$(grep -oP '(?<=^> \*\*Max Size:\*\* )\d+(?= lines)' memory/RESUME.md 2>/dev/null | head -1 || echo "40")
-CURRENT=$(wc -l <memory/RESUME.md)
+# NB: `|| echo "40"` after a pipe never fires (head returns 0 on empty
+# input). Default with parameter expansion AFTER the pipe is the only
+# correct pattern (R2 #4).
+MAX="$(grep -oP '(?<=^> \*\*Max Size:\*\* )\d+(?= lines)' memory/RESUME.md 2>/dev/null | head -1 || true)"
+MAX="${MAX:-40}"
+CURRENT=$(awk 'END{print NR}' memory/RESUME.md)
 
 if grep -q "^\*\*Last hook autosave:\*\*" memory/RESUME.md; then
     # Cross-platform sed in-place (BSD/GNU agnostic)

@@ -109,7 +109,7 @@ Requires: Kimi CLI, `memory/` directory with `archive/` subdirectory.
 
 ## Files
 
-Complete file/module map: 54 files across 4 layers (including `.github/workflows/integrity.yml` CI, the `agent/` deployment files, the `.kimi/skills/elite-role/` skill bundle, the `.kimi/skills/{audit-mode,challenge-grade,save-state}/` Flow Skills, and the `.kimi/hooks/` mechanical-enforcement scripts). See `KIMI_PROTOCOL.md` E.
+Complete file/module map: 56 files across 4 layers (including `.github/workflows/integrity.yml` CI, the `agent/` deployment files, the `.kimi/skills/` skill bundles, the `.kimi/hooks/` mechanical-enforcement scripts plus `pre-shell.sh`, and `install.sh` one-command deployer). See `KIMI_PROTOCOL.md` E.
 
 ## Honest Assessment
 
