@@ -41,10 +41,17 @@ MAX="${MAX:-40}"
 CURRENT=$(awk 'END{print NR}' memory/RESUME.md)
 
 if grep -q "^\*\*Last hook autosave:\*\*" memory/RESUME.md; then
-    # Cross-platform sed in-place (BSD/GNU agnostic)
-    tmpf=$(mktemp)
+    # Atomic in-place rewrite via a SAME-FILESYSTEM tempfile so that
+    # `mv` is a rename (atomic), not a copy. R2 #5 fix: mktemp under
+    # /tmp could be on a different filesystem; the move would be a
+    # copy-then-unlink that can leave RESUME.md half-written on
+    # interruption.
+    tmpf="memory/.RESUME.md.hook.$$"
+    # shellcheck disable=SC2064  # expansion at trap-set time is intentional
+    trap "rm -f '$tmpf'" EXIT
     sed "s|^\*\*Last hook autosave:\*\*.*|**Last hook autosave:** $TIMESTAMP|" memory/RESUME.md >"$tmpf"
     mv "$tmpf" memory/RESUME.md
+    trap - EXIT
 elif [ "$CURRENT" -lt "$MAX" ]; then
     printf '\n**Last hook autosave:** %s\n' "$TIMESTAMP" >>memory/RESUME.md
 fi

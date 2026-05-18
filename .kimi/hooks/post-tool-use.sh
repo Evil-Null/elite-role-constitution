@@ -28,9 +28,11 @@ PROJECT_ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
 LOG_DIR="$PROJECT_ROOT/.kimi/audit"
 mkdir -p "$LOG_DIR" 2>/dev/null || exit 0
 
-LOG_FILE="$LOG_DIR/post-tool-use-$(date +%Y%m%d).log"
+# Pin both filename and in-file timestamp to UTC so log rotation does
+# not depend on the host's $TZ setting (R2 #8).
+LOG_FILE="$LOG_DIR/post-tool-use-$(TZ=UTC date -u +%Y%m%d).log"
 
-printf '%s | %s | %s\n' "$(date -Iseconds)" "$TOOL" "$FILE" >>"$LOG_FILE" 2>/dev/null || true
+printf '%s | %s | %s\n' "$(TZ=UTC date -u -Iseconds)" "$TOOL" "$FILE" >>"$LOG_FILE" 2>/dev/null || true
 
 # Always allow
 exit 0
