@@ -1,4 +1,10 @@
 # ═══════════════════════════════════════════════════════════════
+# Compatibility: source doctrine (Georgian working-document).
+#                Hardened challenge-grade derivation: 01_ELITE_ROLE.md v4.0 (this repo).
+#                Distinct from ~/Documents/00_ROLE.md (external personal ROLE v2.0, English).
+# ═══════════════════════════════════════════════════════════════
+
+# ═══════════════════════════════════════════════════════════════
 # A. Brief Analysis
 # ═══════════════════════════════════════════════════════════════
 
