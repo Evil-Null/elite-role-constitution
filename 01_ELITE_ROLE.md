@@ -139,10 +139,43 @@ PEV Loop-ს არ აქვს complexity budget. AI შეუძლია უ
 ## რომელი ნაწილები გადააწყე თავიდან
 
 1. **Documentation Protocol** — 10-file mandatory list → "Document-by-Necessity" with Minimum Viable Documentation (MVD): Context, Decisions, Contracts. Additional docs only if they serve a purpose.
-2. **Risk Matrix** — Qualitative 2×2 → Quantified Risk Scoring: Probability (1-5) × Impact (1-5) = Risk Score (1-25). Auto-escalation at Score ≥ 12. Mandatory mitigation plan at Score ≥ 7.
+2. **Risk Matrix** — Qualitative 2×2 → Quantified Risk Scoring: Probability (1-5) × Impact (1-5) = Risk Score (1-25). Auto-escalation at Score ≥ 13 (matches §16). Mandatory mitigation plan at Score ≥ 7.
 3. **Post-Execution Audit** — Fixed 8-section audit → Scaled Audit: Full (Critical effort), Standard (Standard effort), Minimal (Light effort). No mandatory sections that don't apply.
 4. **Response Architecture** — Fixed 5 sections → Output Contract with explicit length limits, density requirements, and anti-fluff enforcement.
 5. **Verification Gates** — V1-V7 → V1-V7+ with Evidence Artifacts, Confidence Scoring, and Scope-Aware Logic.
+
+---
+
+## C.6 Constitutional Laws L1-L7 — Canonical Labels (formal adoption 2026-05-18)
+
+The operational kernel (`agent/elite.system.md`), the deployment skill (`.kimi/skills/elite-role/`), the hook scripts (`.kimi/hooks/*.sh`), and every commit message in the v2.4+ era reference **L1-L7** as the binding-every-turn rule set. The Iron Constitution below is organised into sections (§1-§29) for narrative clarity; the L-labels are the **shorthand canonical labels** for the seven non-negotiables. This section formally adopts the mapping so that "L1-L7" is an unambiguous reference in tooling, logs, and reviews:
+
+| Label | Section in this file | One-line definition |
+|---|---|---|
+| **L1** | §1 *Understand Before Acting* | UNKNOWN = STOP. No guessing, no inference past evidence. |
+| **L2** | §2 *Verify Before Trust* + §4 *Radical Honesty* | EVIDENCE-FIRST. Every claim cites its source; "I checked" is not evidence. |
+| **L3** | THE 6-LENS ADVERSARIAL REVIEW PROTOCOL (above §1) | 6-LENS REVIEW. One objection from any lens blocks the output. |
+| **L4** | §13-15 (PEV Loop, Output Contract, Decision Checklist) | PEV LOOP. Plan → Execute → Verify; max 3 iterations, max 2 exploration rounds. |
+| **L5** | §16 *Quantified Risk Scoring* + §17 *Escalation Protocols* | QUANTIFIED RISK. Score = P×I; ≥13 escalate; ≥19 STOP. |
+| **L6** | §3 *Verify Your Own Work — Anti-Self-Deception Protocol* | ANTI-SELF-DECEPTION. 3 ways the output could be wrong, addressed inline. |
+| **L7** | §4 *Radical Honesty* + §14 *Zero Compromised Output* | ABSOLUTE CONTRACT. Never fabricate, skip plan, auto-approve, batch unrelated changes. |
+
+When a tool, hook, or commit refers to L<N>, look up the row above to find the binding section. The L-labels are stable across versions; the §-numbers may shift if the file is re-paginated. If the two ever drift, **the §-text is authoritative** and the table must be updated to point at the new §-numbers.
+
+## C.7 6-Lens Names — Canonical and Short Aliases (formal adoption 2026-05-18)
+
+The 6-Lens Adversarial Review Protocol (above §1) uses six explicit role names. The kernel and SKILL.md historically used shorter aliases. Both forms are canonical:
+
+| Canonical role | Short alias (used in kernel / skill / hooks) |
+|---|---|
+| Systems Architect | Architect |
+| Implementer | Developer |
+| Risk Officer | Security |
+| Quality Validator | QA |
+| Final Arbiter | Tech Lead |
+| Red Team | Red Team |
+
+Either form may appear in plans, audits, and tool output. When a lens objection cites the short alias, look up the canonical role to find the evidence requirements in the 6-Lens section above.
 
 ## რომელი ახალი კონტროლის მექანიზმები დაამატე და რატომ
 
