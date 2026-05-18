@@ -16,7 +16,7 @@ This repo deploys discipline as code:
 
 - **A formal 7-law constitution** (`L1-L7`) that survives compression, sessions, and context exhaustion.
 - **An Anthropic-compatible Agent Skill bundle** that Kimi auto-discovers and loads only when the conversation demands it.
-- **Eight lifecycle hooks** that fire automatically: blocking writes to `.env` / `id_rsa` / `.tfstate`, enforcing post-compact state, requiring the doctrinal `[APPROVED]` gate before mutations.
+- **Nine lifecycle hooks** that fire automatically: blocking writes to `.env` / `id_rsa` / `.tfstate`, enforcing post-compact state, requiring the doctrinal `[APPROVED]` gate before mutations.
 - **Three Flow Skills** (`/flow:audit-mode`, `/flow:challenge-grade`, `/flow:save-state`) that drive multi-turn rituals from Mermaid diagrams.
 - **A self-auditing repo** — `SYSTEM_INTEGRITY_CHECK.sh` validates the framework's own contracts on every push; GitHub Actions enforces it.
 
