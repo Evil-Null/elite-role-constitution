@@ -96,6 +96,43 @@ The above is the **complete and verified** list of hooks bound by this kernel. K
 
 If a hook fails (exit 2 + stderr), treat the message as a correction and adjust accordingly. If a hook silently times out at 30s (Kimi fail-open default), proceed cautiously — the safety guarantee is reinforcement, not absolute.
 
+### Hook Engine Semantics (Phase C1 source-of-truth, 2026-05-18)
+
+Read from `kimi_cli/hooks/runner.py:run_hook` (Kimi 1.44.0). The runner:
+
+1. **Writes `input_data` JSON to the hook process stdin** and reads stdout/stderr.
+2. **Block paths** — two equivalent forms:
+   - **`exit 2`** with reason on stderr (used by all elite-role hooks today).
+   - **`exit 0`** plus a structured JSON document on stdout containing `{"hookSpecificOutput": {"permissionDecision": "deny", "permissionDecisionReason": "..."}}`.
+3. **Allow paths** — `exit 0` with any other stdout, or any non-2 non-0 exit.
+4. **Fail-open** — timeout (per-hook, default 30s), spawn failure, or unhandled engine exception → result is `allow`. **Aggregate rule** in `engine.py:_execute_hooks`: a single `block` from any matching hook wins; otherwise `allow`.
+
+### Per-event Input Payload Schema (kimi_cli/hooks/events.py)
+
+Every event payload starts with `{"hook_event_name": str, "session_id": str, "cwd": str}` and adds event-specific fields:
+
+| Event | Extra fields | What the hook can decide on |
+|---|---|---|
+| `PreToolUse` | `tool_name`, `tool_input` (dict), `tool_call_id` | Tool name + full argument dict — basis for path/secret guards. |
+| `PostToolUse` | `tool_name`, `tool_input`, **`tool_output` (str)**, `tool_call_id` | Tool result text is visible — basis for retroactive content audit (`L2` citation, secret leak). |
+| `PostToolUseFailure` | `tool_name`, `tool_input`, `error`, `tool_call_id` | Failure mode, no output. |
+| `UserPromptSubmit` | **`prompt` (str)** | Latest user message text — basis for `[APPROVED]` gate (L4 PEV — enables C4). |
+| `Stop` | `stop_hook_active` (bool, anti-recursion flag) | NO response text, NO message history — primary-agent L6 cannot be mechanically verified. Reminder only. |
+| `StopFailure` | `error_type`, `error_message` | Diagnostic. |
+| `SessionStart` | `source` (str) | Cold start vs resume. |
+| `SessionEnd` | `reason` (str) | Why the session ended. |
+| `SubagentStart` | `agent_name`, `prompt` | Subagent dispatch — visible. |
+| `SubagentStop` | `agent_name`, **`response` (str)** | Subagent response IS visible — L6 enforceable for subagents only. |
+| `PreCompact` | `trigger`, `token_count` | "manual" vs "automatic" + size. |
+| `PostCompact` | `trigger`, `estimated_token_count` | Same. |
+
+### Implications for L1–L7 mechanical enforcement
+
+- **L4 PEV `[APPROVED]` gate (C4):** ACHIEVABLE. Register a `UserPromptSubmit` hook that caches the last `prompt` to a file; PreToolUse reads the cache, blocks (exit 2) when a state-mutating tool fires without `[APPROVED]` in the most-recent user message.
+- **L6 anti-self-deception block (C3):** NOT ACHIEVABLE for primary agent (no response text in Stop payload). DOWNGRADED to advisory reminder, which is what the current `stop.sh` already emits. Enforceable for `SubagentStop` if the project ever uses subagents under the kernel.
+- **L2 citation discipline (C2):** PARTIAL. `PostToolUse.tool_output` is visible — a hook can scan tool output for "unverified", "should be", "probably" patterns. Cannot scan the agent's narrative outside tool calls. Treat as advisory.
+- **L1 UNKNOWN-stop / L3 6-Lens / L5 P×I / L7 batching:** No payload exposes the inner reasoning; these remain self-disciplined.
+
 ## Deference Order (when sources conflict)
 
 1. `01_ELITE_ROLE.md` (doctrinal source)

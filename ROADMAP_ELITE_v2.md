@@ -598,6 +598,15 @@ U1+U2 უკვე shipped-ია. U3+U4+U5 ამ roadmap-ის deliverable-�
 ## 12. Change Log
 
 - **v2.0** — 2026-05-18 — initial proposal from elite-grade architectural audit (current session). User-confirmed requirements U1–U5 captured; Phases A–G drafted with per-task pre-mortem, acceptance, rollback, P×I, evidence. Status: PROPOSED.
+- **v2.0-a** — 2026-05-18 — Phase A shipped (commits 472f54d…382bdd8 + bdf40f8). Status updated in §0.
+- **v2.0-b** — 2026-05-18 — Phase B shipped (commits eeec1fb…93ef2bb + 1a92fc5 hotfix + aed1f52 hygiene).
+- **v2.0-C1** — 2026-05-18 — **Phase C task C1 closed via source inspection** (not instrumentation). Read `kimi_cli/hooks/events.py` + `runner.py` + `engine.py` from the installed kimi-cli 1.44.0 package. Complete payload schema for all 12 hook events recorded in `agent/elite.system.md` "Per-event Input Payload Schema" section. Key findings that refine C2–C5 scope:
+  - **C3 (L6 3-ways-wrong block):** NOT ACHIEVABLE for primary agent — `Stop` payload exposes only `{hook_event_name, session_id, cwd, stop_hook_active}`, no response text. M2 fallback from §8 ACTIVATES: keep current advisory-reminder semantics. Plan P×I lowered from 3×4=12 to 1×2=2 (advisory-only scope).
+  - **C2 (L2 citation):** PARTIALLY ACHIEVABLE. `PostToolUse.tool_output` IS visible — a hook can scan tool output for uncited claim patterns, but cannot scan the agent's narrative outside tool calls. Plan rescoped to "advisory PostToolUse-based heuristic," P×I 3×3=9 stays.
+  - **C4 (PEV [APPROVED] gate):** FULLY ACHIEVABLE. `UserPromptSubmit` payload contains the full `prompt` string. Design: register a UserPromptSubmit hook that caches the last prompt to a file; existing PreToolUse hook reads cache, blocks state-mutating tools when `[APPROVED]` is absent. P×I 4×4=16 unchanged.
+  - **C5 (telemetry):** UNCHANGED. PostToolUse + Stop events provide enough signal fields.
+  - **Block protocol:** Two equivalent block forms confirmed (`exit 2 + stderr` AND `exit 0 + JSON {"hookSpecificOutput":{"permissionDecision":"deny",...}}`). All existing hooks use the first; future hooks may use either.
+  - **Fail-open:** Confirmed at 30s timeout per hook in `runner.py`. Aggregate `block` wins from any matching hook (`engine.py`).
 
 ---
 
