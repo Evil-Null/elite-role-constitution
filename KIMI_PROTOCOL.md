@@ -118,51 +118,59 @@ These 7 items are the **immune system**. They must be present in the system prom
 
 ---
 
-# C. Kimi Reality Constraints
+# C. Kimi CLI Reality (verified against v1.43.0 on 2026-05-18)
 
-## C.1 What Kimi CLI Can Do (Verified Capabilities)
+> **REVISION NOTE (2026-05-18, Phase E):** sections C.1-C.3 were rewritten after live verification of Kimi CLI 1.43.0. The prior version of this section described Kimi CLI as a "static-prompt sequential chat" platform with no runtime orchestration. That description was correct for an earlier generation of the tool but is **no longer accurate**. Kimi CLI 1.43.0 ships with a real agent runtime: Agent Skills, Agent files, Hooks (13 lifecycle events, Beta), Plugins (Beta), MCP, session persistence, slash commands, plan mode, and a built-in `decisions.db`. The doctrine's enforcement layer can therefore be **mechanical**, not just mental.
+
+## C.1 What Kimi CLI 1.43+ Can Do (Verified Capabilities)
 
 | Capability | How It Works | Protocol Use |
 |---|---|---|
-| **System prompt / role prompt** | Set once per conversation via `.kimi/` or manual paste | Load constitutional laws and basic output contract |
-| **Sequential chat turns** | User sends message, AI responds, history accumulates | Turn-based ritual execution |
-| **Tool use (read/write files)** | AI can read/write files in working directory when explicitly using tools | Memory file operations (CONTEXT.md, RESUME.md, etc.) |
-| **Manual `/compact`** | User command to compress conversation history | Context management protocol |
-| **Session restart** | User starts new conversation | Session handoff via RESUME.md |
-| **Static reference files** | Files in working directory that AI reads on request | Full doctrine reference on demand |
-| **User text commands** | User types explicit instructions in messages | Mode switching, triggers, approvals |
+| **Agent files (YAML)** | `kimi --agent-file path.yaml`; supports `extend: default`, `tools`, `exclude_tools`, `subagents`, `system_prompt_path`, `system_prompt_args` | Deploy the elite role as a structured agent with tool-set control |
+| **System-prompt variables** | `${KIMI_NOW}`, `${KIMI_WORK_DIR}`, `${KIMI_WORK_DIR_LS}`, `${KIMI_AGENTS_MD}`, `${KIMI_SKILLS}`, `${KIMI_ADDITIONAL_DIRS_INFO}` + Jinja2 `{% include %}` | Inject live context; embed memory snapshots at session start |
+| **Agent Skills (Anthropic-compatible)** | `SKILL.md` in `~/.kimi/skills/<name>/`, `~/.claude/skills/<name>/`, project `.kimi/skills/`, etc. Auto-discovered on startup. Can also be invoked via `/skill:<name>` | Load doctrine references on demand (5-Eye, PEV, P×I, Independent Validation) |
+| **Flow Skills** | `type: flow` SKILL.md with embedded Mermaid/D2 diagram, invoked via `/flow:<name>` | Multi-step automated workflows (e.g. `/flow:audit-mode`, `/flow:challenge-grade`) |
+| **Hooks (Beta)** | 13 lifecycle events: PreToolUse, PostToolUse, PostToolUseFailure, UserPromptSubmit, Stop, StopFailure, SessionStart, SessionEnd, SubagentStart, SubagentStop, PreCompact, PostCompact, Notification. Shell command receives JSON via stdin; exit 0 allow, 2 block, structured JSON for `permissionDecision: deny` | **Mechanical** enforcement: V3-security PreToolUse, memory autosave on SessionEnd, COMPACT_STATE.md on PreCompact, 5-Eye audit on Stop |
+| **Plugins (Beta)** | Declarative tool wrappers via `plugin.json`; user already has `kimi-datasource v2.0.1` installed | Wrap audit scripts and assumption-checkers as first-class tools |
+| **MCP servers** | `~/.kimi/mcp.json`; user already has `kimixed` MCP server configured | Expose memory-folder operations through a dedicated MCP if desired |
+| **Session persistence** | `--continue` / `--session [id]` / `~/.kimi/sessions/`; auto-resume across restarts | Native replacement for the prior "manual RESUME.md handoff" model |
+| **Decisions DB** | `~/.kimi/decisions.db` (SQLite, 856 KB on this host) | Optional parallel sink for `memory/DECISIONS.md`-style state |
+| **Print / Wire mode** | `--print`, `--quiet`, `--wire` (experimental); `--input-format text|stream-json`, `--output-format text|stream-json` | Automation: stress-test runs, CI smoke checks |
+| **Plan mode** | `EnterPlanMode` / `ExitPlanMode` built-in tools + `default_plan_mode` config | Native PEV-loop "PLAN" stage; AI cannot mutate state in plan mode |
+| **Subagents** | Built-in: `coder`, `explore`, `plan` (each with curated tool set). Custom subagents via `subagents:` in agent file | Run 5-Eye lenses as parallel subagents |
+| **AskUserQuestion / SetTodoList / TaskList** | Built-in tools | `[APPROVED]` gates and PEV tracking become native interactions |
+| **MaxRalphIterations** | `--max-ralph-iterations` flag for self-iterative loops | Native iteration cap (replaces "max 3 PEV iterations" mental rule) |
 
-## C.2 What Kimi CLI Cannot Do (Verified Limitations)
+## C.2 Real Limitations (Verified, narrower than the previous claim)
 
-| Limitation | Why | Impact on Design |
+| Limitation | Why | Mitigation |
 |---|---|---|
-| **No dynamic prompt assembly** | System prompt is static for the conversation | Cannot load different "modules" per turn |
-| **No automated module loading** | No runtime loader exists | Cannot automatically activate verification engine |
-| **No state machine engine** | No internal state tracking between turns | Cannot enforce formal state transitions |
-| **No automated classification** | No keyword router runs between turns | Cannot automatically detect task type and switch modes |
-| **No token budget enforcement** | AI does not respect per-component token limits written in prompt | Cannot enforce "max 150 tokens for kernel" |
-| **No automated compression** | `/compact` is manual user command | Cannot auto-compress at thresholds |
-| **No automated fallback** | Context management is internal to CLI app | Cannot implement tiered degradation |
-| **No canary injection** | No mechanism to insert test tasks automatically | Cannot auto-inject behavioral probes |
-| **No automatic file reading** | AI only reads files when explicitly requested or via tool use | Memory files are not auto-loaded; must be explicitly read |
-| **No persistence between sessions** | New session = blank context unless user manually provides state | Session continuity requires manual handoff |
+| **Hooks are Beta** | Configuration shape may change between Kimi versions | Pin to v1.43+; document the protocol revision used; keep hooks idempotent |
+| **No user-defined `/foo` commands** | Custom slash syntax is reserved; user commands surface as `/skill:<name>` or `/flow:<name>` | Use Flow Skills with mnemonic names (`/flow:audit-mode`, `/flow:challenge-grade`) |
+| **System prompt is set per-session** | Mid-session role swap not supported | Use subagents or skill auto-discovery for per-turn role refinement |
+| **Hook timeouts fail-open** | A 30-second hook timeout allows the original action through | Keep hook scripts fast; never rely on a hook alone for safety-critical checks |
+| **No automatic AGENTS.md generation** | `${KIMI_AGENTS_MD}` merges existing files; does not produce them | Author `.kimi/AGENTS.md` explicitly |
+| **Skill priority resolution** | `merge_all_available_skills = true` merges every brand dir; same-name skills collide silently | Name the elite skill `elite-role` uniquely; document the conflict policy |
 
-## C.3 Design Constraint Summary
+## C.3 Design Constraint Summary (revised)
 
-**Every mechanism in KIMI_PROTOCOL.md must satisfy at least one of:**
-1. ✅ Static content in system prompt (loaded once)
-2. ✅ AI self-discipline during response generation (mental checklist)
-3. ✅ Explicit user command in message text (trigger phrase)
-4. ✅ Explicit file read/write via tool use (memory files)
-5. ✅ Manual user action (`/compact`, session restart)
+**The elite role can now be enforced through any of:**
+1. ✅ Agent-file system prompt — load doctrine once, deterministically
+2. ✅ Auto-discovered Skills — doctrine references load only when relevant (token-efficient)
+3. ✅ Flow Skills — explicit multi-step rituals (audit-mode, challenge-grade, save-state)
+4. ✅ Hooks — mechanical V1-V8 verification, automatic memory autosave, blocked-by-default mutations
+5. ✅ Subagents — 5-Eye lenses as isolated parallel reviews
+6. ✅ Session persistence — `--continue` replaces RESUME.md as the primary cross-session bridge
+7. ✅ MCP / Plugins — declarative tool wrappers for repetitive checks
+8. ✅ Plan mode — native PLAN gate, AI cannot mutate state without exiting
 
-**Any mechanism that requires:**
-- ❌ Automated execution between turns
-- ❌ Dynamic prompt composition
-- ❌ Runtime state tracking
-- ❌ System-level context management
+**What still requires AI self-discipline (no mechanical substitute exists):**
+- ❌ L6 anti-self-deception (3 ways wrong)
+- ❌ L2 evidence-first / no-fabrication (only the AI knows what it actually verified)
+- ❌ Honest narrative wording in user-facing messages
 
-**is invalid for Kimi CLI and must be removed or rewritten.**
+**Anti-pattern (to be retired):**
+- Treating every doctrine rule as a *mental* checklist when a hook or skill can enforce it programmatically. That was the only path under the older Kimi CLI; under 1.43+ it is unnecessary friction.
 
 ---
 
