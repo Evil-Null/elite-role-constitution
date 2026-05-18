@@ -1,0 +1,95 @@
+# canon/thresholds.yaml — Numeric thresholds (single source of truth)
+#
+# Consumers (each must reflect THIS file via generate.sh):
+#   - memory/ROLLUP_POLICY.md (Active Layer Boundaries table)
+#   - SYSTEM_INTEGRITY_CHECK.sh (memory cap checks)
+#   - 00_ROLE.md §22 + 01_ELITE_ROLE.md §22 (doctrinal cognitive-load warning)
+#   - KIMI_PROTOCOL.md §H.2 (40-50% warning)
+#   - ~/.kimi/config.toml (runtime compact ratio — applied by install.sh)
+#   - 01_ELITE_ROLE.md §16 (P×I escalation/STOP thresholds)
+#
+# Each memory file ALSO declares its own Max Size in its frontmatter
+# (`> **Max Size:** N lines`) — that is the authoritative per-file
+# declaration consumed by hooks at runtime. Canon must agree with each
+# frontmatter; integrity check verifies parity.
+
+# ──────────────────────────────────────────────────────────────────────
+# Memory-file line caps (per memory/ROLLUP_POLICY.md)
+# ──────────────────────────────────────────────────────────────────────
+memory_caps:
+  - file: memory/README.md
+    max_lines: 60
+    rotation: "Restructure to remove examples/verbosity; keep authority map + read order only"
+
+  - file: memory/RESUME.md
+    max_lines: 40
+    rotation: "Overwrite entirely; never append"
+
+  - file: memory/CONTEXT.md
+    max_lines: 60
+    rotation: "Summarize old completed work; keep current task only"
+
+  - file: memory/ASSUMPTIONS.md
+    max_lines: 50
+    max_active_items: 8
+    rotation: "Archive FALSIFIED/CONFIRMED/SUPERSEDED to archive/assumptions_archive.md"
+
+  - file: memory/DECISIONS.md
+    max_lines: 40
+    max_active_items: 6
+    rotation: "Archive SUPERSEDED/>30-day-old to archive/decisions_archive.md"
+
+  - file: memory/AUDIT_LOG.md
+    max_lines: 50
+    max_active_items: 5
+    rotation: "Archive older entries to archive/audit_archive.md; update archive/audit_index.md"
+
+  - file: memory/COMPACT_STATE.md
+    max_lines: 40
+    rotation: "Overwrite entirely; temporary only"
+
+  - file: memory/STRESS_LOG_DAY_*.md
+    max_lines: 60
+    rotation: "Overwrite entirely; one per stress test day"
+
+# Total active read surface target — sum of all per-file caps that load
+# at session start (README + RESUME + CONTEXT + ASSUMPTIONS), plus
+# conditional reads that occasionally fire (DECISIONS, AUDIT_LOG, etc.).
+active_read_surface_target_lines: 300
+
+# ──────────────────────────────────────────────────────────────────────
+# Compact / context-window ratios
+# ──────────────────────────────────────────────────────────────────────
+compact:
+  # Kimi runtime auto-compact trigger (~/.kimi/config.toml
+  # compaction_trigger_ratio). Lowered from 0.85 → 0.70 by D8 on
+  # 2026-05-18 to give the doctrinal compact ritual real headroom.
+  runtime_trigger_ratio: 0.70
+
+  # Doctrinal advisory — AI proactively suggests /compact when context
+  # usage enters this band. Buffer between top of band and runtime
+  # trigger should be ≥ 20% so the ritual has time to complete.
+  doctrine_warning_low_percent: 40
+  doctrine_warning_high_percent: 50
+
+# ──────────────────────────────────────────────────────────────────────
+# P×I quantified risk thresholds (01_ELITE_ROLE.md §16 + L5)
+# ──────────────────────────────────────────────────────────────────────
+risk_pi:
+  # Score = Probability(1-5) × Impact(1-5), range 1-25.
+  warning_floor: 7      # Mandatory mitigation plan above this.
+  escalate_floor: 13    # Auto-escalate to user / principal.
+  hard_stop_floor: 19   # L5 hard STOP — task halts unconditionally.
+
+# ──────────────────────────────────────────────────────────────────────
+# Hook timeouts (overall ceiling; per-hook values in canon/hooks.yaml)
+# ──────────────────────────────────────────────────────────────────────
+hooks:
+  # Kimi 1.43+ silently fails OPEN at this absolute ceiling regardless
+  # of per-hook timeout. Document this here so its limitation is
+  # canonical, not folklore.
+  fail_open_ceiling_seconds: 30
+  # Warn the operator if any hook approaches this fraction of its
+  # declared timeout (advisory; Phase F observability turns this into
+  # a real metric).
+  warn_at_timeout_fraction: 0.80
