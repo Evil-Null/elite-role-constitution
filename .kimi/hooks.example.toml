@@ -39,11 +39,20 @@ matcher = ""
 command = ".kimi/hooks/post-compact.sh"
 timeout = 10
 
-# V3 security + protected-file guard. Add tools to matcher as needed.
+# V3 security + protected-file guard for direct file mutations.
 [[hooks]]
 event = "PreToolUse"
-matcher = "WriteFile|StrReplaceFile"
+matcher = "WriteFile|StrReplaceFile|MultiEdit"
 command = ".kimi/hooks/pre-tool-use.sh"
+timeout = 15
+
+# Same guard, but applied to Shell commands. Closes the bypass identified
+# by independent review (R3 #3): a Shell tool with `cat secrets > .env`
+# would otherwise sidestep the file-mutation hook entirely.
+[[hooks]]
+event = "PreToolUse"
+matcher = "Shell"
+command = ".kimi/hooks/pre-shell.sh"
 timeout = 15
 
 # Lightweight audit trail

@@ -18,28 +18,40 @@ cd "$PROJECT_ROOT"
 echo "=== Elite Role · PostCompact verification ==="
 
 if [ ! -f memory/COMPACT_STATE.md ]; then
-    echo "WARN: memory/COMPACT_STATE.md is missing — the compact ritual"
-    echo "      did not write a snapshot. L1 (UNKNOWN=STOP) applies for"
-    echo "      any cross-compact continuity claim. Recommend rewriting"
-    echo "      the file before resuming the task."
-    exit 0
+    # R3 #7 fix: the hook used to print "L1 applies" and exit 0, which
+    # is exactly the doctrinal contradiction L1 forbids. A missing
+    # snapshot IS the unknown state — block the continuation until the
+    # agent writes the file.
+    cat <<'EOF' >&2
+BLOCKED by elite-role PostCompact hook (L1 UNKNOWN=STOP):
+memory/COMPACT_STATE.md is missing — the compact ritual did not
+produce a snapshot. Continuing now would silently lose cross-compact
+continuity. Write the snapshot first (SESSION_RITUAL.md Ritual 3),
+then re-run the compact.
+EOF
+    exit 2
 fi
 
-# Sanity-check the file's freshness and shape
-LINES=$(wc -l <memory/COMPACT_STATE.md)
-MAX=$(grep -oP '(?<=^> \*\*Max Size:\*\* )\d+(?= lines)' memory/COMPACT_STATE.md 2>/dev/null | head -1 || echo "40")
+# Sanity-check the file's freshness and shape.
+# NB: same `|| echo` fix as session-end.sh (R2 #4).
+LINES=$(awk 'END{print NR}' memory/COMPACT_STATE.md)
+MAX="$(grep -oP '(?<=^> \*\*Max Size:\*\* )\d+(?= lines)' memory/COMPACT_STATE.md 2>/dev/null | head -1 || true)"
+MAX="${MAX:-40}"
 
 if [ "$LINES" -gt "$MAX" ]; then
     echo "WARN: memory/COMPACT_STATE.md is $LINES lines > $MAX cap"
     echo "      Rotate per ROLLUP_POLICY.md before further compact cycles."
 fi
 
-# Cross-check: COMPACT_STATE should mention the same active task as CONTEXT
+# Cross-check: COMPACT_STATE should mention the same active task as CONTEXT.
+# Use grep -F (fixed-string) plus -- so a task token starting with "-" or
+# containing regex metacharacters cannot inject options or break the
+# regex (R2 #6).
 if [ -f memory/CONTEXT.md ]; then
     TASK_IN_CTX=$(grep -i "active task\|current task" memory/CONTEXT.md | head -1 || echo "")
     if [ -n "$TASK_IN_CTX" ]; then
         FIRST_WORD=$(echo "$TASK_IN_CTX" | awk -F': ' '{print $2}' | awk '{print $1}')
-        if [ -n "$FIRST_WORD" ] && ! grep -qi "$FIRST_WORD" memory/COMPACT_STATE.md; then
+        if [ -n "$FIRST_WORD" ] && ! grep -qiF -- "$FIRST_WORD" memory/COMPACT_STATE.md; then
             echo "WARN: CONTEXT.md mentions task '$FIRST_WORD' but COMPACT_STATE.md does not"
             echo "      — verify the compact snapshot is for the current task."
         fi
