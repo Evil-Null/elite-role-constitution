@@ -3,10 +3,13 @@
 #
 # Event: Stop  (turn end, no error)
 # Purpose: act as the doctrine's "L6 anti-self-deception check"
-# reminder. The hook cannot read the response content itself, so it
-# cannot verify L6 was performed — but it can keep the procedure
-# visible by emitting a structured reminder into context for the next
-# turn.
+# reminder. The Stop payload exposes only {hook_event_name, session_id,
+# cwd, stop_hook_active} (verified C1, kimi_cli/hooks/events.py:73);
+# the agent's response text is NOT visible, so L6 cannot be
+# mechanically verified for the primary agent. The hook keeps the
+# procedure visible by emitting a structured reminder. SubagentStop
+# (response IS visible there) would be where mechanical verification
+# could land in a future phase.
 
 set -euo pipefail
 
@@ -24,6 +27,11 @@ elite-role · Stop reminder
   must have listed 3 concrete ways the result could be wrong, with a
   one-line rebuttal for each. If this turn mutated state and that
   check is missing, raise it before the next user turn.
+
+  (Mechanical enforcement is not possible here — Stop payload omits the
+  response text by Kimi design. See agent/elite.system.md §"Hook Engine
+  Semantics" for the full schema and the C2 PostToolUse fallback that
+  scans tool_output for uncited-claim heuristics.)
 EOF
 
 exit 0
