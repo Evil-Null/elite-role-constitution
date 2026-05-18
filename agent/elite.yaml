@@ -10,7 +10,8 @@ version: 1
 # This file is the entry point for the doctrine described in
 # 01_ELITE_ROLE.md and the surrounding governance files. The actual
 # system prompt content lives in elite.system.md (sibling file); skills
-# are auto-discovered from `skills/elite-role/` and `~/.kimi/skills/`.
+# are auto-discovered from `.kimi/skills/` (project-local) and
+# `~/.kimi/skills/` (user-level). See SYSTEM_PROMPT_INSTALL.md §3.
 # Mechanical enforcement (V1-V8 hooks, memory autosave) lives under
 # `.kimi/hooks/` (configured in `.kimi/config.toml`).
 #
@@ -51,5 +52,5 @@ agent:
     #       web; suitable for adversarial reading without state changes)
     #
     # The orchestration (which lens to run, in what order) is delegated
-    # to the main agent's PEV loop. See skills/elite-role/references/
+    # to the main agent's PEV loop. See .kimi/skills/elite-role/references/
     # 5-eye-review.md for the operating procedure.
