@@ -76,6 +76,10 @@ def emit_patterns_sh(patterns: dict) -> str:
         "# Sourced by pre-tool-use.sh and pre-shell.sh.  Provides:",
         "#   PROTECTED_PATTERNS[]  WHITELIST_PATTERNS[]",
         "#   SECRET_REGEX_<NAME>  SECRET_REGEX_ANY  (combined alternation)",
+        "#",
+        "# shellcheck disable=SC2034",
+        "# (variables look unused when this file is shellchecked in isolation;",
+        "# they are consumed by the scripts that `source` this file.)",
         "",
         "PROTECTED_PATTERNS=(",
     ]
