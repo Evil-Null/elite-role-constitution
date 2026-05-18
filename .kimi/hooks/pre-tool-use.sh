@@ -20,6 +20,12 @@
 set -euo pipefail
 shopt -s nocasematch
 
+# Source canon-generated patterns (B7 — single source of truth via canon/patterns.yaml).
+# shellcheck source=_patterns.sh disable=SC1091
+HOOKS_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+# shellcheck source=/dev/null
+source "$HOOKS_DIR/_patterns.sh"
+
 INPUT="$(cat)"
 
 # ── 1. Fail closed on parse failure ─────────────────────────────────
@@ -69,43 +75,29 @@ check_protected() {
     local raw="$1"
     local real
     real="$(readlink -f "$raw" 2>/dev/null || printf '%s' "$raw")"
-    local base
-    base="${raw##*/}"
-    local real_base
-    real_base="${real##*/}"
+    local base="${raw##*/}"
+    local real_base="${real##*/}"
 
-    # Whitelist: these names are conventionally checked into repos with
-    # placeholders, not real values. The doctrine even names .env.example
-    # as the legitimate edit target, so the guard MUST exempt them.
+    # Whitelist first: example/sample/template names are conventionally
+    # checked into repos with placeholders, not real values. The doctrine
+    # names .env.example as the legitimate edit target.
     local safe_p
-    for safe_p in '*.env.example' '*.env.sample' '*.env.template' \
-                  '*.env.dist' '*.env.test' '.env.example' 'credentials.example.*'; do
+    for safe_p in "${WHITELIST_PATTERNS[@]}"; do
         # shellcheck disable=SC2254  # case-glob expansion is intentional
-        case "$base" in $safe_p) return 1 ;; esac
+        case "$base"      in $safe_p) return 1 ;; esac
         # shellcheck disable=SC2254
         case "$real_base" in $safe_p) return 1 ;; esac
     done
 
-    # Block list (case-insensitive via nocasematch). Patterns are checked
-    # against the basename so directory clutter does not hide them, AND
-    # against the resolved path so symlinks cannot bypass.
+    # Block list — checked against basename so directory clutter does
+    # not hide them, AND against the resolved path so symlinks cannot
+    # bypass. Patterns come from canon/patterns.yaml via _patterns.sh.
     local pat
-    for pat in \
-        '*.env' '*.env.*' '*.envrc' '*.envrc.*' \
-        '*credentials' '*credentials.*' '*.credentials' '*.credentials.*' \
-        'id_rsa*' 'id_dsa*' 'id_ecdsa*' 'id_ed25519*' '*authorized_keys*' \
-        '*.pem' '*.key' '*.p12' '*.pfx' '*.crt' '*.cer' '*.jks' \
-        '*.gpg' '*.asc' 'secring.gpg' '*.netrc' '*pgpass*' '*.npmrc' '*.pypirc' \
-        '*kubeconfig*' 'gcloud-key*.json' '*service-account*.json' \
-        '*terraform.tfstate' '*.tfstate' '*.tfstate.*'
-    do
+    for pat in "${PROTECTED_PATTERNS[@]}"; do
         # shellcheck disable=SC2254  # case-glob expansion is intentional
-        case "$base" in     $pat) return 0 ;; esac
+        case "$base"      in $pat) return 0 ;; esac
         # shellcheck disable=SC2254
         case "$real_base" in $pat) return 0 ;; esac
-        # Also match path-level patterns (e.g. .aws/credentials)
-        case "$raw"  in *credentials*) [ "$pat" = "*credentials*" ] && return 0 ;; esac
-        case "$real" in *credentials*) [ "$pat" = "*credentials*" ] && return 0 ;; esac
     done
     return 1
 }
@@ -155,18 +147,12 @@ except Exception:
 " 2>/dev/null || true)"
 
 if [ -n "$CONTENT" ]; then
-    # Expanded secret regex set: AWS, OpenAI (legacy + project), Anthropic,
-    # GitHub PAT (classic + fine-grained + oauth/install/refresh tokens),
-    # Slack, Google API, Stripe live, every common private-key PEM header.
-    if printf '%s' "$CONTENT" | grep -qE 'AKIA[0-9A-Z]{16}|ASIA[0-9A-Z]{16}' \
-       || printf '%s' "$CONTENT" | grep -qE 'sk-(ant-)?[A-Za-z0-9_-]{20,}' \
-       || printf '%s' "$CONTENT" | grep -qE 'sk-proj-[A-Za-z0-9_-]{20,}' \
-       || printf '%s' "$CONTENT" | grep -qE 'gh[pousr]_[A-Za-z0-9]{36,}' \
-       || printf '%s' "$CONTENT" | grep -qE 'github_pat_[A-Za-z0-9_]{36,}' \
-       || printf '%s' "$CONTENT" | grep -qE 'AIza[0-9A-Za-z_-]{35}' \
-       || printf '%s' "$CONTENT" | grep -qE 'xox[abprs]-[A-Za-z0-9-]{10,}' \
-       || printf '%s' "$CONTENT" | grep -qE 'sk_live_[A-Za-z0-9]{20,}' \
-       || printf '%s' "$CONTENT" | grep -qE -- '-----BEGIN ([A-Z]+ ){0,2}PRIVATE KEY( BLOCK)?-----'; then
+    # Combined secret regex from canon/patterns.yaml (via _patterns.sh).
+    # Single grep call replaces the 9-clause chain of the pre-B7 hook;
+    # covers AWS, OpenAI (legacy + project), Anthropic, GitHub PAT
+    # (classic + fine-grained), Google API, Slack, Stripe live, and
+    # every common private-key PEM header.
+    if printf '%s' "$CONTENT" | grep -qE -- "$SECRET_REGEX_ANY"; then
         cat <<'EOF' >&2
 BLOCKED by elite-role PreToolUse hook (L7 Absolute Contract):
 The proposed content looks like a secret or private key (matched

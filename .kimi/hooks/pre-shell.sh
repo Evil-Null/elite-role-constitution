@@ -13,6 +13,11 @@
 set -euo pipefail
 shopt -s nocasematch
 
+# Source canon-generated patterns (B7 — single source of truth via canon/patterns.yaml).
+HOOKS_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+# shellcheck source=/dev/null
+source "$HOOKS_DIR/_patterns.sh"
+
 INPUT="$(cat)"
 
 # Fail-closed on parse failure
@@ -34,27 +39,26 @@ if [ -z "$CMD" ]; then
     exit 0
 fi
 
-# Reuse the same protected pattern set as pre-tool-use.sh. Kept inline so
-# the two hooks can evolve together without an extra include layer.
+# B7 refactor: pattern arrays come from canon/patterns.yaml via _patterns.sh.
+# The pre-B7 version of this script had a strictly smaller pattern list
+# than pre-tool-use.sh (missed *.credentials.*, secring.gpg, gcloud-key*.json,
+# *terraform.tfstate). Sourcing the same _patterns.sh eliminates that gap
+# by construction.
 is_protected() {
     local raw="$1"
     local base="${raw##*/}"
     local real
     real="$(readlink -f "$raw" 2>/dev/null || printf '%s' "$raw")"
     local real_base="${real##*/}"
-    # shellcheck disable=SC2254  # case-glob expansion is intentional
-    for safe in '*.env.example' '*.env.sample' '*.env.template' '*.env.dist' '*.env.test'; do
-        case "$base" in $safe) return 1 ;; esac
+    local safe
+    for safe in "${WHITELIST_PATTERNS[@]}"; do
+        # shellcheck disable=SC2254  # case-glob expansion is intentional
+        case "$base"      in $safe) return 1 ;; esac
+        # shellcheck disable=SC2254
+        case "$real_base" in $safe) return 1 ;; esac
     done
     local pat
-    for pat in \
-        '*.env' '*.env.*' '*.envrc' '*.envrc.*' \
-        '*credentials' '*credentials.*' \
-        'id_rsa*' 'id_dsa*' 'id_ecdsa*' 'id_ed25519*' '*authorized_keys*' \
-        '*.pem' '*.key' '*.p12' '*.pfx' '*.crt' '*.cer' '*.jks' \
-        '*.gpg' '*.asc' '*.netrc' '*pgpass*' '*.npmrc' '*.pypirc' \
-        '*kubeconfig*' '*service-account*.json' '*.tfstate' '*.tfstate.*'
-    do
+    for pat in "${PROTECTED_PATTERNS[@]}"; do
         # shellcheck disable=SC2254  # case-glob expansion is intentional
         case "$base"      in $pat) return 0 ;; esac
         # shellcheck disable=SC2254
