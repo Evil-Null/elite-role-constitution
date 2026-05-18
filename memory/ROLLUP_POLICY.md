@@ -3,7 +3,8 @@
 > **Role:** Defines thresholds, triggers, and mechanics for keeping the operational memory layer bounded.  
 > **Read:** Once per architecture change, or when rollup behavior is questioned.  
 > **Updated:** Only when threshold rules change.  
-> **Authority:** Governance — governed by memory/README.md (structural authority).
+> **Authority:** Governance — governed by memory/README.md (structural authority).  
+> **Max Size:** N/A — governance reference, intentionally unbounded.
 
 ---
 

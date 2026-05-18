@@ -1,7 +1,8 @@
 # COMPACT STATE CHECKPOINT
 
 > **Role:** Temporary state snapshot for `/compact` survival.  
-> **Authority:** Transient (Rank 8) — COMPACT_STATE < ASSUMPTIONS/DECISIONS in conflicts.
+> **Authority:** Transient (Rank 8) — COMPACT_STATE < ASSUMPTIONS/DECISIONS in conflicts.  
+> **Max Size:** 40 lines. Exceed → trigger rollup per `memory/ROLLUP_POLICY.md`.
 
 ---
 

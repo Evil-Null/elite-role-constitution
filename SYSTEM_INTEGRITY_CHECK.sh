@@ -11,13 +11,24 @@ ERRORS=0
 echo "=== System Integrity Check v2.4 ==="
 
 # 1. README file count equals git tracked files
-README_COUNT=$(grep -oP '\d+(?= files across)' README.md 2>/dev/null || echo "0")
-GIT_COUNT=$(git ls-files | wc -l)
-if [ "$README_COUNT" -eq "$GIT_COUNT" ]; then
-    echo "[PASS] File count: README claims $README_COUNT, git has $GIT_COUNT"
-else
-    echo "[FAIL] File count mismatch: README claims $README_COUNT, git has $GIT_COUNT"
+# R3 #6 fix: distinguish "README missing" from "pattern missing" from
+# "count mismatch" so the failure message tells the user which problem
+# to fix.
+if [ ! -r README.md ]; then
+    echo "[FAIL] README.md is missing or unreadable"
     ERRORS=$((ERRORS + 1))
+elif ! grep -qP '\d+(?= files across)' README.md; then
+    echo "[FAIL] README.md no longer contains the canonical 'N files across' sentence"
+    ERRORS=$((ERRORS + 1))
+else
+    README_COUNT="$(grep -oP '\d+(?= files across)' README.md | head -1)"
+    GIT_COUNT="$(git ls-files | wc -l)"
+    if [ "$README_COUNT" -eq "$GIT_COUNT" ]; then
+        echo "[PASS] File count: README claims $README_COUNT, git has $GIT_COUNT"
+    else
+        echo "[FAIL] File count mismatch: README claims $README_COUNT, git has $GIT_COUNT"
+        ERRORS=$((ERRORS + 1))
+    fi
 fi
 
 # 2. Version strings align to v2.4 (system-level files only)
@@ -42,13 +53,31 @@ else
     ERRORS=$((ERRORS + 1))
 fi
 
-# 3. Memory files respect thresholds
+# 3. Memory files respect thresholds.
+# R3 #5 fix: fail explicitly if a memory file in the loop lacks a
+# `Max Size:` declaration. The prior silent fallback to MAX=999 hid
+# broken declarations indefinitely (caught in this audit cycle).
 THRESHOLD_FAIL=0
-for file in memory/ASSUMPTIONS.md memory/DECISIONS.md memory/AUDIT_LOG.md memory/README.md memory/CONTEXT.md memory/RESUME.md memory/COMPACT_STATE.md; do
-    LINES=$(wc -l < "$file")
-    MAX=$(grep -oP '\d+(?= lines)' "$file" 2>/dev/null | head -1 || true)
+for file in memory/ASSUMPTIONS.md memory/DECISIONS.md memory/AUDIT_LOG.md memory/README.md memory/CONTEXT.md memory/RESUME.md memory/COMPACT_STATE.md memory/STRESS_LOG_DAY_1.md; do
+    if [ ! -f "$file" ]; then
+        # STRESS_LOG_DAY_*.md may legitimately not exist before Phase 1 runs;
+        # skip if absent rather than failing.
+        case "$file" in memory/STRESS_LOG_DAY_*.md) continue ;; esac
+        echo "[FAIL] $file: missing"
+        THRESHOLD_FAIL=$((THRESHOLD_FAIL + 1))
+        continue
+    fi
+    LINES="$(awk 'END{print NR}' "$file")"
+    # Look for the canonical declaration first; falls back to legacy any-digit
+    # form for compatibility, but FAIL if neither is present.
+    MAX="$(grep -oP '(?<=^> \*\*Max Size:\*\* )\d+(?= lines)' "$file" 2>/dev/null | head -1 || true)"
     if [ -z "$MAX" ]; then
-        MAX=999
+        MAX="$(grep -oP '\*\*Max Size:\*\* \d+(?= lines)' "$file" 2>/dev/null | grep -oE '[0-9]+' | head -1 || true)"
+    fi
+    if [ -z "$MAX" ]; then
+        echo "[FAIL] $file: missing required '> **Max Size:** N lines' declaration"
+        THRESHOLD_FAIL=$((THRESHOLD_FAIL + 1))
+        continue
     fi
     if [ "$LINES" -gt "$MAX" ]; then
         echo "[FAIL] $file: $LINES lines > $MAX max"
@@ -56,7 +85,7 @@ for file in memory/ASSUMPTIONS.md memory/DECISIONS.md memory/AUDIT_LOG.md memory
     fi
 done
 if [ "$THRESHOLD_FAIL" -eq 0 ]; then
-    echo "[PASS] Memory thresholds: all files within limits"
+    echo "[PASS] Memory thresholds: all files within limits and declared"
 else
     ERRORS=$((ERRORS + 1))
 fi
