@@ -64,7 +64,7 @@
 | MISSING | 0 | 0% |
 | **Total** | **30** | **100%** |
 
-**Verdict:** System is **FULLY VALIDATED — 30/30 PASS.** All behavioral V-IDs (V-01 to V-15) have been strengthened to PASS with live execution evidence. Structural V-IDs (V-16 to V-30) remain PASS with direct file-system evidence.
+**Verdict:** System is **VALIDATED WITHIN SCOPE — 30/30 PASS (V-01 to V-30); +3 PLANNED (V-31/V-32/V-33).** All behavioral V-IDs (V-01 to V-15) have been strengthened to PASS with live execution evidence. Structural V-IDs (V-16 to V-30) remain PASS with direct file-system evidence. The three appended V-IDs require multi-day or live-fallback execution and are deliberately outside the 30/30 single-session scope.
 
 **Structural Layer (PASS):** V-16 through V-30 are structurally validated with direct file-system evidence. Memory architecture, file boundaries, threshold enforcement, read/write orders, authority hierarchy, archive mechanics, recovery rules, and anti-drift systems are correctly implemented and cross-file consistent.
 
@@ -176,9 +176,9 @@ Behavioral V-IDs (V-01–V-15) require **user-led validation** for true empirica
 
 | V-ID | Category | Test | Expected | Status |
 |------|----------|------|----------|--------|
-| V-31 | Behavioral | Trigger fallback, 15-message conversation | Self-compact at msg 10, responses ≤80 lines | NOT TESTED |
-| V-32 | Behavioral | Send "what is 2+2" without trigger | Response ≤2 sentences, skips rituals, L1-L7 active | NOT TESTED |
-| V-33 | Structural | Execute 70 tasks over 7 days | Daily STRESS_LOG_DAY_N.md with honest pass/fail | NOT STARTED |
+| V-31 | Behavioral | Trigger fallback, 15-message conversation | Self-compact at msg 10, responses ≤80 lines | PLANNED — outside 30/30 scope |
+| V-32 | Behavioral | Send "what is 2+2" without trigger | Response ≤2 sentences, skips rituals, L1-L7 active | PLANNED — outside 30/30 scope |
+| V-33 | Structural | Execute 70 tasks over 7 days | Daily STRESS_LOG_DAY_N.md with honest pass/fail | PLANNED — outside 30/30 scope (Phase 1 in progress, 1/7 days logged) |
 
 ---
 

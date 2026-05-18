@@ -77,9 +77,9 @@ On-Demand: Full doctrine (~3000 tokens) triggered by user phrase "challenge-grad
 |---|---|---|
 | Structural | 15 V-IDs (files, thresholds, rituals, read/write order) | 15/15 PASS |
 | Behavioral | 15 V-IDs (L1-L7 enforcement, trigger dictionary, response contract, continuity) | 15/15 PASS |
-| **Total** | **30 V-IDs + 22 execution scenarios (S1–S22)** | **30/30 PASS** |
+| **Total** | **30 V-IDs + 22 execution scenarios (S1–S22)** | **30/30 PASS within scope; +3 pending (V-31/V-32/V-33)** |
 
-Evidence: `VALIDATION_MATRIX.md`, `TEST_SCENARIOS.md`, commit `70c9cb9`.
+Evidence: `VALIDATION_MATRIX.md`, `TEST_SCENARIOS.md`, commit `70c9cb9`. The three appended behavioral-stress V-IDs (V-31/V-32/V-33) are PLANNED — they require multi-day or live-fallback execution and are deliberately outside the 30/30 single-session scope.
 
 ## Installation
 
@@ -126,11 +126,11 @@ This system was externally reviewed and scored **46/60**. Three real weaknesses 
 - **FALLBACK_PROTOCOL.md:** Resilient mode with AI Response Budget (80-line limit, self-compact, [FALLBACK_CHECKPOINT]).
 - **KIMI_PROTOCOL.md:** Auto-Detection rules for effort classification (LIGHT/STANDARD/CHALLENGE/OVERRIDE) when no explicit trigger is sent.
 - **STRESS_TEST_PLAN.md:** Executable Phase 1 (70 tasks / 7 days) + conditional Phases 2–3.
-- **Status:** Phase 1 stress test NOT YET EXECUTED.
+- **Status:** Phase 1 stress test in progress — Day 1 logged (`memory/STRESS_LOG_DAY_1.md`); Days 2–7 pending. Not a completed validation; explicitly an honesty marker, not a result claim.
 
 **Best for:** High-stakes, long-running, multi-session projects where rule erosion and hallucination are costly.  
 **Overkill for:** Trivial queries, single-turn tasks, or contexts without file I/O.
 
 ## Version
 
-**v2.4** — Gap closure: fallback bounds, auto-detection, executable stress test. Honest daily-use hardening. 30/30 validated with documented caveats. OPERATIONALLY READY.
+**v2.4** — Gap closure: fallback bounds, auto-detection, executable stress test. Honest daily-use hardening. 30/30 within-scope validated; V-31/V-32/V-33 deliberately pending behavioral stress test. Documented caveats. OPERATIONALLY READY.
