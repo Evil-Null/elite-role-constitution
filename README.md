@@ -67,16 +67,32 @@ kimi --agent-file agent/elite.yaml
 
 ## How to use
 
-Type one of these in the Kimi session:
+Type one of these in the Kimi session.
+
+### Text triggers (natural language)
 
 | You type | What happens |
 |---|---|
-| `plan only: <task>` | AI outputs a `[PLAN]` with risk score, **does not change any file** until you reply `[APPROVED]`. |
+| `plan only: <task>` | AI outputs a `[PLAN]` with acceptance criteria, pre-mortem, and risk score. **No file is changed** until you reply `[APPROVED]`. |
 | `[APPROVED]` | Releases the plan gate. AI proceeds with what it just proposed. |
-| `challenge-grade <subject>` | Full 6-lens review of the subject (Architect / Implementer / Risk / QA / Final Arbiter / Red Team) with evidence per lens. |
-| `save state` | Writes `memory/RESUME.md` and `memory/CONTEXT.md` so the next session can continue. |
-| `light effort` | Skip the planning ceremony for trivial tasks. The L1–L7 rules still apply. |
+| `[APPROVED] <scope>` | Partial approval — only the named scope (e.g. `[APPROVED] Phase A only`). |
+| `REJECT — <reason>` | Rejects the plan. AI iterates with the reason. |
+| `challenge-grade <subject>` | Full 6-lens review (Architect / Implementer / Risk / QA / Final Arbiter / Red Team) with evidence per lens, ≥800-word audit. |
 | `audit mode` | AI self-reviews its recent responses against L1–L7 and reports drift. |
+| `save state` | Writes `memory/RESUME.md` + `memory/CONTEXT.md` so the next session can continue. |
+| `resume` | Reads `memory/{README,RESUME,CONTEXT,ASSUMPTIONS}.md` and summarises where you left off. |
+| `rollup memory` | Archives stale entries from active memory files into `memory/archive/` per `ROLLUP_POLICY.md`. |
+| `light effort` (or `quick check`) | Skip the planning ceremony for trivial tasks. L1–L7 still apply. |
+| `stop` (or `escalate`) | Hard pause. AI declares state, saves it, and waits for your decision. |
+
+### Slash commands (Kimi-native)
+
+| You type | What happens |
+|---|---|
+| `/skill:elite-role` | Loads the full doctrine reference (`SKILL.md` + four reference files) into context. |
+| `/flow:audit-mode` | Runs the audit ritual as a Mermaid-driven multi-turn flow. |
+| `/flow:challenge-grade` | Runs the 6-lens challenge as a multi-turn flow with anti-self-deception block. |
+| `/flow:save-state` | Runs the memory-autosave ritual (also fires automatically via the `SessionEnd` hook). |
 
 A complete Georgian usage guide is in [`USAGE_KA.md`](./USAGE_KA.md).
 
