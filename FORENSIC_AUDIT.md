@@ -3,10 +3,31 @@
 ## Auditor: External Principal Systems Architect
 ## Standard: Adversarial, Zero-Protection, Evidence-First
 ## Date: 2026-05-17
+## **Revision (2026-05-18): partially superseded — see "A.0 Revision Notice" below.**
 
 ---
 
-# A. Core Finding
+# A.0 Revision Notice (2026-05-18)
+
+**The "fundamental category error" verdict in §A was tested against Kimi CLI 1.43.0 and is now partially invalidated.** When this audit was written (2026-05-17), the assumption that Kimi CLI was a "sequential chat interface with a static system prompt, manual tool use, and turn-by-turn execution" appears to have been accurate. Verification on 2026-05-18 against an installed Kimi CLI 1.43.0 (`kimi --version`) shows a substantially different runtime surface:
+
+- **Skills** (Anthropic-compatible SKILL.md format, auto-discovered)
+- **Agent files** (YAML, with `extend`, custom tools, subagents, custom system prompts)
+- **Hooks (Beta)** — 13 lifecycle events with shell-script handlers and structured-JSON exit semantics
+- **Plugins (Beta)** — declarative tool wrappers
+- **MCP servers**, **session persistence** (`--continue`/`--session`), **slash commands**, **plan mode**, built-in **decisions.db**
+
+These features mean that several mechanisms this audit dismissed as "self-projection" — dynamic prompt composition, automated state management, runtime module loading — actually do have native equivalents in Kimi CLI 1.43+. `SYSTEM_PLAN.md` was therefore **architecturally over-ambitious for the older Kimi CLI** but **closer to feasible for the current one**. The B/D hybrid grade in §A.4 reflects fidelity to a snapshot of Kimi that no longer holds.
+
+What still stands from this audit:
+- The role-fidelity analysis in §B (which primitives come from the role vs. self-projection) is independent of Kimi's runtime and remains valid.
+- The recommendation to keep KIMI_PROTOCOL.md as the canonical deployment doc is still correct, but its §C section has been rewritten (2026-05-18) to describe the *actual* current Kimi capabilities.
+
+The plan forward (see `IMPROVEMENT_PLAN.md` Phase E) is **not** to unarchive SYSTEM_PLAN.md verbatim — its content predates the rewrite of §C and would need its own re-audit — but to re-derive a Kimi-1.43-native deployment from `01_ELITE_ROLE.md` directly, using skills, hooks, agent files, and MCP. The historical record below is preserved for traceability.
+
+---
+
+# A. Core Finding (as written 2026-05-17 — see A.0 for revision)
 
 `SYSTEM_PLAN.md` is **not** a faithful translation of `01_ELITE_ROLE.md` into a Kimi CLI system. It is a **high-quality software architecture document** for an idealized AI runtime platform, wrapped in the vocabulary of the role. Approximately **40% of the plan is legitimately derived from the role**, **30% is legitimate architectural extension** (reasonable inference from role principles), and **30% is pure self-projection** — the author's own systems-engineering instincts (kernel architectures, module loaders, state machines, fallback tiers) imposed onto a chat CLI that lacks the runtime substrate to execute them.
 
@@ -14,7 +35,7 @@ The plan suffers from a **fundamental category error**: it treats Kimi CLI as if
 
 The role's actual mechanisms — PEV loop, 6-Lens Review, Assumption Registry, Context Continuity — are **manual protocols** the AI and user follow together. The plan incorrectly transforms them into **automated system components** that Kimi CLI cannot host.
 
-**Verdict:** This is a **B/D hybrid** — partially role-based, heavily self-projected, architecturally sophisticated, but constitutionally impure and not yet Kimi-native.
+**Verdict:** This is a **B/D hybrid** — partially role-based, heavily self-projected, architecturally sophisticated, but constitutionally impure and not yet Kimi-native. *(2026-05-18: see A.0 — this verdict was correct for the Kimi CLI snapshot of 2026-05-17 but is no longer the operative grading for current Kimi 1.43+.)*
 
 ---
 
