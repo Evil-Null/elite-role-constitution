@@ -23,16 +23,29 @@ cd "$PROJECT_ROOT"
 # Default read order per memory/README.md Authority Hierarchy.
 READ_ORDER=(memory/README.md memory/RESUME.md memory/CONTEXT.md memory/ASSUMPTIONS.md)
 
+# Per-file inlined-content cap. The hook's stdout is appended to the
+# agent's context; an unconstrained `cat` of a bloated memory file
+# would silently inflate the session prompt by tens of KB (R2 #9).
+# Files larger than this cap are truncated with an explicit marker so
+# the loss is visible, not silent.
+MAX_INLINE_LINES=120
+
 echo "=== Elite Role · SessionStart memory context ==="
 echo ""
 echo "Project root: $PROJECT_ROOT"
-echo "Loaded at:    $(date -Iseconds)"
+echo "Loaded at:    $(TZ=UTC date -u -Iseconds)"
 echo ""
 
 for f in "${READ_ORDER[@]}"; do
     if [ -f "$f" ]; then
-        echo "--- $f ($(wc -l <"$f") lines) ---"
-        cat "$f"
+        LINES="$(awk 'END{print NR}' "$f")"
+        echo "--- $f ($LINES lines) ---"
+        if [ "$LINES" -gt "$MAX_INLINE_LINES" ]; then
+            head -n "$MAX_INLINE_LINES" "$f"
+            echo "[...truncated by SessionStart hook at $MAX_INLINE_LINES lines; full file is $LINES lines. Read it directly if needed.]"
+        else
+            cat "$f"
+        fi
         echo ""
     else
         echo "--- $f (MISSING; L1 UNKNOWN=STOP applies if this file is required) ---"

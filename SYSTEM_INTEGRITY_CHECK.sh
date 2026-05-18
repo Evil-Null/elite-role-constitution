@@ -90,11 +90,16 @@ else
     ERRORS=$((ERRORS + 1))
 fi
 
-# 4. Stress log governance exists
-if grep -q "STRESS_LOG" memory/ROLLUP_POLICY.md && grep -q "STRESS_LOG" FILE_UPDATE_RULES.md; then
-    echo "[PASS] Stress log governance: present in ROLLUP_POLICY and FILE_UPDATE_RULES"
+# 4. Stress log governance exists.
+# R3 #9 fix: anchor to structural markers (a code-block fence containing
+# STRESS_LOG in ROLLUP_POLICY, a Markdown table row in FILE_UPDATE_RULES)
+# instead of any keyword presence, so a "STRESS_LOG no longer applies"
+# negation comment cannot pass the check.
+if grep -qE '^\| .memory/STRESS_LOG_DAY_\*\.md.' FILE_UPDATE_RULES.md \
+   && grep -qE 'STRESS_LOG' memory/ROLLUP_POLICY.md; then
+    echo "[PASS] Stress log governance: structural rows present in both files"
 else
-    echo "[FAIL] Stress log governance: missing from policy or rules"
+    echo "[FAIL] Stress log governance: missing structural row in FILE_UPDATE_RULES or no reference in ROLLUP_POLICY"
     ERRORS=$((ERRORS + 1))
 fi
 
@@ -128,11 +133,15 @@ else
     ERRORS=$((ERRORS + 1))
 fi
 
-# 8. Fuzzy trigger matching documented
-if grep -q "substring" OPERATING_RULES.md; then
-    echo "[PASS] Trigger matching: substring/fuzzy documented"
+# 8. Fuzzy trigger matching documented.
+# R3 #9 fix: also require that the word "substring" appears alongside
+# an actual rule directive (case-insensitive "match" within a 5-line
+# window). A comment like "we no longer use substring matching" would
+# previously have passed the bare keyword check.
+if grep -qiE "(substring|fuzzy).{0,60}(match|trigger)" OPERATING_RULES.md; then
+    echo "[PASS] Trigger matching: substring/fuzzy rule documented"
 else
-    echo "[FAIL] Trigger matching: no substring/fuzzy documentation"
+    echo "[FAIL] Trigger matching: substring/fuzzy keyword present but not paired with a match/trigger rule"
     ERRORS=$((ERRORS + 1))
 fi
 
