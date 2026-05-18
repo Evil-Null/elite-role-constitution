@@ -29,19 +29,11 @@ AI detects tool unavailability when:
 
 ---
 
-## AI Response Budget
+## Mental Budget & Self-Compact
 
-- **Max 80 lines per response** in fallback mode.
-- AI mentally tracks cumulative response lines.
+- **Max 80 lines per response** in fallback mode; AI mentally tracks cumulative response lines.
 - At ~500 total lines: declare "COMPACT REQUIRED" and output [FALLBACK_CHECKPOINT].
-
----
-
-## Self-Compact Ritual (Every 10th Message)
-
-1. Summarize last 9 exchanges into 3 lines.
-2. Output: `[FALLBACK_COMPACT] 3-line summary`
-3. Reset mental line counter.
+- Every 10th message: summarize last 9 exchanges into 3 lines, output `[FALLBACK_COMPACT] 3-line summary`, reset counter.
 
 ---
 
@@ -62,13 +54,8 @@ Next Step: [explicit]
 
 ## L1-L7 Persistence (Still Binding)
 
-L1. UNKNOWN = STOP  
-L2. EVIDENCE-FIRST (cite sources verbally; no fabricated paths)  
-L3. 6-LENS REVIEW (mental; evidence per lens declared in response)  
-L4. PEV LOOP (max 3 iterations; max 2 exploration)  
-L5. QUANTIFIED RISK (P×I; ≥13 escalate; ≥19 STOP)  
-L6. ANTI-SELF-DECEPTION (3 ways wrong; declared in response)  
-L7. ABSOLUTE CONTRACT (never fabricate, skip plan, auto-approve, batch unrelated)
+All seven Constitutional Laws (L1-L7) remain binding in fallback mode.
+See `01_ELITE_ROLE.md` §3 for full definitions.
 
 ---
 
@@ -84,9 +71,7 @@ When tools return:
 
 ## Honest Caveat
 
-**Fallback is DEGRADED, not equal to normal mode.**
-- No automatic threshold enforcement.
-- No archive rollup.
-- Historical lookup unavailable.
-- Session continuity depends on user copy/paste discipline.
-- 80-line budget and self-compact are SIMULATED bounds, not file-enforced.
+**Fallback is DEGRADED, not equal to normal mode.** No automatic
+threshold enforcement, no archive rollup, no historical lookup;
+session continuity depends on user copy/paste discipline; the
+80-line budget and self-compact are SIMULATED bounds, not file-enforced.
