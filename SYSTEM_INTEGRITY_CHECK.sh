@@ -3,12 +3,15 @@
 # Run: bash SYSTEM_INTEGRITY_CHECK.sh
 # Returns: 0 if all checks pass, 1 if any fail
 
+set -euo pipefail
+shopt -s nullglob
+
 ERRORS=0
 
 echo "=== System Integrity Check v2.4 ==="
 
 # 1. README file count equals git tracked files
-README_COUNT=$(grep -oP '\d+(?= files across)' README.md || echo "0")
+README_COUNT=$(grep -oP '\d+(?= files across)' README.md 2>/dev/null || echo "0")
 GIT_COUNT=$(git ls-files | wc -l)
 if [ "$README_COUNT" -eq "$GIT_COUNT" ]; then
     echo "[PASS] File count: README claims $README_COUNT, git has $GIT_COUNT"
@@ -43,7 +46,7 @@ fi
 THRESHOLD_FAIL=0
 for file in memory/ASSUMPTIONS.md memory/DECISIONS.md memory/AUDIT_LOG.md memory/README.md memory/CONTEXT.md memory/RESUME.md memory/COMPACT_STATE.md; do
     LINES=$(wc -l < "$file")
-    MAX=$(grep -oP '\d+(?= lines)' "$file" | head -1)
+    MAX=$(grep -oP '\d+(?= lines)' "$file" 2>/dev/null | head -1 || true)
     if [ -z "$MAX" ]; then
         MAX=999
     fi
@@ -131,8 +134,8 @@ ROOT_THRESHOLD_FAIL=0
 for file in *.md; do
     if grep -qP '^> \*\*Max Size:\*\* \d+ lines' "$file" 2>/dev/null; then
         LINES=$(wc -l < "$file")
-        MAX=$(grep -oP '(?<=^> \*\*Max Size:\*\* )\d+(?= lines)' "$file" | head -1)
-        if [ "$LINES" -gt "$MAX" ]; then
+        MAX=$(grep -oP '(?<=^> \*\*Max Size:\*\* )\d+(?= lines)' "$file" 2>/dev/null | head -1 || true)
+        if [ -n "$MAX" ] && [ "$LINES" -gt "$MAX" ]; then
             echo "[FAIL] $file: $LINES lines > $MAX max (root-level)"
             ROOT_THRESHOLD_FAIL=$((ROOT_THRESHOLD_FAIL + 1))
         fi
