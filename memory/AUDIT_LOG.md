@@ -22,11 +22,11 @@ E6: Validation environment setup and structural verification — 2026-05-17 — 
 
 Live verification of Kimi CLI 1.43.0 showed `KIMI_PROTOCOL.md` §C "Kimi cannot do X" claims were largely outdated. Phase E re-derived the deployment as native Kimi artifacts: agent file, Anthropic-compatible Skill + 4 references, 3 Flow Skills, 8 hooks, install guide v3.0.
 
-Commits: c553301 (E.1 honest correction), b281bc1 (E.2+E.3 agent + system prompt), acfd79c (E.4 SKILL + refs), b834fb9 (E.5 hooks), 590a424 (E.6 Flow Skills), 0d392fa (E.7 install guide), this entry.
+Commits: c553301 (E.1), b281bc1 (E.2+E.3), acfd79c (E.4), b834fb9 (E.5), 590a424 (E.6), 0d392fa (E.7), b672dde (E.8), 567fd6a (skills-path fix).
 
-End-to-end test: `kimi --agent-file agent/elite.yaml --print --version` → 1.43.0 OK; all 8 hooks smoke-tested with sample JSON; `pre-tool-use.sh` correctly exits 2 on `.env` payload.
+**LIVE runtime verification (Kimi 1.43.0, post-`567fd6a`):** alive probe → "ALIVE"; skill auto-discovery → all 4 skills listed; doctrine recall → L1-L7 recited verbatim; PEV gate → `plan only` produced [PLAN]+P×I+[STOP] with no mutation (verified `test.txt` not created).
 
-**Open work:** R6 (Phase 0 independent reviewer) **still deferred** — Phase E doubled the artifact surface that needs second-eye review. Recommend an external pass on IMPROVEMENT_PLAN.md + agent/elite.system.md + .kimi/skills/elite-role/SKILL.md before publishing.
+**Open:** R6 (Phase 0 independent reviewer) **still deferred** — recommend external pass on IMPROVEMENT_PLAN.md + agent/elite.system.md + .kimi/skills/elite-role/SKILL.md.
 
 ## Running Statistics
 
