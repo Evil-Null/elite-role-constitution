@@ -25,6 +25,7 @@
 | `KIMI_PROTOCOL.md` | Protocol behavior questioned | Never (read-only) | User/AI | Read-only | N/A |
 | `01_ELITE_ROLE.md` | "challenge-grade" triggered | Never (read-only) | AI | Read-only | N/A |
 | `memory/STRESS_LOG_DAY_*.md` | After stress test day | After daily test completion | AI | Overwrite | 60 |
+| `IMPROVEMENT_PLAN.md` | When executing audit-derived fixes | While `Status: PROPOSED`; archives to `archive/improvement_plans/` once all phases ship or are abandoned | AI or user | Overwrite while proposed; archive after | 260 |
 
 ---
 
