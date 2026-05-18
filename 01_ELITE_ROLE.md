@@ -150,6 +150,7 @@ PEV Loop-ს არ აქვს complexity budget. AI შეუძლია უ
 
 The operational kernel (`agent/elite.system.md`), the deployment skill (`.kimi/skills/elite-role/`), the hook scripts (`.kimi/hooks/*.sh`), and every commit message in the v2.4+ era reference **L1-L7** as the binding-every-turn rule set. The Iron Constitution below is organised into sections (§1-§29) for narrative clarity; the L-labels are the **shorthand canonical labels** for the seven non-negotiables. This section formally adopts the mapping so that "L1-L7" is an unambiguous reference in tooling, logs, and reviews:
 
+<!-- canon-generated:laws-start -->
 | Label | Section in this file | One-line definition |
 |---|---|---|
 | **L1** | §1 *Understand Before Acting* | UNKNOWN = STOP. No guessing, no inference past evidence. |
@@ -159,6 +160,7 @@ The operational kernel (`agent/elite.system.md`), the deployment skill (`.kimi/s
 | **L5** | §16 *Quantified Risk Scoring* + §17 *Escalation Protocols* | QUANTIFIED RISK. Score = P×I; ≥13 escalate; ≥19 STOP. |
 | **L6** | §3 *Verify Your Own Work — Anti-Self-Deception Protocol* | ANTI-SELF-DECEPTION. 3 ways the output could be wrong, addressed inline. |
 | **L7** | §4 *Radical Honesty* + §14 *Zero Compromised Output* | ABSOLUTE CONTRACT. Never fabricate, skip plan, auto-approve, batch unrelated changes. |
+<!-- canon-generated:laws-end -->
 
 When a tool, hook, or commit refers to L<N>, look up the row above to find the binding section. The L-labels are stable across versions; the §-numbers may shift if the file is re-paginated. If the two ever drift, **the §-text is authoritative** and the table must be updated to point at the new §-numbers.
 
