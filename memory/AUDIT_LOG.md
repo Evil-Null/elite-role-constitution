@@ -43,3 +43,4 @@ Live re-test post-fix: kimi recall of L6 still verbatim PASS. R6 score now P3×I
 - **Archive location:** `memory/archive/audit_archive.md`
 - **Index location:** `memory/archive/audit_index.md`
 - **Last rollup:** 2026-05-17T06:45+04:00
+- **Last metadata check:** 2026-05-18 — entries E8/E9/E10/IND1 added since; active set within 50-line cap, no rollup triggered.
