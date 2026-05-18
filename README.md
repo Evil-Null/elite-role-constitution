@@ -157,12 +157,6 @@ those.
 
 ---
 
-## Contributors
-
-- **[Evil-Null / EvilNull](https://github.com/Evil-Null)** — author and maintainer.
-
----
-
 ## License
 
 See the repository for license terms or contact the maintainer.
