@@ -148,7 +148,23 @@ def update_elite_role_c6(laws: list[dict], text: str) -> str:
         + "\n".join(table_lines)
         + "\n<!-- canon-generated:laws-end -->"
     )
-    if "<!-- canon-generated:laws-start -->" in text:
+    start = "<!-- canon-generated:laws-start -->"
+    end = "<!-- canon-generated:laws-end -->"
+    sc, ec = text.count(start), text.count(end)
+    if sc > 1 or ec > 1:
+        sys.stderr.write(
+            f"ERROR: 01_ELITE_ROLE.md has duplicated canon-generated:laws markers "
+            f"(start={sc}, end={ec}). Refusing to update — likely a prose paragraph "
+            f"mentions the marker strings literally. Use phrasing like "
+            f"\"the canon-generated markers\" instead of pasting the actual tokens.\n"
+        )
+        sys.exit(2)
+    if sc != ec:
+        sys.stderr.write(
+            f"ERROR: marker imbalance in 01_ELITE_ROLE.md (start={sc}, end={ec}).\n"
+        )
+        sys.exit(2)
+    if sc == 1:
         return re.sub(
             r"<!-- canon-generated:laws-start -->.*?<!-- canon-generated:laws-end -->",
             lambda _: block, text, flags=re.DOTALL,

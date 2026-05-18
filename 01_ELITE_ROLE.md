@@ -162,7 +162,9 @@ The operational kernel (`agent/elite.system.md`), the deployment skill (`.kimi/s
 | **L7** | §4 *Radical Honesty* + §14 *Zero Compromised Output* | ABSOLUTE CONTRACT. Never fabricate, skip plan, auto-approve, batch unrelated changes. |
 <!-- canon-generated:laws-end -->
 
-When a tool, hook, or commit refers to L<N>, look up the row above to find the binding section. The L-labels are stable across versions; the §-numbers may shift if the file is re-paginated. If the two ever drift, **the §-text is authoritative** and the table must be updated to point at the new §-numbers.
+When a tool, hook, or commit refers to L<N>, look up the row above to find the binding section. The L-labels are stable across versions; the §-numbers may shift if the file is re-paginated. If the two ever drift, **the §-text is authoritative**.
+
+**Single source of truth:** the table above is **generated from `canon/laws.yaml`** by `generate.sh` (Phase B6, 2026-05-18). Manual edits to the rows inside the canon-generated markers will be silently overwritten on the next `bash generate.sh`. To change a row, edit `canon/laws.yaml`, run the generator, commit both. See `canon/README.md` for the full workflow. CI (`.github/workflows/integrity.yml`) blocks merges where canon and derived blocks diverge.
 
 ## C.7 6-Lens Names — Canonical and Short Aliases (formal adoption 2026-05-18)
 

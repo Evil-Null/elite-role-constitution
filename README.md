@@ -209,7 +209,16 @@ tests/                     ← Validation harness
 
 archive/SYSTEM_PLAN.md     ← Historical (pre-v2.4 design)
 
-.github/workflows/         ← CI: lint + smoke + integrity on push
+canon/                     ← Single source of truth for derivable facts
+  README.md                (workflow + marker convention)
+  hooks.yaml               (9 lifecycle hooks)
+  patterns.yaml            (protected globs + secret regexes)
+  thresholds.yaml          (memory caps, compact ratios, P×I bounds)
+  laws.yaml                (L1-L7 → §-section mapping)
+generate.sh                ← bash wrapper around _generate.py (canon → derived)
+_generate.py               ← 229-line generator (idempotent; --check for CI)
+
+.github/workflows/         ← CI: lint + smoke + integrity + canon-parity on push
 00_ROLE.md                 ← Source doctrine (Georgian working doc)
 01_ELITE_ROLE.md           ← Iron Constitution v4.0 (with §C.6 L1-L7 mapping)
 KIMI_PROTOCOL.md           ← Deployment protocol
