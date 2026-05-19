@@ -11,31 +11,29 @@
 ## Recent Entries (Last 5)
 
 ```
-PhaseC: ROADMAP_ELITE_v2 Phase C closed — C1 source-inspection, C2 PostToolUse L2-citation heuristic, C3 stop.sh L6-honesty, C4 PEV [APPROVED] gate (user-prompt-submit.sh + pre-tool-use.sh + pre-shell.sh, advisory/strict), C5 telemetry signals. Hook count 9→10. Smoke 5/5 PASS — 2026-05-19 — APPROVED A+B+C; D-G pending — 5 commits
-E11: ROADMAP_ELITE_v2.md v2.0 + Phase A (A1-A7) + Phase B (B1-B9) + post-audit hotfix — strategic structural roadmap shipped; 8 doctrine drift surfaces closed — 2026-05-18 — APPROVED A + B — 19 commits total
+IND2: Tier-2 cross-vendor review (Kimi K2 / Moonshot, isolated kimi --print) — 2026-05-19 — 1 flaw raised, 1 applied — doctrine§6 (01_ELITE_ROLE.md:350) 400-word cap exception list missed "deep mode" / challenge-grade, contradicting KIMI_PROTOCOL.md:420 (G.4: 800 deep). Fix: exception list extended in 01_ELITE_ROLE.md:350 + :738 to reference G.4 ladder as the authoritative refinement. Severity P3×I2=6.
+PhaseC: ROADMAP_ELITE_v2 Phase C closed — C1 source-inspection, C2 PostToolUse L2-citation heuristic, C3 stop.sh L6-honesty, C4 PEV [APPROVED] gate, C5 telemetry signals. Hook count 9→10. Smoke 5/5 PASS — 2026-05-19 — APPROVED A+B+C; D-G pending — 5 commits
+E11: ROADMAP_ELITE_v2.md v2.0 + Phase A + Phase B + post-audit hotfix — strategic structural roadmap shipped; 8 doctrine drift surfaces closed — 2026-05-18 — APPROVED A + B — 19 commits total
 IND1: R6 mitigation — 4 parallel independent subagent reviewers — 2026-05-18 — 24 findings (9 CRITICAL) → 7 follow-up commits → R6 score 15→6
 E10: Phase E — Kimi 1.43+ native deployment — 2026-05-18 — PASS:10/10 — Risk:R6=15 (now mitigated by IND1)
-E9: IMPROVEMENT_PLAN v1.1 — Phases A+B+C.1+D shipped — 2026-05-18 — PASS:10/10 — Risk:R6=15 — Files:35
 ```
 
-## IND1 Detail — Independent Review Cycle (2026-05-18, post-Phase E)
+## IND2 Detail — Tier-2 Cross-Vendor Review (2026-05-19, post-D1)
 
-Four subagent reviewers run in isolated contexts: general-purpose (doctrine consistency), code-reviewer (hook security), silent-failure-hunter (silent failures), Explore (live-test reproducibility). Per `independent-validation.md`, this counts as Tier 3 (same-vendor different-session) — lower than human peer but a real R6 mitigation.
+Reviewer: Kimi K2 / Moonshot via isolated `kimi --print` (temp HOME, hooks stripped, empty skills dir) on `build-tier2-bundle.sh` output @ commit 30bfea7. First run hit the 300 s timeout mid-analysis; flaw was captured from `wire.jsonl` thinking trace and re-verified by grep against the live repo (SOP §3 criteria met: file:line, verbatim quote, not in pre-mortem, not in IND1, actionable).
 
-Findings: 24 total, 9 CRITICAL (P×I≥15). Headline issues — L1-L7 phantom labels in canon (Obj #1), osascript command injection (R2 #1), Shell-tool bypass of file guard (R3 #3), PreToolUse fail-open on parse error (R3 #1), doctrine misclaiming what hooks do (R3 #4), stale IMPROVEMENT_PLAN evidence (Obj #3).
+Mitigation applied this commit: doctrine §6:350 + §28:738 exception lists extended to name "deep-mode / challenge-grade review" and cite KIMI_PROTOCOL.md G.4 as the authoritative ladder. Protocol's 800-word allowance now sits inside the doctrine's envelope.
 
-Fix commits: a8b0f3d (L1-L7 mapping + P×I align + lens names), 537eb54 (plan evidence refresh), 3427980 (osascript + protected-file + Shell + secrets), 66a1f61 (memory Max Size declarations + integrity hardening), a106909 (honest hook claims), ed46877 (CI lint+smoke hooks), 60bc7c9 (medium fixes), [this commit] (IND1 entry + TOML conflict fix).
-
-Live re-test post-fix: kimi recall of L6 still verbatim PASS. R6 score now P3×I2=6 (low) — single-eye-author bias remains, but the 4-reviewer cycle has filed and addressed all CRITICAL findings.
+## IND1 Detail — see archive/audit_archive.md (2026-05-18); R6 dropped 15→6.
 
 ## Running Statistics
 
 | Metric | Value |
 |---|---|
-| Total entries | 13 (11 task + 1 IND + 1 plan) |
-| Recent pass rate | 100% (13/13) |
-| Average risk score | 5.3 (R6 dropped 15→6; PhaseC mean P×I ~6) |
-| Escalation rate | 15% (E9+E10 hit L5, IND1 closed, E11+PhaseC routine) |
+| Total entries | 14 (11 task + 2 IND + 1 plan) |
+| Recent pass rate | 100% (14/14) |
+| Average risk score | 5.2 (R6 dropped 15→6; IND2 P×I=6; PhaseC mean P×I ~6) |
+| Escalation rate | 14% (E9+E10 hit L5, IND1+IND2 closed, E11+PhaseC routine) |
 
 ## Archive Reference
 
@@ -43,4 +41,4 @@ Live re-test post-fix: kimi recall of L6 still verbatim PASS. R6 score now P3×I
 - **Archive location:** `memory/archive/audit_archive.md`
 - **Index location:** `memory/archive/audit_index.md`
 - **Last rollup:** 2026-05-17T06:45+04:00
-- **Last metadata check:** 2026-05-19 — PhaseC entry added with non-numeric prefix to sidestep E-number collision with archived E12 (2026-05-11). E11 kept as Phase A+B closure; PhaseC is Phase C closure. Statistics reflect total commits.
+- **Last metadata check:** 2026-05-19 — IND2 entry added at top of Recent (Tier-2 cross-vendor review via isolated Kimi K2 invocation); E9 fell off the visible window (preserved in archive). PhaseC and prior entries unchanged. Statistics reflect total commits + counted IND cycles.

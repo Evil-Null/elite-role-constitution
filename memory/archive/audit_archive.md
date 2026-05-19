@@ -42,9 +42,17 @@ E34: Write-guard logic verification — 2026-05-17 — PASS — Risk:3 — Iter:
 E35: Test scenario coverage audit — 2026-05-17 — PASS — Risk:2 — Iter:1
 ```
 
+## IND1 Detail — Independent Review Cycle (rolled up 2026-05-19)
+
+Four Claude subagent reviewers in isolated contexts: general-purpose (doctrine consistency), code-reviewer (hook security), silent-failure-hunter (silent failures), Explore (live-test reproducibility). Per `independent-validation.md`, this counts as Tier 3 (same-vendor different-session) — lower than human peer but a real R6 mitigation.
+
+Findings: 24 total, 9 CRITICAL (P×I≥15). Headline — L1-L7 phantom labels in canon (Obj #1), osascript command injection (R2 #1), Shell-tool bypass of file guard (R3 #3), PreToolUse fail-open on parse error (R3 #1), doctrine misclaiming what hooks do (R3 #4), stale IMPROVEMENT_PLAN evidence (Obj #3).
+
+Fix commits: a8b0f3d, 537eb54, 3427980, 66a1f61, a106909, ed46877, 60bc7c9, plus IND1 entry + TOML conflict fix. Live re-test post-fix: kimi recall of L6 still verbatim PASS. R6 score now P3×I2=6.
+
 ## Archive Metadata
 
 - **Created:** 2026-05-17
-- **Last Rollup:** 2026-05-17T06:30+04:00
-- **Total Archived:** 30
+- **Last Rollup:** 2026-05-19 (IND1 Detail block rolled from active AUDIT_LOG.md)
+- **Total Archived:** 30 entries + IND1 Detail
 - **Source File:** memory/AUDIT_LOG.md

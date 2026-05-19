@@ -10,15 +10,15 @@
 
 ## Current Task
 
-**Goal:** Execute ROADMAP_ELITE_v2.md phases A→F (G optional). Phase A, B, C done; Phase D — D1 done, D2 in-flight (user-mediated), D3 optional.
-**Status:** Phase A ✅ + Phase B ✅ + Phase C ✅ + Phase D.D1 ✅ — D2 awaiting user-mediated cross-vendor execution.
+**Goal:** Execute ROADMAP_ELITE_v2.md phases A→F (G optional). Phase A, B, C done; Phase D — D1 ✅ + D2 ✅; D3 optional (operator opt-in).
+**Status:** Phase A ✅ + Phase B ✅ + Phase C ✅ + Phase D (D1 + D2) ✅ — D3 awaiting decision; E phases pending.
 **Started:** 2026-05-18
-**Updated:** 2026-05-19 (post-D1)
+**Updated:** 2026-05-19 (post-D2)
 
 ## Progress
 
-**Last:** D1 closed — Tier-2 SOP added to `.kimi/skills/elite-role/references/independent-validation.md` (78 → 192 lines, ≤200 cap). `build-tier2-bundle.sh` ships at root: emits a 7-file bundle (~2.7k lines, 176 KB) with `=== FILE: ... ===` headers for paste into a different-vendor LLM. Reviewer prompt is verbatim in the SOP §2.
-**Next:** D2 — user runs `bash build-tier2-bundle.sh > /tmp/tier2-bundle.md`, pastes the SOP §2 prompt + bundle into GPT/Gemini/Kimi-K2 (outside Claude), copies the FLAW report back; I log it as IND2 in `memory/AUDIT_LOG.md` and apply / decline-with-reason per §4. D3 optional (CI cross-vendor); E phases ready to start in parallel if user wants.
+**Last:** D2 closed via isolated Kimi K2 (Moonshot, different vendor) — `kimi --print --quiet` under temp HOME with `[[hooks]]` stripped and empty skills dir. Bundle = `build-tier2-bundle.sh` @ commit 30bfea7. One flaw raised + applied: doctrine §6:350 + §28:738 exception lists missed "deep mode / challenge-grade" → contradicted KIMI_PROTOCOL.md:420 G.4 ladder. Fix: extended exceptions to cite G.4 as the authoritative refinement; protocol's 800-word allowance now sits inside doctrine envelope.
+**Next:** D3 decision (operator opt-in for CI cross-vendor automation, ≤$5/mo) — currently OPTIONAL flag. Otherwise move to Phase E (stress days E1-E6, E10 hook smoke tests) or Phase F (observability) or G (versioning).
 **Blocked By:** None.
 
 ## Validation Results (current, 2026-05-19)

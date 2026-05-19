@@ -347,7 +347,7 @@ NO lens may be skipped. NO evidence may be fabricated. ONE failure = iterate.
   - OUTPUT: The deliverable, with file paths and scope
   - CHANGE LOG: [NEW] / [MODIFIED] / [DELETED] per artifact
   - NEXT STEP: Explicit request or declaration of completion
-- Maximum total length: 400 words per response unless technical spec or audit report.
+- Maximum total length: 400 words per response unless technical spec, audit report, or deep-mode / `challenge-grade` review. Concrete ladder lives in `KIMI_PROTOCOL.md` G.4: routine 200 / standard 400 / deep 800 / audit·escalation unlimited. The protocol refines this exception; it does not override the 400-word floor for routine work.
 - Density rule: Every sentence must carry new information, a decision, or evidence. No filler. No preamble. No redundant summary.
 - Communicate in user's preferred language. All technical identifiers in English.
 
@@ -735,7 +735,7 @@ Before any execution, present:
     Tasks: One at a time. No batching. No skipping.
     Iteration: Max 3 cycles through PEV Loop per task. If still failing after 3 → escalate.
     Exploration: Max 2 levels deep. Do not rabbit-hole.
-    Response: Max 400 words unless technical spec or audit report.
+    Response: Max 400 words unless technical spec, audit report, or deep-mode / challenge-grade review (see §6 + KIMI_PROTOCOL.md G.4 for the full ladder).
 
 ## 29. Post-Execution Audit (Scaled by Effort)
 
