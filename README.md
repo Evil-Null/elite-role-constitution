@@ -16,7 +16,7 @@ This repo deploys discipline as code:
 
 - **A formal 7-law constitution** (`L1-L7`) that survives compression, sessions, and context exhaustion.
 - **An Anthropic-compatible Agent Skill bundle** that Kimi auto-discovers and loads only when the conversation demands it.
-- **Nine lifecycle hooks** that fire automatically: blocking writes to `.env` / `id_rsa` / `.tfstate`, enforcing post-compact state, requiring the doctrinal `[APPROVED]` gate before mutations.
+- **Ten lifecycle hooks** that fire automatically: blocking writes to `.env` / `id_rsa` / `.tfstate`, enforcing post-compact state, requiring the doctrinal `[APPROVED]` gate before mutations.
 - **Three Flow Skills** (`/flow:audit-mode`, `/flow:challenge-grade`, `/flow:save-state`) that drive multi-turn rituals from Mermaid diagrams.
 - **A self-auditing repo** — `SYSTEM_INTEGRITY_CHECK.sh` validates the framework's own contracts on every push; GitHub Actions enforces it.
 
@@ -31,7 +31,7 @@ bash install.sh --yes        # idempotent; backs up your ~/.kimi/config.toml
 kimi --agent-file agent/elite.yaml
 ```
 
-That single launch loads the agent file, auto-discovers the four skills under `.kimi/skills/`, and wires the nine lifecycle hooks. The first message you can send is:
+That single launch loads the agent file, auto-discovers the four skills under `.kimi/skills/`, and wires the ten lifecycle hooks. The first message you can send is:
 
 ```
 plan only: design a function that reverses a linked list
@@ -67,7 +67,7 @@ These map to specific sections of `01_ELITE_ROLE.md`; see §C.6 there for the ca
        ┌───────────────────────┼───────────────────────┐
        ▼                       ▼                       ▼
   agent/elite.system.md   .kimi/skills/           .kimi/hooks/
-  (L1-L7 kernel,          (auto-discovered:      (9 lifecycle scripts:
+  (L1-L7 kernel,          (auto-discovered:      (10 lifecycle scripts:
    output contract,        elite-role,            SessionStart loads
    ${KIMI_NOW} etc.)       audit-mode,            memory; PreToolUse
                            challenge-grade,        blocks .env writes;
@@ -192,7 +192,7 @@ agent/                     ← Kimi 1.43+ deployment entry
   skills/audit-mode/       (Flow Skill — /flow:audit-mode)
   skills/challenge-grade/  (Flow Skill — /flow:challenge-grade)
   skills/save-state/       (Flow Skill — /flow:save-state)
-  hooks/*.sh               (9 lifecycle scripts; shellcheck clean)
+  hooks/*.sh               (10 lifecycle scripts; shellcheck clean)
   hooks.example.toml       (copy into ~/.kimi/config.toml)
 
 memory/                    ← Bounded operational state
@@ -211,7 +211,7 @@ archive/SYSTEM_PLAN.md     ← Historical (pre-v2.4 design)
 
 canon/                     ← Single source of truth for derivable facts
   README.md                (workflow + marker convention)
-  hooks.yaml               (9 lifecycle hooks)
+  hooks.yaml               (10 lifecycle hooks)
   patterns.yaml            (protected globs + secret regexes)
   thresholds.yaml          (memory caps, compact ratios, P×I bounds)
   laws.yaml                (L1-L7 → §-section mapping)

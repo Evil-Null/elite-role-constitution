@@ -72,3 +72,10 @@ event = "Notification"
 matcher = ""
 command = ".kimi/hooks/notification.sh"
 timeout = 5
+
+# C4 PEV gate prep: cache the latest user prompt to .kimi/state/prompt-${session_id}.txt so PreToolUse can read it and detect [APPROVED]/light-effort/challenge-grade tokens (advisory by default; strict if .kimi/state/c4-strict-mode sentinel exists)
+[[hooks]]
+event = "UserPromptSubmit"
+matcher = ""
+command = ".kimi/hooks/user-prompt-submit.sh"
+timeout = 5

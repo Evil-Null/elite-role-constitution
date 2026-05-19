@@ -122,7 +122,7 @@ for h in .kimi/hooks/*.sh; do
     fi
 done
 if [ "$NEEDED_CHMOD" -eq 0 ]; then
-    ok "All 9 hook scripts already executable."
+    ok "All 10 hook scripts already executable."
 else
     ok "Made $NEEDED_CHMOD hook scripts executable."
 fi

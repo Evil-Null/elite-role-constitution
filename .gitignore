@@ -32,3 +32,6 @@ MEMORY.md
 
 # Hook-generated audit trail (kept locally, not committed)
 .kimi/audit/
+
+# Per-session prompt cache used by C4 PEV [APPROVED] gate (transient state)
+.kimi/state/

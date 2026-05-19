@@ -18,6 +18,45 @@ HOOKS_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 # shellcheck source=/dev/null
 source "$HOOKS_DIR/_patterns.sh"
 
+# C4 L4 PEV approval check — duplicated from pre-tool-use.sh.
+# Acceptable duplication: short helper, both files exist for tightly
+# different events; canonicalising via canon/approval.yaml is a Phase G
+# refactor target if approval logic grows.
+c4_check_approval() {
+    local session_id="$1"
+    local state_dir
+    state_dir="$(cd "$HOOKS_DIR/../state" 2>/dev/null && pwd || echo "$HOOKS_DIR/../state")"
+    local strict_sentinel="$state_dir/c4-strict-mode"
+    local prompt_file="$state_dir/prompt-${session_id}.txt"
+    [ -z "$session_id" ] && return 0
+    [ ! -f "$prompt_file" ] && return 0
+    local prompt
+    prompt="$(cat "$prompt_file" 2>/dev/null || echo '')"
+    [ -z "$prompt" ] && return 0
+    if printf '%s' "$prompt" | grep -qE '\[APPROVED\]|\blight effort\b|\bchallenge-grade\b'; then
+        return 0
+    fi
+    if [ -f "$strict_sentinel" ]; then
+        cat <<EOF >&2
+BLOCKED by elite-role pre-shell hook (L4 PEV gate — strict mode):
+The current user prompt does not contain an approval token. State-
+mutating shell commands require [APPROVED] in the user's most recent
+message, or "light effort" / "challenge-grade".
+
+Override: re-send with [APPROVED] appended, OR disable strict mode:
+  rm $strict_sentinel
+EOF
+        return 2
+    fi
+    cat <<EOF >&2
+elite-role · L4 PEV advisory (shell):
+  State-mutating shell command fired without an [APPROVED] token in
+  the user's most recent message. Activate strict-block mode:
+    touch $strict_sentinel
+EOF
+    return 0
+}
+
 INPUT="$(cat)"
 
 # Fail-closed on parse failure
@@ -37,6 +76,20 @@ except Exception:
 
 if [ -z "$CMD" ]; then
     exit 0
+fi
+
+# C4 — apply L4 PEV gate only to state-mutating shell patterns. A pure
+# read like `ls` or `cat` should never need approval. We detect mutation
+# via the same redirection/copy/move/sed/dd patterns used below.
+if printf '%s' "$CMD" | grep -qE '(>>?|tee|^cp\b|^mv\b|^install\b|sed -i|sed --in-place|dd\s+of=)'; then
+    SESSION_ID="$(printf '%s' "$INPUT" | python3 -c "
+import sys, json
+try: print(json.load(sys.stdin).get('session_id',''))
+except Exception: pass
+" 2>/dev/null || echo "")"
+    if ! c4_check_approval "$SESSION_ID"; then
+        exit 2
+    fi
 fi
 
 # B7 refactor: pattern arrays come from canon/patterns.yaml via _patterns.sh.

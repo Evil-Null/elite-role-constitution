@@ -73,3 +73,10 @@ hooks:
     script: .kimi/hooks/notification.sh
     timeout: 5
     doc: "Desktop notification: notify-send (Linux), osascript argv (macOS, injection-safe per R2 #1), stderr fallback"
+
+  - name: user-prompt-submit
+    event: UserPromptSubmit
+    matcher: ""
+    script: .kimi/hooks/user-prompt-submit.sh
+    timeout: 5
+    doc: "C4 PEV gate prep: cache the latest user prompt to .kimi/state/prompt-${session_id}.txt so PreToolUse can read it and detect [APPROVED]/light-effort/challenge-grade tokens (advisory by default; strict if .kimi/state/c4-strict-mode sentinel exists)"

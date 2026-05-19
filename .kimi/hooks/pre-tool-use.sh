@@ -26,6 +26,44 @@ HOOKS_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 # shellcheck source=/dev/null
 source "$HOOKS_DIR/_patterns.sh"
 
+# C4 L4 PEV approval check (advisory by default; strict-mode via sentinel).
+c4_check_approval() {
+    local session_id="$1"
+    local state_dir
+    state_dir="$(cd "$HOOKS_DIR/../state" 2>/dev/null && pwd || echo "$HOOKS_DIR/../state")"
+    local strict_sentinel="$state_dir/c4-strict-mode"
+    local prompt_file="$state_dir/prompt-${session_id}.txt"
+    [ -z "$session_id" ] && return 0
+    [ ! -f "$prompt_file" ] && return 0
+    local prompt
+    prompt="$(cat "$prompt_file" 2>/dev/null || echo '')"
+    [ -z "$prompt" ] && return 0
+    # Approval tokens — recognized doctrine sentinels.
+    if printf '%s' "$prompt" | grep -qE '\[APPROVED\]|\blight effort\b|\bchallenge-grade\b'; then
+        return 0
+    fi
+    if [ -f "$strict_sentinel" ]; then
+        cat <<EOF >&2
+BLOCKED by elite-role PreToolUse hook (L4 PEV gate — strict mode):
+The current user prompt does not contain an approval token. State-
+mutating tools require [APPROVED] in the user's most recent message,
+or "light effort" / "challenge-grade".
+
+Override: re-send with [APPROVED] appended, OR disable strict mode:
+  rm $strict_sentinel
+EOF
+        return 2
+    fi
+    cat <<EOF >&2
+elite-role · L4 PEV advisory:
+  State-mutating tool fired without an [APPROVED] token in the user's
+  most recent message. Doctrine asks non-routine mutations to be
+  plan-gated. If non-routine, request [APPROVED] for the next turn.
+  Activate strict-block mode:  touch $strict_sentinel
+EOF
+    return 0
+}
+
 INPUT="$(cat)"
 
 # ── 1. Fail closed on parse failure ─────────────────────────────────
@@ -38,6 +76,18 @@ Contract, security guards do not silently bypass on unparseable input.
 This is almost certainly a bug in the tool wrapper, not malicious; rerun
 the same call once more, and if the error persists, file a bug.
 EOF
+    exit 2
+fi
+
+# ── 1b. C4 — L4 PEV approval gate (advisory or strict per sentinel) ─
+
+SESSION_ID="$(printf '%s' "$INPUT" | python3 -c "
+import sys, json
+try: print(json.load(sys.stdin).get('session_id',''))
+except Exception: pass
+" 2>/dev/null || echo "")"
+
+if ! c4_check_approval "$SESSION_ID"; then
     exit 2
 fi
 

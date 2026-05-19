@@ -11,11 +11,11 @@
 ## Recent Entries (Last 5)
 
 ```
-E11: ROADMAP_ELITE_v2.md v2.0 + Phase A (A1-A7) + Phase B (B1-B9) + post-audit hotfix — strategic structural roadmap shipped; 8 doctrine drift surfaces closed (hook count, protected patterns, secret regexes, L1-L7 §-mapping, file count, audit-log metadata, scope honesty, SC2034 in generated code) — 2026-05-18 — APPROVED A + B; C-G pending — 19 commits total
+PhaseC: ROADMAP_ELITE_v2 Phase C closed — C1 source-inspection, C2 PostToolUse L2-citation heuristic, C3 stop.sh L6-honesty, C4 PEV [APPROVED] gate (user-prompt-submit.sh + pre-tool-use.sh + pre-shell.sh, advisory/strict), C5 telemetry signals. Hook count 9→10. Smoke 5/5 PASS — 2026-05-19 — APPROVED A+B+C; D-G pending — 5 commits
+E11: ROADMAP_ELITE_v2.md v2.0 + Phase A (A1-A7) + Phase B (B1-B9) + post-audit hotfix — strategic structural roadmap shipped; 8 doctrine drift surfaces closed — 2026-05-18 — APPROVED A + B — 19 commits total
 IND1: R6 mitigation — 4 parallel independent subagent reviewers — 2026-05-18 — 24 findings (9 CRITICAL) → 7 follow-up commits → R6 score 15→6
 E10: Phase E — Kimi 1.43+ native deployment — 2026-05-18 — PASS:10/10 — Risk:R6=15 (now mitigated by IND1)
 E9: IMPROVEMENT_PLAN v1.1 — Phases A+B+C.1+D shipped — 2026-05-18 — PASS:10/10 — Risk:R6=15 — Files:35
-E8: Hardening phase — all 7 WEAK→PASS, all 9 Phase 3 executed — 2026-05-17 — PASS:30/WEAK:0/FAIL:0 — Risk:5
 ```
 
 ## IND1 Detail — Independent Review Cycle (2026-05-18, post-Phase E)
@@ -32,10 +32,10 @@ Live re-test post-fix: kimi recall of L6 still verbatim PASS. R6 score now P3×I
 
 | Metric | Value |
 |---|---|
-| Total entries | 12 (10 task + 1 IND + 1 plan) |
-| Recent pass rate | 100% (12/12) |
-| Average risk score | 5.5 (R6 dropped 15→6; E11 PROPOSED-state task) |
-| Escalation rate | 17% (E9+E10 hit L5, IND1 closed, E11 routine) |
+| Total entries | 13 (11 task + 1 IND + 1 plan) |
+| Recent pass rate | 100% (13/13) |
+| Average risk score | 5.3 (R6 dropped 15→6; PhaseC mean P×I ~6) |
+| Escalation rate | 15% (E9+E10 hit L5, IND1 closed, E11+PhaseC routine) |
 
 ## Archive Reference
 
@@ -43,4 +43,4 @@ Live re-test post-fix: kimi recall of L6 still verbatim PASS. R6 score now P3×I
 - **Archive location:** `memory/archive/audit_archive.md`
 - **Index location:** `memory/archive/audit_index.md`
 - **Last rollup:** 2026-05-17T06:45+04:00
-- **Last metadata check:** 2026-05-18 evening — E11 entry text refreshed to span Phase A + Phase B + hotfix (single combined entry rather than adding E12 to avoid reopening pre-existing E-number collision with archived E8 from 2026-05-10). Statistics below reflect total commits, not entry count.
+- **Last metadata check:** 2026-05-19 — PhaseC entry added with non-numeric prefix to sidestep E-number collision with archived E12 (2026-05-11). E11 kept as Phase A+B closure; PhaseC is Phase C closure. Statistics reflect total commits.
