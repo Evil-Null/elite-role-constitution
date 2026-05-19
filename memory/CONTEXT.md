@@ -10,15 +10,15 @@
 
 ## Current Task
 
-**Goal:** Execute ROADMAP_ELITE_v2.md phases A→F (G optional). Phase A, B, C complete; awaiting `[APPROVED] D` (Tier-2 external validation) or alternative scope.
-**Status:** Phase A ✅ + Phase B ✅ + Phase C ✅ — Phase C closed 2026-05-19 by C4 commit; idle, awaiting next approval.
+**Goal:** Execute ROADMAP_ELITE_v2.md phases A→F (G optional). Phase A, B, C done; Phase D — D1 done, D2 in-flight (user-mediated), D3 optional.
+**Status:** Phase A ✅ + Phase B ✅ + Phase C ✅ + Phase D.D1 ✅ — D2 awaiting user-mediated cross-vendor execution.
 **Started:** 2026-05-18
-**Updated:** 2026-05-19 (post-Phase-C closure)
+**Updated:** 2026-05-19 (post-D1)
 
 ## Progress
 
-**Last:** Phase C closed. C1 (payload introspection, docs/c1 commit), C2 (PostToolUse L2 citation heuristic), C3 (stop.sh L6-honesty), C5 (telemetry signals bundled with C2), C4 (PEV `[APPROVED]` gate — `user-prompt-submit.sh` caches prompt; `pre-tool-use.sh` + `pre-shell.sh` enforce). Hook count 9 → 10. Mode: **advisory by default**, strict via `.kimi/state/c4-strict-mode` sentinel — honest deviation from §5.C.C4 acceptance documented in ROADMAP §12 v2.0-C entry. Smoke-tested 5/5 PASS.
-**Next:** User chooses: D (Tier-2 external review — single highest remaining P×I=9 if skipped), E1-E9 (stress days 2-7), E10 (hook pattern smoke tests), F (observability), G (versioning & canary), or pause.
+**Last:** D1 closed — Tier-2 SOP added to `.kimi/skills/elite-role/references/independent-validation.md` (78 → 192 lines, ≤200 cap). `build-tier2-bundle.sh` ships at root: emits a 7-file bundle (~2.7k lines, 176 KB) with `=== FILE: ... ===` headers for paste into a different-vendor LLM. Reviewer prompt is verbatim in the SOP §2.
+**Next:** D2 — user runs `bash build-tier2-bundle.sh > /tmp/tier2-bundle.md`, pastes the SOP §2 prompt + bundle into GPT/Gemini/Kimi-K2 (outside Claude), copies the FLAW report back; I log it as IND2 in `memory/AUDIT_LOG.md` and apply / decline-with-reason per §4. D3 optional (CI cross-vendor); E phases ready to start in parallel if user wants.
 **Blocked By:** None.
 
 ## Validation Results (current, 2026-05-19)

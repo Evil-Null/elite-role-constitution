@@ -180,7 +180,7 @@ Three real weaknesses remain documented (not hidden):
 
 ---
 
-## Repo map (67 files across 4 layers)
+## Repo map (68 files across 4 layers)
 
 ```
 agent/                     ← Kimi 1.43+ deployment entry
