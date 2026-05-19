@@ -10,15 +10,15 @@
 
 ## Current Task
 
-**Goal:** Execute ROADMAP_ELITE_v2.md phases A→F (G optional). Phase A, B, C done; Phase D — D1 ✅ + D2 ✅; D3 optional (operator opt-in).
-**Status:** Phase A ✅ + Phase B ✅ + Phase C ✅ + Phase D (D1 + D2) ✅ — D3 awaiting decision; E phases pending.
+**Goal:** Execute ROADMAP_ELITE_v2.md phases A→F (G optional). Phase A, B, C, D done; Phase E starting with E10 (hook pattern coverage smoke tests).
+**Status:** Phase A ✅ + Phase B ✅ + Phase C ✅ + Phase D ✅ (D1 + D2 done, D3 DEFERRED per D11 in DECISIONS.md). Phase E.E10 in flight.
 **Started:** 2026-05-18
-**Updated:** 2026-05-19 (post-D2)
+**Updated:** 2026-05-19 (post-Phase-D closure)
 
 ## Progress
 
-**Last:** D2 closed via isolated Kimi K2 (Moonshot, different vendor) — `kimi --print --quiet` under temp HOME with `[[hooks]]` stripped and empty skills dir. Bundle = `build-tier2-bundle.sh` @ commit 30bfea7. One flaw raised + applied: doctrine §6:350 + §28:738 exception lists missed "deep mode / challenge-grade" → contradicted KIMI_PROTOCOL.md:420 G.4 ladder. Fix: extended exceptions to cite G.4 as the authoritative refinement; protocol's 800-word allowance now sits inside doctrine envelope.
-**Next:** D3 decision (operator opt-in for CI cross-vendor automation, ≤$5/mo) — currently OPTIONAL flag. Otherwise move to Phase E (stress days E1-E6, E10 hook smoke tests) or Phase F (observability) or G (versioning).
+**Last:** Phase D closed. D3 DEFERRED by operator choice (D11 in `memory/DECISIONS.md`) — manual D2 flow already covers periodic-review need; CI automation not yet load-bearing.
+**Next:** Phase E.E10 — expand `.github/workflows/integrity.yml` smoke-test block to cover ≥10 negative cases (id_rsa, kubeconfig, gcloud-key, *.tfstate, BEGIN OPENSSH PRIVATE KEY, xoxb-, sk-ant-, AKIA, AIza). Currently only 2 cases. P×I 2×4=8.
 **Blocked By:** None.
 
 ## Validation Results (current, 2026-05-19)
