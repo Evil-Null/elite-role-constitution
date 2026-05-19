@@ -50,17 +50,54 @@ cd elite-role-constitution
 bash install.sh --yes
 ```
 
-`install.sh` does three things:
+`install.sh` runs eight ordered steps, each opt-in via y/n prompt unless
+you passed `--yes`:
 
-1. Marks all hook scripts executable.
-2. Optionally symlinks the four skills under `~/.kimi/skills/`.
-3. Optionally appends the ten `[[hooks]]` blocks to `~/.kimi/config.toml`
-   (with a timestamped backup of the existing file).
+1. **Prerequisites** — Kimi CLI 1.43+, python3, optional shellcheck.
+2. **Repository integrity** — runs `SYSTEM_INTEGRITY_CHECK.sh` (10 checks).
+3. **Hook permissions** — `chmod +x` on the hook scripts (skips the
+   `_patterns.sh` helper that is sourced, not executed).
+4. **Flow skill validation** — imports `kimi_cli.skill.flow.mermaid` and
+   verifies every `SKILL.md` flow block parses. Catches the Kimi 1.44
+   `rfind('>')` arrow-finder bug at install time instead of at runtime.
+5. **Skill symlinks** *(optional)* — links the four skills under
+   `~/.kimi/skills/` so they discover from any project.
+6. **Hook wire-up** *(optional)* — appends the ten `[[hooks]]` blocks to
+   `~/.kimi/config.toml` (with a timestamped backup of the existing file).
+7. **Doctrine launcher** *(optional)* — installs `~/.local/bin/kimi-elite`
+   (a wrapper for scripts / non-interactive use) and offers to add an
+   `alias kimi='command kimi --agent-file <repo>/agent/elite.yaml'` block
+   to `~/.bashrc` and `~/.zshrc`. Without this step, `kimi` loads the
+   default agent and the hooks fire host-wide without the doctrine
+   system prompt loaded — the "half-installed" state.
+8. **Live probe** — sends a one-word probe through `kimi --agent-file ...`
+   and (if the launcher is installed) through `kimi-elite`. Reports
+   `INSTALLED` / `WRAPPED` if the deployment is live.
 
-Then start a session:
+Useful flags:
 
 ```bash
-kimi --agent-file agent/elite.yaml
+bash install.sh --yes           # accept all defaults (skills+hooks+launcher)
+bash install.sh --skills-only   # only skill symlinks, skip hooks+launcher
+bash install.sh --hooks-only    # only hooks wire-up, skip skills+launcher
+bash install.sh --no-launcher   # skip the kimi-elite wrapper + alias
+bash install.sh --no-probe      # skip the live API probe at the end
+```
+
+Then start a session. If you accepted step 7 (recommended), plain
+`kimi` already loads the doctrine in any directory:
+
+```bash
+kimi                                           # alias path (interactive)
+kimi-elite                                     # wrapper path (scripts/cron)
+kimi --agent-file agent/elite.yaml             # manual path (always works)
+```
+
+Confirm the doctrine is live by tailing the log after your first turn:
+
+```bash
+tail -1 ~/.kimi/logs/kimi.*.log | grep "Loading agent"
+# expected: Loading agent: <repo>/agent/elite.yaml   (not .../kimi_cli/agents/default/)
 ```
 
 ---
