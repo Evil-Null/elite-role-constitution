@@ -80,8 +80,11 @@ fi
 
 # C4 — apply L4 PEV gate only to state-mutating shell patterns. A pure
 # read like `ls` or `cat` should never need approval. We detect mutation
-# via the same redirection/copy/move/sed/dd patterns used below.
-if printf '%s' "$CMD" | grep -qE '(>>?|tee|^cp\b|^mv\b|^install\b|sed -i|sed --in-place|dd\s+of=)'; then
+# via the same redirection/copy/move/sed/dd/destructive patterns used
+# below. The `\b(rm|shred|truncate|chmod|chown|chgrp)\b` group catches
+# delete/zero/permission-flip variants that bypass the write-redirect
+# detector (gap closed 2026-05-19 after Tier-1 elite test T2.3/T2.4).
+if printf '%s' "$CMD" | grep -qE '(>>?|tee|^cp\b|^mv\b|^install\b|sed -i|sed --in-place|dd\s+of=|\b(rm|shred|truncate|chmod|chown|chgrp)\b)'; then
     SESSION_ID="$(printf '%s' "$INPUT" | python3 -c "
 import sys, json
 try: print(json.load(sys.stdin).get('session_id',''))
@@ -116,6 +119,21 @@ is_protected() {
         case "$base"      in $pat) return 0 ;; esac
         # shellcheck disable=SC2254
         case "$real_base" in $pat) return 0 ;; esac
+    done
+    return 1
+}
+
+# Catastrophic-path matcher (added 2026-05-19 to close the rm/shred/
+# truncate gap surfaced by elite test T2.4). Matches the FULL path
+# (not basename) — so `/`, `/etc`, `/root` block but `/tmp/foo` does not.
+# Trailing slashes are stripped before comparison so `/etc/` ≡ `/etc`.
+is_catastrophic() {
+    local raw="$1"
+    local norm="${raw%/}"
+    [ -z "$norm" ] && norm="/"
+    local cp
+    for cp in "${CATASTROPHIC_PATHS[@]}"; do
+        [ "$norm" = "$cp" ] && return 0
     done
     return 1
 }
@@ -165,6 +183,25 @@ while i < len(tokens):
         for u in tokens[i+1:]:
             if not u.startswith('-'):
                 targets.append(u)
+    # Destructive commands (rm, shred, truncate) — every non-option arg
+    # is a target. Catches `rm /root/.ssh/id_rsa`, `shred .env`, etc.
+    if t in ('rm', 'shred', 'truncate') or t.endswith('/rm') or t.endswith('/shred') or t.endswith('/truncate'):
+        for u in tokens[i+1:]:
+            if not u.startswith('-'):
+                targets.append(u)
+    # Permission/ownership flip — chmod 000, chown root:root, chgrp. The
+    # first non-option after the command is the mode/owner spec; the
+    # remaining non-option tokens are the targets.
+    if t in ('chmod', 'chown', 'chgrp') or t.endswith('/chmod') or t.endswith('/chown') or t.endswith('/chgrp'):
+        j = i + 1
+        while j < len(tokens) and tokens[j].startswith('-'):
+            j += 1
+        # Skip the mode/owner spec (one positional token)
+        if j < len(tokens):
+            j += 1
+        for u in tokens[j:]:
+            if not u.startswith('-'):
+                targets.append(u)
     i += 1
 
 for tg in targets:
@@ -175,6 +212,22 @@ PY
 
 while IFS= read -r tgt; do
     [ -z "$tgt" ] && continue
+    # Catastrophic-path check runs first — these full-path matches block
+    # regardless of whether the basename is in PROTECTED_PATTERNS.
+    if is_catastrophic "$tgt"; then
+        cat <<EOF >&2
+BLOCKED by elite-role pre-shell hook (L7 Absolute Contract — catastrophic):
+Shell command targets a catastrophic system path: '$tgt'
+Full command was:
+  $CMD
+
+The path '$tgt' is on the catastrophic-paths list (/, /etc, /var, /usr,
+/bin, /sbin, /lib, /lib64, /boot, /sys, /proc, /dev, /root, /home, /opt).
+Deletion or permission-flip of these paths would brick the host.
+No agent operation is permitted against them.
+EOF
+        exit 2
+    fi
     if is_protected "$tgt"; then
         cat <<EOF >&2
 BLOCKED by elite-role pre-shell hook (L7 Absolute Contract):
@@ -184,8 +237,8 @@ Full command was:
 
 Sensitive files (.env, credentials, SSH keys, certificates, kubeconfig,
 terraform state, etc.) must not be modified by the agent — including
-indirectly via Shell redirection or copy. If you need to edit one of
-these, do it manually outside this session.
+indirectly via Shell redirection, copy, deletion, or permission flip.
+If you need to edit one of these, do it manually outside this session.
 EOF
         exit 2
     fi

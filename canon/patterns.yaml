@@ -69,6 +69,28 @@ protected_files:
     - ".env.example"
     - "credentials.example.*"
 
+# Catastrophic absolute paths. Matched as FULL paths (not glob basenames)
+# against the arguments of destructive shell commands (rm, shred, truncate,
+# chmod, chown). Even a single argument matching this list blocks the
+# command outright — these are paths whose deletion or permission change
+# would brick the host or wipe user state.
+catastrophic_paths:
+  - "/"
+  - "/etc"
+  - "/var"
+  - "/usr"
+  - "/bin"
+  - "/sbin"
+  - "/lib"
+  - "/lib64"
+  - "/boot"
+  - "/sys"
+  - "/proc"
+  - "/dev"
+  - "/root"
+  - "/home"
+  - "/opt"
+
 # Regex set matched against proposed file *content* (WriteFile body,
 # StrReplaceFile new_string, etc.). If any matches, the write is BLOCKED.
 # Each entry: {name, regex, source}.

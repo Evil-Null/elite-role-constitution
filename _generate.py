@@ -82,6 +82,7 @@ def emit_hooks_toml(hooks: list[dict]) -> str:
 def emit_patterns_sh(patterns: dict) -> str:
     block = patterns["protected_files"]["block"]
     wl = patterns["protected_files"]["whitelist"]
+    catastrophic = patterns.get("catastrophic_paths", [])
     secrets = patterns["secrets"]
 
     out: list[str] = [
@@ -90,8 +91,8 @@ def emit_patterns_sh(patterns: dict) -> str:
         "# DO NOT EDIT — run `bash generate.sh` instead.",
         "#",
         "# Sourced by pre-tool-use.sh and pre-shell.sh.  Provides:",
-        "#   PROTECTED_PATTERNS[]  WHITELIST_PATTERNS[]",
-        "#   SECRET_REGEX_<NAME>  SECRET_REGEX_ANY  (combined alternation)",
+        "#   PROTECTED_PATTERNS[]   WHITELIST_PATTERNS[]   CATASTROPHIC_PATHS[]",
+        "#   SECRET_REGEX_<NAME>    SECRET_REGEX_ANY  (combined alternation)",
         "#",
         "# shellcheck disable=SC2034",
         "# (variables look unused when this file is shellchecked in isolation;",
@@ -102,6 +103,9 @@ def emit_patterns_sh(patterns: dict) -> str:
     out += [f'    "{p}"' for p in block]
     out += [")", "", "WHITELIST_PATTERNS=("]
     out += [f'    "{p}"' for p in wl]
+    out += [")", "", "# Catastrophic absolute paths — full-path match, not basename glob.",
+            "CATASTROPHIC_PATHS=("]
+    out += [f'    "{p}"' for p in catastrophic]
     out += [")", "", "# Secret content regexes"]
     for s in secrets:
         rx = s["regex"].replace("\\", "\\\\").replace('"', '\\"')

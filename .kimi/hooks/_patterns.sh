@@ -3,8 +3,8 @@
 # DO NOT EDIT — run `bash generate.sh` instead.
 #
 # Sourced by pre-tool-use.sh and pre-shell.sh.  Provides:
-#   PROTECTED_PATTERNS[]  WHITELIST_PATTERNS[]
-#   SECRET_REGEX_<NAME>  SECRET_REGEX_ANY  (combined alternation)
+#   PROTECTED_PATTERNS[]   WHITELIST_PATTERNS[]   CATASTROPHIC_PATHS[]
+#   SECRET_REGEX_<NAME>    SECRET_REGEX_ANY  (combined alternation)
 #
 # shellcheck disable=SC2034
 # (variables look unused when this file is shellchecked in isolation;
@@ -54,6 +54,25 @@ WHITELIST_PATTERNS=(
     "*.env.test"
     ".env.example"
     "credentials.example.*"
+)
+
+# Catastrophic absolute paths — full-path match, not basename glob.
+CATASTROPHIC_PATHS=(
+    "/"
+    "/etc"
+    "/var"
+    "/usr"
+    "/bin"
+    "/sbin"
+    "/lib"
+    "/lib64"
+    "/boot"
+    "/sys"
+    "/proc"
+    "/dev"
+    "/root"
+    "/home"
+    "/opt"
 )
 
 # Secret content regexes
