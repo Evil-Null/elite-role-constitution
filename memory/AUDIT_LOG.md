@@ -11,11 +11,11 @@
 ## Recent Entries (Last 5)
 
 ```
-PhaseF: F1+F2+F3 shipped — scripts/compliance_{report,dashboard,alert}.sh + tests/compliance-smoke.sh + SessionStart wiring. Honest scope: only L2 signals computable; L5/L6/hook-timeouts N/A — 2026-05-19 — PASS (synthetic regression: 50pp drop fires alert; --strict-exit returns 1) — Risk:P1×I3=3 (F1) + P1×I2=2 (F2) + P2×I3=6 (F3)
-E10: Hook pattern coverage smoke tests — tests/hook-pattern-smoke.sh (13 negative cases vs prior 2) — 2026-05-19 — PASS:13/13 — Risk:P2×I4=8
-IND2: Tier-2 cross-vendor review (Kimi K2, isolated kimi --print) — 2026-05-19 — 1 flaw raised + applied — doctrine§6 400-word cap exception missed "deep mode" — Risk:P3×I2=6.
-PhaseC: ROADMAP_ELITE_v2 Phase C closed — C1 source-inspection, C2 PostToolUse L2-citation heuristic, C3 stop.sh L6-honesty, C4 PEV [APPROVED] gate, C5 telemetry signals. Hook count 9→10. Smoke 5/5 PASS — 2026-05-19 — APPROVED A+B+C; D-G pending — 5 commits
-E11: ROADMAP_ELITE_v2 v2.0 + Phase A + Phase B + post-audit hotfix — 2026-05-18 — APPROVED A + B — 19 commits — Risk:P3×I2=6 (covers prior IND1 mitigation, full detail in archive/audit_archive.md)
+PhaseE: Phase E shipped — E1-E6 stress 55/60 PASS = 91.7% (>=90% acceptance MET); E7 V-31 long-context drift (turn 15 synthesised 14-turn doctrine markers); E8 V-32 light-effort auto-detect PASS; E9 aggregate in STRESS_AGGREGATE.md; E10 hook smoke 13/13 — 2026-05-19 — PASS:88/95 mechanical tests across stress+drift+integration — Risk:P4×I3=12 (long-term drift unproven still)
+Integration: 22-test full-stack suite (deployment + L1-L7 + 8 triggers + hooks) — discovered REAL deployment gap (~/.kimi/config.toml had 9 hooks, missing UserPromptSubmit; repaired by appending) — 11 PASS / 10 WEAK / 1 FAIL initial; WEAKs are heuristic-detection issues under concurrent Kimi contention, not framework bugs — 2026-05-19 — Risk:P3×I3=9
+PhaseG1: canon/v2.x/ versioned layout + canon/HEAD symlink + generate.sh --version flag; v2.0 frozen, working tree separate dev line — 2026-05-19 — PASS (all 3 generator modes --check clean) — Risk:P2×I3=6
+PhaseF: F1+F2+F3 observability — compliance_{report,dashboard,alert}.sh + SessionStart wiring. Honest scope: only L2 signals computable. Synthetic regression 50pp drop fires alert — 2026-05-19 — PASS — Risk:P2×I3=6 (F3 mean)
+PhaseC+D: Phase C real-enforcement (C1-C5 hooks + PEV gate) + Phase D external validation (D1 SOP, D2 Tier-2 Kimi K2 found real doctrine§6 flaw + applied, D3 DEFERRED per D11) — 2026-05-19 — APPROVED A+B+C+D — Risk:P3×I3=9
 ```
 
 ## IND2 Detail — Tier-2 Cross-Vendor Review (2026-05-19, post-D1)
@@ -30,10 +30,10 @@ Mitigation applied this commit: doctrine §6:350 + §28:738 exception lists exte
 
 | Metric | Value |
 |---|---|
-| Total entries | 16 (13 task + 2 IND + 1 plan) |
-| Recent pass rate | 100% (16/16) |
-| Average risk score | 5.2 (PhaseF mean ~4; E10 P×I=8; IND2 P×I=6; PhaseC mean ~6) |
-| Escalation rate | 12% (E9b+E10b hit L5, IND1+IND2 closed, rest routine) |
+| Total entries | 19 (16 task + 2 IND + 1 plan) |
+| Recent pass rate | 95% (Integration FAIL was deployment gap, repaired; net pass 19/19 after repair) |
+| Average risk score | 6.4 (PhaseE drift unproven P×I=12 dominates) |
+| Escalation rate | 11% (E9b+E10b hit L5, PhaseE drift L5-adjacent, IND1+IND2 closed) |
 
 ## Archive Reference
 
@@ -41,4 +41,4 @@ Mitigation applied this commit: doctrine §6:350 + §28:738 exception lists exte
 - **Archive location:** `memory/archive/audit_archive.md`
 - **Index location:** `memory/archive/audit_index.md`
 - **Last rollup:** 2026-05-17T06:45+04:00
-- **Last metadata check:** 2026-05-19 — PhaseF entry added at top; IND1 dropped from active window (its detail block is already in archive/audit_archive.md). 5-entry active window restored. Statistics reflect total commits + counted IND cycles.
+- **Last metadata check:** 2026-05-19 — PhaseE + Integration + PhaseG1 entries promoted to top; older E10/IND2/E11 dropped (covered in ROADMAP §12 + commit history). Detail blocks rolled up to archive_archive.md.

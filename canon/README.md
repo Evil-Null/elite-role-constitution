@@ -43,3 +43,30 @@ Phase B of `ROADMAP_ELITE_v2.md` makes drift "impossible by construction." Prior
 ## Scope
 
 This directory does NOT replace the doctrine (`01_ELITE_ROLE.md`, `KIMI_PROTOCOL.md`). It holds only **derivable data**. Narrative, rationale, and discretionary engineering judgment live in the doctrine files.
+
+## Versioning (Phase G.G1, 2026-05-19)
+
+Two parallel layouts live here:
+
+| Path | Role |
+|---|---|
+| `canon/*.yaml` | **Dev / working tree.** What `generate.sh` reads by default. Moves freely between releases. |
+| `canon/v2.0/*.yaml` | **Frozen v2.0 snapshot.** Made at the close of Phase F (commit a4d56a6 ancestor). Never edited after release; deletions instead mark it superseded. |
+| `canon/HEAD` | Symlink to the version considered "current released" — currently `→ v2.0`. |
+
+Run modes for `generate.sh`:
+
+```bash
+bash generate.sh                       # default: working canon/*.yaml
+bash generate.sh --version v2.0        # frozen v2.0/
+bash generate.sh --version HEAD        # follow the symlink (= v2.0 right now)
+```
+
+When the working line accumulates enough change to release v2.1:
+
+1. `cp -r canon/v2.0 canon/v2.1` (snapshot current released state)
+2. Edit `canon/v2.1/*.yaml` if v2.1 diverges from v2.0 at release time, OR re-base v2.1 from the working tree.
+3. `rm canon/HEAD && ln -s v2.1 canon/HEAD` — promotes v2.1 to current.
+4. Working tree continues moving toward v2.2.
+
+The integrity check (`SYSTEM_INTEGRITY_CHECK.sh`) and CI parity gate run against the **working tree**, not HEAD. Frozen versions are read-only references — they exist to let `install.sh --canary <version>` (G2, future) deploy a specific tag to a specific work-dir without touching the dev line.

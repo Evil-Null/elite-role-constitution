@@ -1,0 +1,82 @@
+# canon/hooks.yaml — Kimi lifecycle hooks (single source of truth)
+#
+# Consumers:
+#   - .kimi/hooks.example.toml (TOML emission for ~/.kimi/config.toml)
+#   - README.md "lifecycle hooks" count line
+#   - SYSTEM_PROMPT_INSTALL.md "N hooks are wired" line
+#   - install.sh "All N hook scripts executable" log message
+#
+# Edit here, then run `bash generate.sh`. Derived files will be regenerated.
+# CI gate (.github/workflows/integrity.yml) fails if a derived file is edited
+# manually without canon being updated.
+
+hooks:
+  - name: session-start
+    event: SessionStart
+    matcher: ""
+    script: .kimi/hooks/session-start.sh
+    timeout: 10
+    doc: "Inject memory/{README,RESUME,CONTEXT,ASSUMPTIONS}.md into the new session's context (capped to MAX_INLINE_LINES per file)"
+
+  - name: session-end
+    event: SessionEnd
+    matcher: ""
+    script: .kimi/hooks/session-end.sh
+    timeout: 10
+    doc: "Idempotent timestamp update on memory/RESUME.md via same-FS tempfile + atomic mv (R2 #5 fix)"
+
+  - name: pre-compact
+    event: PreCompact
+    matcher: ""
+    script: .kimi/hooks/pre-compact.sh
+    timeout: 10
+    doc: "Emit reminder of SESSION_RITUAL.md Ritual 3 (agent must write memory/COMPACT_STATE.md before compact proceeds)"
+
+  - name: post-compact
+    event: PostCompact
+    matcher: ""
+    script: .kimi/hooks/post-compact.sh
+    timeout: 10
+    doc: "BLOCK (exit 2) if memory/COMPACT_STATE.md is missing per L1 UNKNOWN=STOP; verify task-token match against CONTEXT.md"
+
+  - name: pre-tool-use
+    event: PreToolUse
+    matcher: "WriteFile|StrReplaceFile|MultiEdit"
+    script: .kimi/hooks/pre-tool-use.sh
+    timeout: 15
+    doc: "Fail-closed on JSON parse error (R3 #1); resolve symlinks; case-insensitive protected-file match; V3 secret-pattern scan on content"
+
+  - name: pre-shell
+    event: PreToolUse
+    matcher: "Shell"
+    script: .kimi/hooks/pre-shell.sh
+    timeout: 15
+    doc: "Parse Shell command via python shlex; block if any redirect/copy/move/sed target matches the protected pattern set (R3 #3 closure)"
+
+  - name: post-tool-use
+    event: PostToolUse
+    matcher: "WriteFile|StrReplaceFile|Shell"
+    script: .kimi/hooks/post-tool-use.sh
+    timeout: 5
+    doc: "Append one line to .kimi/audit/post-tool-use-YYYYMMDD.log (host-wide audit per KIMI_PROTOCOL.md §H.0)"
+
+  - name: stop
+    event: Stop
+    matcher: ""
+    script: .kimi/hooks/stop.sh
+    timeout: 5
+    doc: "Emit L6 anti-self-deception reminder (Phase C upgrades to real verification once Kimi payload schema confirmed)"
+
+  - name: notification
+    event: Notification
+    matcher: ""
+    script: .kimi/hooks/notification.sh
+    timeout: 5
+    doc: "Desktop notification: notify-send (Linux), osascript argv (macOS, injection-safe per R2 #1), stderr fallback"
+
+  - name: user-prompt-submit
+    event: UserPromptSubmit
+    matcher: ""
+    script: .kimi/hooks/user-prompt-submit.sh
+    timeout: 5
+    doc: "C4 PEV gate prep: cache the latest user prompt to .kimi/state/prompt-${session_id}.txt so PreToolUse can read it and detect [APPROVED]/light-effort/challenge-grade tokens (advisory by default; strict if .kimi/state/c4-strict-mode sentinel exists)"

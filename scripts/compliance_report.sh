@@ -27,7 +27,9 @@
 set -euo pipefail
 
 REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-AUDIT_DIR="$REPO_ROOT/.kimi/audit"
+# Allow override for isolated smoke tests; production callers leave it
+# unset and pick up the real .kimi/audit/ directory.
+AUDIT_DIR="${COMPLIANCE_AUDIT_DIR:-$REPO_ROOT/.kimi/audit}"
 
 DAYS=7
 MACHINE=0

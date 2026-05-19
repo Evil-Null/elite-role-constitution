@@ -27,7 +27,7 @@ jobs:
         run: python3 -m pip install --quiet pyyaml
 
       - name: Static-analyze every shell script in the repo
-        run: shellcheck SYSTEM_INTEGRITY_CHECK.sh install.sh generate.sh build-tier2-bundle.sh tests/hook-pattern-smoke.sh tests/compliance-smoke.sh scripts/compliance_report.sh scripts/compliance_dashboard.sh scripts/compliance_alert.sh .kimi/hooks/*.sh
+        run: shellcheck SYSTEM_INTEGRITY_CHECK.sh install.sh generate.sh build-tier2-bundle.sh tests/hook-pattern-smoke.sh tests/compliance-smoke.sh tests/integration-suite.sh tests/stress-harness.sh tests/v31-conversation-drift.sh tests/v32-light-effort.sh scripts/compliance_report.sh scripts/compliance_dashboard.sh scripts/compliance_alert.sh .kimi/hooks/*.sh
 
       - name: Verify canon and derived files are in sync
         run: |

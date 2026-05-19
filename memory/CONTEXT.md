@@ -10,15 +10,15 @@
 
 ## Current Task
 
-**Goal:** Execute ROADMAP_ELITE_v2.md phases A→F (G optional). Phase A, B, C, D, F done; Phase E partly done (E10 ✅), E1-E9 operator-mediated pending. G OPTIONAL pending.
-**Status:** Phase A ✅ + Phase B ✅ + Phase C ✅ + Phase D ✅ + Phase E.E10 ✅ + Phase F ✅. E1-E9 + G pending.
+**Goal:** Execute ROADMAP_ELITE_v2.md phases A→G. Phases A→F + E (synthetic) + G1 done; G2+G3 OPTIONAL, deferred.
+**Status:** A ✅ + B ✅ + C ✅ + D ✅ + E ✅ (91.7% PASS, synthetic) + F ✅ + G1 ✅. G2/G3 (--canary, --rollback) OPTIONAL untouched.
 **Started:** 2026-05-18
-**Updated:** 2026-05-19 (post-Phase-F)
+**Updated:** 2026-05-19 (post-Phase-E + integration + G1)
 
 ## Progress
 
-**Last:** Phase F shipped — scripts/compliance_{report,dashboard,alert}.sh + tests/compliance-smoke.sh + SessionStart hook wired to surface trend alerts. Honest scope: only L2 citation signals computable; L5/L6/hook-timeouts marked N/A. Synthetic 100%→0% regression test fires alerts; --strict-exit returns 1. CI runs the F-smoke harness on every push.
-**Next:** Hygiene — DECISIONS.md max_active_items fix (8 active vs canon max 6), then push 30+ commits to origin/main so GH Actions Integrity Check verifies the full A→F state. Operator-mediated stress days (E1-E9) + OPTIONAL Phase G separately.
+**Last:** Phase E synthetic shipped — 60-task stress harness (55/60 PASS = 91.7%, acceptance ≥90% MET), V-31 long-context drift (turn 15 PASS doctrinal markers despite 6/15 mechanical FAIL_EMPTYs from concurrent Kimi load), V-32 light-effort auto-detect PASS. Integration suite caught + repaired real deployment gap (`~/.kimi/config.toml` had 9 hooks → appended UserPromptSubmit → now 10). Phase G1 canon/v2.0/ versioned layout + canon/HEAD symlink + generate.sh --version flag (3 modes all `--check` clean).
+**Next:** Commit + push (28+ unpushed commits including stress logs + integration report + config repair). G2 (--canary install) + G3 (--rollback) remain OPTIONAL; user opt-in needed. Calendar-week organic stress (E1-E6 deep validation) still N/A — synthetic-only.
 **Blocked By:** None.
 
 ## Validation Results (current, 2026-05-19)

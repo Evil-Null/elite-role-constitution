@@ -40,3 +40,8 @@ MEMORY.md
 # (Phase F.F2). Each weekly file derives from .kimi/audit/signals-*.jsonl
 # at generation time — committing them would commit transient telemetry.
 memory/compliance/
+
+# Artifact directory created by stress harness (tests/stress-harness.sh)
+# when a synthetic challenge task ("design a job queue …") prompts the
+# agent to materialise a Python module. Not part of the tracked codebase.
+queue/

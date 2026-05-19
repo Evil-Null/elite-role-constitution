@@ -11,14 +11,17 @@ set -euo pipefail
 REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$REPO_ROOT"
 
-AUDIT_DIR=".kimi/audit"
+# Use an isolated audit directory so accumulated real signals do not
+# break the zero-data assertion. The override is honored by both
+# compliance_report.sh and compliance_dashboard.sh via the
+# COMPLIANCE_AUDIT_DIR env var.
+AUDIT_DIR="$(mktemp -d /tmp/compliance-smoke-XXXXXX)"
+export COMPLIANCE_AUDIT_DIR="$AUDIT_DIR"
 TODAY="$(TZ=UTC date -u +%Y%m%d)"
 PRIOR="$(python3 -c 'import datetime; print((datetime.date.today() - datetime.timedelta(days=8)).strftime("%Y%m%d"))')"
 
-# Always restore the audit dir to its pre-test state.
-trap 'rm -f "$AUDIT_DIR/signals-${TODAY}.jsonl" "$AUDIT_DIR/signals-${PRIOR}.jsonl"; exit 0' EXIT
-
-mkdir -p "$AUDIT_DIR"
+# Always tear down the isolated audit dir at exit.
+trap 'rm -rf "$AUDIT_DIR"; exit 0' EXIT
 
 # ── F1 no-data path ────────────────────────────────────────────────
 F1_EMPTY="$(bash scripts/compliance_report.sh)"
