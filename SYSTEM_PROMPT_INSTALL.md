@@ -114,7 +114,7 @@ done
 ## Step 3 — Wire up the hooks (optional but recommended)
 
 Hooks are configured in `~/.kimi/config.toml`. Append the contents of
-`.kimi/hooks.example.toml` to that file (or merge by hand). Nine
+`.kimi/hooks.example.toml` to that file (or merge by hand). Ten
 hooks are wired:
 
 | Event | Script | Purpose |
