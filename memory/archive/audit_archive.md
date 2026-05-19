@@ -40,6 +40,8 @@ E32: Cross-file consistency verification — 2026-05-17 — PASS — Risk:3 — 
 E33: Authority hierarchy validation — 2026-05-17 — PASS — Risk:2 — Iter:1
 E34: Write-guard logic verification — 2026-05-17 — PASS — Risk:3 — Iter:1
 E35: Test scenario coverage audit — 2026-05-17 — PASS — Risk:2 — Iter:1
+E10b: Phase E — Kimi 1.43+ native deployment — 2026-05-18 — PASS:10/10 — Risk:R6=15 (later mitigated to 6 by IND1). Rolled to archive 2026-05-19 when a newer E10 entry (Hook pattern smoke tests) took the active slot. Renamed E10b in archive to disambiguate from E10 (2026-05-11, memory file system) above.
+E9b: IMPROVEMENT_PLAN v1.1 — Phases A+B+C.1+D shipped — 2026-05-18 — PASS:10/10 — Risk:R6=15 — Files:35. Rolled to archive 2026-05-19 alongside E10b. Renamed E9b to disambiguate from E9 (2026-05-10) above.
 ```
 
 ## IND1 Detail — Independent Review Cycle (rolled up 2026-05-19)
@@ -53,6 +55,6 @@ Fix commits: a8b0f3d, 537eb54, 3427980, 66a1f61, a106909, ed46877, 60bc7c9, plus
 ## Archive Metadata
 
 - **Created:** 2026-05-17
-- **Last Rollup:** 2026-05-19 (IND1 Detail block rolled from active AUDIT_LOG.md)
-- **Total Archived:** 30 entries + IND1 Detail
+- **Last Rollup:** 2026-05-19 (IND1 Detail block + E10b + E9b rolled from active AUDIT_LOG.md)
+- **Total Archived:** 32 entries + IND1 Detail
 - **Source File:** memory/AUDIT_LOG.md

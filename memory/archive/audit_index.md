@@ -48,13 +48,15 @@
 | E33 | 2026-05-17 | Check | 2 | PASS | audit_archive.md |
 | E34 | 2026-05-17 | Check | 3 | PASS | audit_archive.md |
 | E35 | 2026-05-17 | Check | 2 | PASS | audit_archive.md |
+| E9b | 2026-05-18 | Plan | 15 | PASS | audit_archive.md |
+| E10b | 2026-05-18 | Deployment | 15 | PASS | audit_archive.md |
 
 ---
 
 ## Quick Stats
 
-- **Total Archived Entries:** 30
-- **Date Range:** 2026-05-10 to 2026-05-17
-- **Pass Rate:** 100% (30/30)
-- **Average Risk:** 3.9
-- **Highest Risk:** E24 (Audit — Risk 8)
+- **Total Archived Entries:** 32
+- **Date Range:** 2026-05-10 to 2026-05-18
+- **Pass Rate:** 100% (32/32)
+- **Average Risk:** 4.6 (E9b + E10b each Risk:15 raised the mean)
+- **Highest Risk:** E9b + E10b (Risk 15; later mitigated to 6 by IND1)
