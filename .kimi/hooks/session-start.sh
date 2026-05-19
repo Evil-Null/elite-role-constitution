@@ -54,4 +54,15 @@ for f in "${READ_ORDER[@]}"; do
 done
 
 echo "=== end of memory context ==="
+
+# F3 — compliance trend alert (per ROADMAP §5.F.F3). The script
+# inspects .kimi/audit/signals-*.jsonl, compares this-week to the
+# rolling 14-day window, and emits a warning if any tracked rate
+# regressed > 20pp. Silent on the no-alert path so a clean session
+# stays clean. Failure of the alert script itself must not block the
+# session — wrap in `|| true`.
+if [ -x "$PROJECT_ROOT/scripts/compliance_alert.sh" ]; then
+    bash "$PROJECT_ROOT/scripts/compliance_alert.sh" 2>/dev/null || true
+fi
+
 exit 0

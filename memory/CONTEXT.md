@@ -10,15 +10,15 @@
 
 ## Current Task
 
-**Goal:** Execute ROADMAP_ELITE_v2.md phases A→F (G optional). Phase A, B, C, D done; Phase E partly done (E10 ✅), E1-E9 still pending.
-**Status:** Phase A ✅ + Phase B ✅ + Phase C ✅ + Phase D ✅ + Phase E.E10 ✅. E1-E9 + F + G pending.
+**Goal:** Execute ROADMAP_ELITE_v2.md phases A→F (G optional). Phase A, B, C, D, F done; Phase E partly done (E10 ✅), E1-E9 operator-mediated pending. G OPTIONAL pending.
+**Status:** Phase A ✅ + Phase B ✅ + Phase C ✅ + Phase D ✅ + Phase E.E10 ✅ + Phase F ✅. E1-E9 + G pending.
 **Started:** 2026-05-18
-**Updated:** 2026-05-19 (post-E10)
+**Updated:** 2026-05-19 (post-Phase-F)
 
 ## Progress
 
-**Last:** E10 closed. `tests/hook-pattern-smoke.sh` runs 13 negative cases against `pre-tool-use.sh` + `pre-shell.sh` (was 2 inline cases). Allow-list assertions include `.env.example` whitelist. Secret-shaped fixtures use prefix-concat so the repo never literally contains AKIA/AIza/sk-ant/xoxb tokens. Workflow's shellcheck step now covers `build-tier2-bundle.sh` + the new smoke script.
-**Next:** E1-E6 (per-day 10-task stress days 2-7 — operator-mediated), E7 (V-31 fallback over 15-message conv.), E8 (V-32 light-effort without trigger), E9 (V-33 70-task aggregate). All require operator-mediated task runs. Or skip to F (observability — aggregate the C5 JSONL signals) or G (versioning & canary).
+**Last:** Phase F shipped — scripts/compliance_{report,dashboard,alert}.sh + tests/compliance-smoke.sh + SessionStart hook wired to surface trend alerts. Honest scope: only L2 citation signals computable; L5/L6/hook-timeouts marked N/A. Synthetic 100%→0% regression test fires alerts; --strict-exit returns 1. CI runs the F-smoke harness on every push.
+**Next:** Hygiene — DECISIONS.md max_active_items fix (8 active vs canon max 6), then push 30+ commits to origin/main so GH Actions Integrity Check verifies the full A→F state. Operator-mediated stress days (E1-E9) + OPTIONAL Phase G separately.
 **Blocked By:** None.
 
 ## Validation Results (current, 2026-05-19)

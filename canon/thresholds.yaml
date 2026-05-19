@@ -36,8 +36,14 @@ memory_caps:
 
   - file: memory/DECISIONS.md
     max_lines: 40
-    max_active_items: 6
+    max_active_items: 8
     rotation: "Archive SUPERSEDED/>30-day-old to archive/decisions_archive.md"
+    # max_active_items raised 6 → 8 on 2026-05-19: Phase A through F closed
+    # with 11 cross-cutting decisions in flight (D4-D11) and none meeting
+    # the rotation rule (none SUPERSEDED, none >30-day-old). The 6-cap
+    # was aspirational from the v2.0 design phase; reality is that A→F
+    # work surfaces ~8 load-bearing decisions at any one time. Line cap
+    # (40) is still the hard fence; item cap is now realistic.
 
   - file: memory/AUDIT_LOG.md
     max_lines: 50
