@@ -46,13 +46,20 @@ jobs:
       - name: Verify every hook is executable
         run: |
           set -e
+          # Iterate over .kimi/hooks/*.sh but skip helper libraries
+          # (underscore-prefixed files are sourced, not invoked — e.g.
+          # _patterns.sh is read by source, never executed directly).
           for h in .kimi/hooks/*.sh; do
+            base="$(basename "$h")"
+            case "$base" in
+              _*) continue ;;
+            esac
             if [ ! -x "$h" ]; then
               echo "FAIL: $h missing +x bit (Kimi cannot invoke it)"
               exit 1
             fi
           done
-          echo "All hooks executable."
+          echo "All invoked hooks executable (underscore-prefixed helpers skipped)."
 
       - name: Hook pattern coverage smoke tests
         run: bash tests/hook-pattern-smoke.sh
