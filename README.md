@@ -115,9 +115,9 @@ sections in `01_ELITE_ROLE.md` §C.6.
 
 ---
 
-## Repo map (74 files across 4 layers)
+## Repo map (91 files across 4 layers)
 
-74 files across 4 layers (doctrine, deployment, runtime, validation):
+Doctrine, deployment, runtime, validation:
 
 ```
 agent/                   Kimi entry: kimi --agent-file agent/elite.yaml
@@ -163,8 +163,8 @@ This is what I can prove versus what I cannot:
 | The hooks run and block what they say they block. | Verified by smoke tests in `.github/workflows/integrity.yml`. |
 | The agent loads in Kimi 1.43.0 and follows L1–L7. | Verified by a four-probe live test on 2026-05-18 (recorded in `memory/AUDIT_LOG.md` E10). |
 | 30 V-IDs PASS. | All thirty were checked by an LLM observing itself in one session. That is not the same as multi-session empirical proof. Three more V-IDs (V-31/V-32/V-33) are explicitly pending real stress-test execution. |
-| Phase 1 stress test (70 tasks over 7 days). | Day 1 logged. Days 2-7 not run yet. |
-| Independent review. | One cycle done (IND1, recorded in `memory/AUDIT_LOG.md`): four subagent reviewers found 24 issues, 9 critical, all fixed across commits `a8b0f3d` → `aaf5ff9`. That cycle is "same-vendor different-session" — lower than a human peer review. |
+| Phase 1 stress test (70 tasks over 7 days). | Day 1 manual + Days 2-7 synthetic via `tests/stress-harness.sh` (60 mechanical tasks through `kimi --print`). Result: **55/60 PASS = 91.7%** (≥ 90% acceptance MET). Caveat: synthetic single-machine run, not calendar-week organic; Drift + Staleness columns are honestly N/A. |
+| Independent review. | Two cycles: **IND1** (Tier 3, four subagent reviewers — 24 findings, 9 critical, all fixed) and **IND2** (Tier 2, isolated Kimi K2 / Moonshot — 1 flaw raised on doctrine §6, applied). Logged in `memory/AUDIT_LOG.md`. |
 
 Best for: long-running engineering work where forgotten rules and
 hallucinated certainty cost money.
