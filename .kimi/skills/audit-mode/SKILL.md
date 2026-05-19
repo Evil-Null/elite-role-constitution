@@ -26,9 +26,9 @@ flowchart TD
     E -->|Yes — drift found| F[List each gap with: Law number, specific line/file/turn, severity, suggested remediation.]
     E -->|No — clean| G[Run the 6th Lens — Red Team adversarial pass on the subject AND on this audit. Find at least one weakness the 5 default lenses missed.]
     F --> G
-    G --> H[Score residual risk P×I per skills/elite-role/references/quantified-risk.md. Note any score >= 13.]
+    G --> H[Score residual risk P×I per skills/elite-role/references/quantified-risk.md. Note any score ≥ 13.]
     H --> I[Write the audit narrative: subject, findings, P×I, recommended actions, ALWAYS include 3 ways this audit itself could be wrong.]
-    I --> J[Append one entry to memory/AUDIT_LOG.md in the standard format: E<N>: <subject> — <date> — PASS:n/WEAK:n/FAIL:n — Risk:<n> — Iter:<n> — Files:<count>.]
+    I --> J[Append one entry to memory/AUDIT_LOG.md in the standard E.N format (subject, date, PASS/WEAK/FAIL counts, Risk, Iter, Files). The reference document spells out the placeholder syntax.]
     J --> K([END])
 ```
 

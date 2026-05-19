@@ -29,11 +29,11 @@ flowchart TD
     H --> I{Any of the 5 lenses returned OBJECTION?}
     I -->|Yes| J[Stop the flow. Surface the objection with its evidence, propose a path to PASS, and request user direction.]
     I -->|No| K[Lens 6 - Red Team adversarial pass. Find AT LEAST 3 weaknesses the previous 5 lenses missed or under-weighted. Each weakness gets a P×I score.]
-    K --> L{Any Red Team finding with P×I >= 13?}
+    K --> L{Any Red Team finding with P×I ≥ 13?}
     L -->|Yes| M[Escalate per L5. The output is NOT challenge-grade-passing yet. Document the finding and propose mitigation.]
     L -->|No| N[Anti-self-deception block. List 3 concrete ways this entire review could be wrong: missed lens, miscalibrated risk, biased framing.]
     M --> N
-    N --> O[Final verdict and recommendation. Word count target: >= 800 words for the narrative.]
+    N --> O[Final verdict and recommendation. Word count target: ≥ 800 words for the narrative.]
     O --> P[Append AUDIT_LOG.md entry tagged 'challenge-grade'. Append assumptions surfaced to memory/ASSUMPTIONS.md.]
     P --> Q([END])
 ```

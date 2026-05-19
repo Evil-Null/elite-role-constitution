@@ -31,7 +31,7 @@ flowchart TD
     H -->|No| J[Skip DECISIONS.md.]
     I --> K{Did this session complete one or more discrete tasks?}
     J --> K
-    K -->|Yes| L[Append to memory/AUDIT_LOG.md in the E<N> format. Rotate if would exceed 50 lines.]
+    K -->|Yes| L[Append to memory/AUDIT_LOG.md in the E.N format. Rotate if would exceed 50 lines.]
     K -->|No| M[Skip AUDIT_LOG.md.]
     L --> N[Run bash SYSTEM_INTEGRITY_CHECK.sh and confirm 10/10 PASS. If any check failed, surface the failure to the user before declaring save complete.]
     M --> N
