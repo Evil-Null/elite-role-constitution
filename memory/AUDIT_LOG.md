@@ -11,11 +11,11 @@
 ## Recent Entries (Last 5)
 
 ```
-IND2: Tier-2 cross-vendor review (Kimi K2 / Moonshot, isolated kimi --print) — 2026-05-19 — 1 flaw raised, 1 applied — doctrine§6 (01_ELITE_ROLE.md:350) 400-word cap exception list missed "deep mode" / challenge-grade, contradicting KIMI_PROTOCOL.md:420 (G.4: 800 deep). Fix: exception list extended in 01_ELITE_ROLE.md:350 + :738 to reference G.4 ladder as the authoritative refinement. Severity P3×I2=6.
+E10: Hook pattern coverage smoke tests — tests/hook-pattern-smoke.sh (13 negative cases vs prior 2) wired into integrity.yml; shellcheck step expanded to cover build-tier2-bundle.sh + the new smoke script — 2026-05-19 — PASS:13/13 — Risk:P2×I4=8
+IND2: Tier-2 cross-vendor review (Kimi K2 / Moonshot, isolated kimi --print) — 2026-05-19 — 1 flaw raised, 1 applied — doctrine§6 (01_ELITE_ROLE.md:350) 400-word cap exception list missed "deep mode" / challenge-grade, contradicting KIMI_PROTOCOL.md:420 (G.4: 800 deep). Fix: exception list extended. Severity P3×I2=6.
 PhaseC: ROADMAP_ELITE_v2 Phase C closed — C1 source-inspection, C2 PostToolUse L2-citation heuristic, C3 stop.sh L6-honesty, C4 PEV [APPROVED] gate, C5 telemetry signals. Hook count 9→10. Smoke 5/5 PASS — 2026-05-19 — APPROVED A+B+C; D-G pending — 5 commits
 E11: ROADMAP_ELITE_v2.md v2.0 + Phase A + Phase B + post-audit hotfix — strategic structural roadmap shipped; 8 doctrine drift surfaces closed — 2026-05-18 — APPROVED A + B — 19 commits total
 IND1: R6 mitigation — 4 parallel independent subagent reviewers — 2026-05-18 — 24 findings (9 CRITICAL) → 7 follow-up commits → R6 score 15→6
-E10: Phase E — Kimi 1.43+ native deployment — 2026-05-18 — PASS:10/10 — Risk:R6=15 (now mitigated by IND1)
 ```
 
 ## IND2 Detail — Tier-2 Cross-Vendor Review (2026-05-19, post-D1)
@@ -30,10 +30,10 @@ Mitigation applied this commit: doctrine §6:350 + §28:738 exception lists exte
 
 | Metric | Value |
 |---|---|
-| Total entries | 14 (11 task + 2 IND + 1 plan) |
-| Recent pass rate | 100% (14/14) |
-| Average risk score | 5.2 (R6 dropped 15→6; IND2 P×I=6; PhaseC mean P×I ~6) |
-| Escalation rate | 14% (E9+E10 hit L5, IND1+IND2 closed, E11+PhaseC routine) |
+| Total entries | 15 (12 task + 2 IND + 1 plan) |
+| Recent pass rate | 100% (15/15) |
+| Average risk score | 5.4 (E10 P×I=8; IND2 P×I=6; PhaseC mean ~6) |
+| Escalation rate | 13% (E9+E10-2026-05-18 hit L5, IND1+IND2 closed, rest routine) |
 
 ## Archive Reference
 

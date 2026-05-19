@@ -30,4 +30,4 @@
 On "resume": Read README.md → RESUME.md → CONTEXT.md → ASSUMPTIONS.md.
 Do NOT read archive files during default resume.
 
-**Last hook autosave:** 2026-05-18T20:33:00+02:00
+**Last hook autosave:** 2026-05-19T07:07:29+02:00

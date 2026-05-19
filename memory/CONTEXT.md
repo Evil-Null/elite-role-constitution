@@ -10,15 +10,15 @@
 
 ## Current Task
 
-**Goal:** Execute ROADMAP_ELITE_v2.md phases A→F (G optional). Phase A, B, C, D done; Phase E starting with E10 (hook pattern coverage smoke tests).
-**Status:** Phase A ✅ + Phase B ✅ + Phase C ✅ + Phase D ✅ (D1 + D2 done, D3 DEFERRED per D11 in DECISIONS.md). Phase E.E10 in flight.
+**Goal:** Execute ROADMAP_ELITE_v2.md phases A→F (G optional). Phase A, B, C, D done; Phase E partly done (E10 ✅), E1-E9 still pending.
+**Status:** Phase A ✅ + Phase B ✅ + Phase C ✅ + Phase D ✅ + Phase E.E10 ✅. E1-E9 + F + G pending.
 **Started:** 2026-05-18
-**Updated:** 2026-05-19 (post-Phase-D closure)
+**Updated:** 2026-05-19 (post-E10)
 
 ## Progress
 
-**Last:** Phase D closed. D3 DEFERRED by operator choice (D11 in `memory/DECISIONS.md`) — manual D2 flow already covers periodic-review need; CI automation not yet load-bearing.
-**Next:** Phase E.E10 — expand `.github/workflows/integrity.yml` smoke-test block to cover ≥10 negative cases (id_rsa, kubeconfig, gcloud-key, *.tfstate, BEGIN OPENSSH PRIVATE KEY, xoxb-, sk-ant-, AKIA, AIza). Currently only 2 cases. P×I 2×4=8.
+**Last:** E10 closed. `tests/hook-pattern-smoke.sh` runs 13 negative cases against `pre-tool-use.sh` + `pre-shell.sh` (was 2 inline cases). Allow-list assertions include `.env.example` whitelist. Secret-shaped fixtures use prefix-concat so the repo never literally contains AKIA/AIza/sk-ant/xoxb tokens. Workflow's shellcheck step now covers `build-tier2-bundle.sh` + the new smoke script.
+**Next:** E1-E6 (per-day 10-task stress days 2-7 — operator-mediated), E7 (V-31 fallback over 15-message conv.), E8 (V-32 light-effort without trigger), E9 (V-33 70-task aggregate). All require operator-mediated task runs. Or skip to F (observability — aggregate the C5 JSONL signals) or G (versioning & canary).
 **Blocked By:** None.
 
 ## Validation Results (current, 2026-05-19)
