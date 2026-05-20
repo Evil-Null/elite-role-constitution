@@ -27,6 +27,10 @@ A14: New session resume correctly restores task state from RESUME.md
   Declared: 2026-05-17T11:35+04:00  Status: ACTIVE  Score: P3×I4=12
 A15: Rollup trigger activates before write when threshold is exceeded
   Declared: 2026-05-17T11:35+04:00  Status: ACTIVE  Score: P2×I3=6
+A16: context-guard.sh cwd-from-payload correctly locates COMPACT_STATE.md in foreign work_dirs
+  Declared: 2026-05-21T02:40+04:00  Status: ACTIVE  Score: P2×I4=8
+A17: COMPACT_STATE.md mtime < 5 min is sufficient proxy for save-state ritual freshness
+  Declared: 2026-05-21T02:40+04:00  Status: ACTIVE  Score: P3×I4=12
 ```
 
 ## Risk Score Rules
