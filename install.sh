@@ -237,7 +237,7 @@ fi
 
 if [ "$DO_HOOKS" -eq 1 ]; then
     step "6. Optional: wire hooks into ~/.kimi/config.toml"
-    echo "    The eight lifecycle hooks under .kimi/hooks/ only fire if they"
+    echo "    The lifecycle hooks under .kimi/hooks/ only fire if they"
     echo "    are registered in ~/.kimi/config.toml. The example block lives"
     echo "    at .kimi/hooks.example.toml and uses project-relative paths."
 

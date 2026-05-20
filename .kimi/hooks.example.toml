@@ -26,6 +26,12 @@ timeout = 10
 
 # Emit reminder of SESSION_RITUAL.md Ritual 3 (agent must write memory/COMPACT_STATE.md before compact proceeds)
 [[hooks]]
+event = "UserPromptSubmit"
+matcher = ""
+command = ".kimi/hooks/context-guard.sh"
+timeout = 10
+
+[[hooks]]
 event = "PreCompact"
 matcher = ""
 command = ".kimi/hooks/pre-compact.sh"

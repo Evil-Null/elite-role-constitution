@@ -185,6 +185,14 @@ else
     ERRORS=$((ERRORS + 1))
 fi
 
+# 11. Context Guard hook exists and is executable.
+if [ -x ".kimi/hooks/context-guard.sh" ]; then
+    echo "[PASS] Context Guard hook: present and executable"
+else
+    echo "[FAIL] Context Guard hook: missing or not executable"
+    ERRORS=$((ERRORS + 1))
+fi
+
 echo ""
 if [ "$ERRORS" -eq 0 ]; then
     echo "=== ALL CHECKS PASS ==="

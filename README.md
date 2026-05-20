@@ -54,7 +54,7 @@ bash install.sh --yes
 you passed `--yes`:
 
 1. **Prerequisites** — Kimi CLI 1.43+, python3, optional shellcheck.
-2. **Repository integrity** — runs `SYSTEM_INTEGRITY_CHECK.sh` (10 checks).
+2. **Repository integrity** — runs `SYSTEM_INTEGRITY_CHECK.sh` (11 checks).
 3. **Hook permissions** — `chmod +x` on the hook scripts (skips the
    `_patterns.sh` helper that is sourced, not executed).
 4. **Flow skill validation** — imports `kimi_cli.skill.flow.mermaid` and
@@ -152,7 +152,7 @@ sections in `01_ELITE_ROLE.md` §C.6.
 
 ---
 
-## Repo map (91 files across 4 layers)
+## Repo map (92 files across 4 layers)
 
 Doctrine, deployment, runtime, validation:
 
@@ -167,7 +167,7 @@ archive/                 Historical material (SYSTEM_PLAN.md)
 01_ELITE_ROLE.md         The doctrine itself
 KIMI_PROTOCOL.md         Why Kimi 1.43+ and how it maps to skills/hooks
 SYSTEM_PROMPT_INSTALL.md Step-by-step deployment guide
-SYSTEM_INTEGRITY_CHECK.sh Repo self-test (10 checks, runs in CI)
+SYSTEM_INTEGRITY_CHECK.sh Repo self-test (11 checks, runs in CI)
 install.sh               One-command installer
 USAGE_KA.md              Georgian user guide
 README.md                This file
@@ -184,8 +184,9 @@ check fails if `git ls-files | wc -l` does not match.
 bash SYSTEM_INTEGRITY_CHECK.sh
 ```
 
-Ten checks run: file-count match, version alignment, memory thresholds,
-archive marker, etc. The expected output ends with `=== ALL CHECKS PASS ===`.
+Eleven checks run: file-count match, version alignment, memory thresholds,
+archive marker, context-guard hook presence, etc. The expected output ends
+with `=== ALL CHECKS PASS ===`.
 GitHub Actions runs the same script plus `shellcheck` and hook smoke tests
 on every push to `main`.
 
