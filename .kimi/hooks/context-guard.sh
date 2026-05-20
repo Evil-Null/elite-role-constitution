@@ -2,16 +2,18 @@
 # context-guard.sh — Elite Role hook for Kimi CLI 1.43+
 #
 # Event: UserPromptSubmit (before every user turn)
-# Purpose: Monitor context token usage and warn BEFORE automatic compaction
-# destroys session continuity. Reads live token_count from Kimi CLI's
-# context file and surfaces an early-warning block when approaching the
-# compaction threshold.
+# Purpose: 3-phase context protection gate:
+#   Phase 1 (warn):  at (trigger_ratio - 0.05) → advisory warning to begin
+#                    save-state ritual (exit 0).
+#   Phase 2 (stop):  at (trigger_ratio - 0.03) → BLOCK (exit 2) if the elite
+#                    save-state ritual has NOT been performed recently.
+#                    Ritual freshness is detected by COMPACT_STATE.md mtime
+#                    (< 5 min). Once fresh, allow with reminder (exit 0).
+#   Phase 3 (compact): at trigger_ratio → Kimi auto-compacts; PreCompact
+#                    hook handles post-compact recovery.
 #
-# Math: max_context_size * compaction_trigger_ratio = compaction point.
-#       We warn at (trigger_ratio - 0.03) so the agent has time to run
-#       the save-state ritual before Kimi auto-compacts.
-#
-# Hook protocol: exit 0 = allow; stdout appended to agent context.
+# Hook protocol: exit 0 = allow; exit 2 + stderr = BLOCK; stdout on
+# exit 0 is appended to agent context.
 
 set -euo pipefail
 
@@ -55,36 +57,103 @@ if [ -f "$CONFIG_FILE" ]; then
     [ -n "$CFG_RATIO" ] && RATIO="$CFG_RATIO"
 fi
 
-# Compute early-warning threshold: 3 percentage points BEFORE compaction trigger.
-# If the user configured a custom trigger ratio (e.g. 0.70), we still warn
-# 3 pp early (0.67).
-WARNING_RATIO=$(python3 -c "r = float('$RATIO') - 0.03; print(r if r > 0 else 0.50)" 2>/dev/null || echo "0.82")
-WARNING_TOKENS=$(python3 -c "print(int($MAX_CTX * $WARNING_RATIO))" 2>/dev/null || echo "0")
+# Compute 3-phase thresholds relative to the configured trigger ratio.
+WARN_RATIO=$(python3 -c "r = float('$RATIO') - 0.05; print(r if r > 0 else 0.50)" 2>/dev/null || echo "0.80")
+STOP_RATIO=$(python3 -c "r = float('$RATIO') - 0.03; print(r if r > 0 else 0.52)" 2>/dev/null || echo "0.82")
+WARN_TOKENS=$(python3 -c "print(int($MAX_CTX * $WARN_RATIO))" 2>/dev/null || echo "0")
+STOP_TOKENS=$(python3 -c "print(int($MAX_CTX * $STOP_RATIO))" 2>/dev/null || echo "0")
+COMPACT_TOKENS=$(python3 -c "print(int($MAX_CTX * float('$RATIO')))" 2>/dev/null || echo "0")
 
-# Only warn if we have crossed the threshold.
-if [ "$TOKEN_COUNT" -ge "$WARNING_TOKENS" ]; then
-    PERCENT=$(python3 -c "print(f'{(int($TOKEN_COUNT) / int($MAX_CTX)) * 100:.1f}')" 2>/dev/null || echo "?")
-    COMPACT_AT=$(python3 -c "print(int(int($MAX_CTX) * float($RATIO)))" 2>/dev/null || echo "?")
+PERCENT=$(python3 -c "print(f'{(int($TOKEN_COUNT) / int($MAX_CTX)) * 100:.1f}')" 2>/dev/null || echo "?")
 
-    cat <<EOF
-╔════════════════════════════════════════════════════════════════════╗
-║  ⚠️  CONTEXT GUARD — Session approaching compaction threshold      ║
-╠════════════════════════════════════════════════════════════════════╣
-║  Token usage:  ${TOKEN_COUNT} / ${MAX_CTX}  (${PERCENT}%)                        ║
-║  Auto-compact triggers at: ${RATIO}  (~${COMPACT_AT} tokens)                      ║
-║  Warning threshold: ${WARNING_TOKENS} tokens                                       ║
-╠════════════════════════════════════════════════════════════════════╣
-║  ACTION REQUIRED: Perform the save-state ritual NOW, before        ║
-║  automatic compaction silently truncates context continuity.       ║
-║                                                                    ║
-║  1. Update memory/CONTEXT.md  → current task + progress            ║
-║  2. Update memory/ASSUMPTIONS.md → active risks + P×I scores      ║
-║  3. Update memory/DECISIONS.md → recent choices                    ║
-║  4. Write memory/COMPACT_STATE.md → compact-safe snapshot          ║
-║  5. Update memory/RESUME.md → checkpoint summary                   ║
-║  6. Confirm: "State persisted. Ready for compact."                 ║
-╚════════════════════════════════════════════════════════════════════╝
-EOF
+# Resolve cwd from JSON payload (like pre-compact.sh does) for correct
+# COMPACT_STATE.md location. Falls back to script's repo root.
+CWD=$(echo "$INPUT" | python3 -c "import sys,json; print(json.load(sys.stdin).get('cwd',''))" 2>/dev/null || echo "")
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+PROJECT_ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
+
+# Use cwd if available and valid, else fall back to repo root
+if [ -n "$CWD" ] && [ -d "$CWD" ]; then
+    COMPACT_STATE="$CWD/memory/COMPACT_STATE.md"
+else
+    COMPACT_STATE="$PROJECT_ROOT/memory/COMPACT_STATE.md"
 fi
 
+# ── PHASE 3: CRITICAL — STOP if ritual not performed ─────────────────
+if [ "$TOKEN_COUNT" -ge "$STOP_TOKENS" ]; then
+    # Check if save-state ritual was already performed recently.
+    # We detect this by COMPACT_STATE.md mtime within last 5 minutes.
+    RITUAL_FRESH=0
+    RITUAL_AGE=""
+    if [ -f "$COMPACT_STATE" ]; then
+        NOW=$(date +%s)
+        MTIME=$(stat -c %Y "$COMPACT_STATE" 2>/dev/null || echo 0)
+        if [ "$MTIME" -gt 0 ]; then
+            AGE=$(( NOW - MTIME ))
+            if [ "$AGE" -lt 300 ] && [ "$AGE" -ge 0 ]; then
+                RITUAL_FRESH=1
+                RITUAL_AGE="$AGE"
+            fi
+        fi
+    fi
+
+    if [ "$RITUAL_FRESH" -eq 1 ]; then
+        # Ritual already done recently — allow with a light reminder.
+        cat <<EOF
+elite-role · Context Guard (phase 3 — acknowledged)
+  COMPACT_STATE.md updated ${RITUAL_AGE}s ago. Save-state ritual is fresh.
+  Continuing under L6 self-check. Remain vigilant until compact resolves.
+EOF
+        exit 0
+    fi
+
+    # BLOCK: ritual not performed yet.
+    cat <<EOF >&2
+╔════════════════════════════════════════════════════════════════════╗
+║  🛑 CONTEXT GUARD — STOP: Session at ${PERCENT}% (${TOKEN_COUNT}/${MAX_CTX})    ║
+╠════════════════════════════════════════════════════════════════════╣
+║  CRITICAL THRESHOLD CROSSED: ${STOP_RATIO} (${STOP_TOKENS} tokens)                ║
+║  Auto-compact imminent at:   ${RATIO} (${COMPACT_TOKENS} tokens)                  ║
+╠════════════════════════════════════════════════════════════════════╣
+║  SAVE-STATE RITUAL IS MANDATORY BEFORE PROCEEDING.                ║
+║                                                                    ║
+║  Perform the FULL elite ritual NOW:                               ║
+║  1. memory/CONTEXT.md      → active task + progress + file state  ║
+║  2. memory/ASSUMPTIONS.md  → active risks with P×I scores        ║
+║  3. memory/DECISIONS.md    → recent decisions                     ║
+║  4. memory/COMPACT_STATE.md → compact-safe snapshot (this file    ║
+║                                must be touched to unlock Phase 3) ║
+║  5. memory/RESUME.md       → checkpoint summary                   ║
+║  6. Confirm: "Elite save-state complete. Acknowledged."           ║
+╠════════════════════════════════════════════════════════════════════╣
+║  This turn is BLOCKED until the ritual is performed.               ║
+║  Once COMPACT_STATE.md is fresh (< 5 min), continuation unlocks.  ║
+╚════════════════════════════════════════════════════════════════════╝
+EOF
+    exit 2
+fi
+
+# ── PHASE 2: WARNING — advise ritual ─────────────────────────────────
+if [ "$TOKEN_COUNT" -ge "$WARN_TOKENS" ]; then
+    cat <<EOF
+╔════════════════════════════════════════════════════════════════════╗
+║  ⚠️  CONTEXT GUARD — WARNING: Session at ${PERCENT}% (${TOKEN_COUNT}/${MAX_CTX})  ║
+╠════════════════════════════════════════════════════════════════════╣
+║  Warning threshold: ${WARN_RATIO} (${WARN_TOKENS} tokens)                         ║
+║  STOP threshold:    ${STOP_RATIO} (${STOP_TOKENS} tokens)  ← 3% ahead             ║
+║  Auto-compact at:   ${RATIO} (${COMPACT_TOKENS} tokens)                           ║
+╠════════════════════════════════════════════════════════════════════╣
+║  ADVISORY: Begin save-state ritual NOW to avoid mandatory STOP.   ║
+║                                                                    ║
+║  Recommended:                                                      ║
+║  1. memory/CONTEXT.md      → current task + progress              ║
+║  2. memory/ASSUMPTIONS.md  → active risks                         ║
+║  3. memory/COMPACT_STATE.md → snapshot (unlocks Phase 3 block)    ║
+╚════════════════════════════════════════════════════════════════════╝
+EOF
+    exit 0
+fi
+
+# ── Phase 1: Silent — no action needed ──────────────────────────────
 exit 0

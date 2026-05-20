@@ -80,7 +80,7 @@ matcher = ""
 command = ".kimi/hooks/user-prompt-submit.sh"
 timeout = 5
 
-# Monitor context token usage from Kimi CLI context file and warn before auto-compaction destroys session continuity (warns at trigger_ratio - 0.03)
+# 3-phase context protection: warn at (trigger_ratio - 0.05), BLOCK (exit 2) at (trigger_ratio - 0.03) if save-state ritual not fresh (< 5 min via COMPACT_STATE.md mtime), allow once ritual acknowledged
 [[hooks]]
 event = "UserPromptSubmit"
 matcher = ""

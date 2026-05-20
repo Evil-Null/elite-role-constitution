@@ -66,5 +66,26 @@ done
 
 echo "" >> "memory/COMPACT_STATE.md"
 echo "---" >> "memory/COMPACT_STATE.md"
-echo "PreCompact: COMPACT_STATE.md written ($(wc -l <"memory/COMPACT_STATE.md") lines)"
+
+LINES=$(wc -l <"memory/COMPACT_STATE.md")
+echo "PreCompact: COMPACT_STATE.md written ($LINES lines)"
+
+# Elite recovery reminder — emitted to AI context via stdout
+cat <<'ELITE'
+╔════════════════════════════════════════════════════════════════════╗
+║  🔄 ELITE RECOVERY — Post-Compact Rehydration Protocol             ║
+╠════════════════════════════════════════════════════════════════════╣
+║  COMPACT_STATE.md has been auto-written with the latest snapshot. ║
+║                                                                    ║
+║  RESTORE FULL OPERATIONAL STATE IN THIS ORDER:                    ║
+║  1. memory/COMPACT_STATE.md  → task summary + assumptions         ║
+║  2. memory/CONTEXT.md        → current task details               ║
+║  3. memory/RESUME.md         → checkpoint                         ║
+║  4. memory/ASSUMPTIONS.md    → active risks (P×I)                 ║
+║  5. memory/DECISIONS.md      → recent choices                     ║
+║                                                                    ║
+║  Confirm: "Elite state restored. Active task: [X]. Next: [Y]."     ║
+╚════════════════════════════════════════════════════════════════════╝
+ELITE
+
 exit 0
