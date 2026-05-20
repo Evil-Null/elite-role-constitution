@@ -80,3 +80,10 @@ hooks:
     script: .kimi/hooks/user-prompt-submit.sh
     timeout: 5
     doc: "C4 PEV gate prep: cache the latest user prompt to .kimi/state/prompt-${session_id}.txt so PreToolUse can read it and detect [APPROVED]/light-effort/challenge-grade tokens (advisory by default; strict if .kimi/state/c4-strict-mode sentinel exists)"
+
+  - name: context-guard
+    event: UserPromptSubmit
+    matcher: ""
+    script: .kimi/hooks/context-guard.sh
+    timeout: 10
+    doc: "Monitor context token usage from Kimi CLI context file and warn before auto-compaction destroys session continuity (warns at trigger_ratio - 0.03)"

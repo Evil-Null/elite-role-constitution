@@ -26,12 +26,6 @@ timeout = 10
 
 # Emit reminder of SESSION_RITUAL.md Ritual 3 (agent must write memory/COMPACT_STATE.md before compact proceeds)
 [[hooks]]
-event = "UserPromptSubmit"
-matcher = ""
-command = ".kimi/hooks/context-guard.sh"
-timeout = 10
-
-[[hooks]]
 event = "PreCompact"
 matcher = ""
 command = ".kimi/hooks/pre-compact.sh"
@@ -85,3 +79,10 @@ event = "UserPromptSubmit"
 matcher = ""
 command = ".kimi/hooks/user-prompt-submit.sh"
 timeout = 5
+
+# Monitor context token usage from Kimi CLI context file and warn before auto-compaction destroys session continuity (warns at trigger_ratio - 0.03)
+[[hooks]]
+event = "UserPromptSubmit"
+matcher = ""
+command = ".kimi/hooks/context-guard.sh"
+timeout = 10
