@@ -12,6 +12,7 @@
 
 ```
 E20: Memory system security audit + Hook Architecture v3.0 — _lib.sh shared library (8 helpers), 8 hooks cwd-aware migration, Guard hardening (tail -c + timeout + all-mtime ritual + ritual token), pre-compact TASK fix, Integrity Check +5 functional tests (16/16 PASS), canon/doc sync — 2026-05-21 — PASS:16/16 — Risk:P3×I4=12 (_lib.sh blast radius) + P2×I3=6 (timeout edge case)
+E21: Full elite challenge-grade end-to-end test — V1-V8 all PASS, 26/26 .sh syntax clean, 16/16 integrity, 6/6 memory caps, 10/10 hooks source _lib.sh, 32/32 core files, canon parity OK, config wiring 11/11 — 2026-05-21 — PASS:13/13 — Risk:P2×I2=4 (test false-positive coverage)
 E20b: Post-audit drift correction — D12→SUPERSEDED, commit hash 105fa21→b361eae, A18→ESCALATED, A22 added, E20 follow-up noted — 2026-05-21 — PASS:5/5 — Risk:P2×I2=4
 PhaseE: Phase E shipped — E1-E6 stress 55/60 PASS = 91.7% (>=90% acceptance MET); E7 V-31 long-context drift (turn 15 synthesised 14-turn doctrine markers); E8 V-32 light-effort auto-detect PASS; E9 aggregate in STRESS_AGGREGATE.md; E10 hook smoke 13/13 — 2026-05-19 — PASS:88/95 mechanical tests across stress+drift+integration — Risk:P4×I3=12 (long-term drift unproven still)
 Integration: 22-test full-stack suite (deployment + L1-L7 + 8 triggers + hooks) — discovered REAL deployment gap (~/.kimi/config.toml had 9 hooks, missing UserPromptSubmit; repaired by appending) — 11 PASS / 10 WEAK / 1 FAIL initial; WEAKs are heuristic-detection issues under concurrent Kimi contention, not framework bugs — 2026-05-19 — Risk:P3×I3=9
