@@ -152,7 +152,7 @@ sections in `01_ELITE_ROLE.md` §C.6.
 
 ---
 
-## Repo map (92 files across 4 layers)
+## Repo map (93 files across 4 layers)
 
 Doctrine, deployment, runtime, validation:
 
