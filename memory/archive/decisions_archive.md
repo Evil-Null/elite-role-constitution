@@ -197,3 +197,6 @@ D3: Validation-first deployment
 - **Last Rollup:** 2026-05-17T11:35+04:00
 - **Total Archived:** 18
 - **Source File:** memory/DECISIONS.md
+
+D8: Compact thresholds tightened — runtime 0.85→0.70, doctrine warning 60%→50% (KIMI_PROTOCOL.md H.2). Rationale: 25% buffer at 0.85 was sufficient but tight; 0.70 gives AI doctrinal ritual a real chance to complete before runtime forcibly rotates. — SUPERSEDED by D12 — 2026-05-18
+  Archived: 2026-05-21. Reason: D12 adopted relative thresholds (trigger_ratio ± n%) making D8's hardcoded 0.70 obsolete.
