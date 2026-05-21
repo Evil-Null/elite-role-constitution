@@ -22,13 +22,16 @@ A15: Rollup trigger activates before write when threshold is exceeded
 A16: context-guard.sh cwd-from-payload correctly locates COMPACT_STATE.md in foreign work_dirs
   Declared: 2026-05-21T02:40+04:00  Status: CONFIRMED  Score: P2×I4=8
 A18: STOP gate (exit 2) will correctly block AI turn in live Kimi session at 67% threshold
-  Declared: 2026-05-21T02:50+04:00  Status: ACTIVE  Score: P3×I5=15
+  Declared: 2026-05-21T02:50+04:00  Status: ESCALATED  Score: P3×I5=15
+  Escalation: User notified 2026-05-21T04:15+04:00 — STOP gate live verification pending real session test at ≥175K tokens
 A19: _lib.sh shared library correctly sourced by all 8 migrated hooks without syntax errors
   Declared: 2026-05-21T03:30+04:00  Status: ACTIVE  Score: P2×I4=8
 A20: tail -c 100K + timeout 5s prevents guard timeout fail-open in practice
   Declared: 2026-05-21T03:30+04:00  Status: ACTIVE  Score: P3×I4=12
 A21: Ritual token chain (pre-compact generate → post-compact/context-guard verify) is bypass-resistant
   Declared: 2026-05-21T03:30+04:00  Status: ACTIVE  Score: P3×I4=12
+A22: _lib.sh added to protected patterns in SYSTEM_INTEGRITY_CHECK.sh
+  Declared: 2026-05-21T04:15+04:00  Status: ACTIVE  Score: P2×I3=6
 ```
 
 ## Risk Score Rules

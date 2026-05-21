@@ -19,8 +19,8 @@
 - pre-compact.sh TASK extraction fixed, ritual token generation added
 - SYSTEM_INTEGRITY_CHECK.sh +5 tests (16/16 PASS)
 - canon/hooks.yaml + agent/elite.system.md + _generate.py synced
-- Git commit 105fa21 pushed to main
-**Next Step:** Monitor for cwd edge cases in foreign projects; consider _lib.sh protection in patterns
+- Git commit b361eae (README count + RESUME fix) pushed to main
+**Next Step:** Monitor for cwd edge cases in foreign projects
 **Blockers:** None.
 
 ## Next Session Read Order

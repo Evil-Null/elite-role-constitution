@@ -54,5 +54,4 @@ None. System is production-ready for v3.0.
 ## Next
 
 - Monitor for cwd-related edge cases in foreign projects
-- Consider adding _lib.sh to protected patterns (Phase 2 Red Team counter-measure)
 - Phase E stress test repeat with new architecture
