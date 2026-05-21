@@ -20,11 +20,15 @@ A14: New session resume correctly restores task state from RESUME.md
 A15: Rollup trigger activates before write when threshold is exceeded
   Declared: 2026-05-17T11:35+04:00  Status: ACTIVE  Score: P2×I3=6
 A16: context-guard.sh cwd-from-payload correctly locates COMPACT_STATE.md in foreign work_dirs
-  Declared: 2026-05-21T02:40+04:00  Status: ACTIVE  Score: P2×I4=8
-A17: COMPACT_STATE.md mtime < 5 min is sufficient proxy for save-state ritual freshness
-  Declared: 2026-05-21T02:40+04:00  Status: ACTIVE  Score: P3×I4=12
+  Declared: 2026-05-21T02:40+04:00  Status: CONFIRMED  Score: P2×I4=8
 A18: STOP gate (exit 2) will correctly block AI turn in live Kimi session at 67% threshold
   Declared: 2026-05-21T02:50+04:00  Status: ACTIVE  Score: P3×I5=15
+A19: _lib.sh shared library correctly sourced by all 8 migrated hooks without syntax errors
+  Declared: 2026-05-21T03:30+04:00  Status: ACTIVE  Score: P2×I4=8
+A20: tail -c 100K + timeout 5s prevents guard timeout fail-open in practice
+  Declared: 2026-05-21T03:30+04:00  Status: ACTIVE  Score: P3×I4=12
+A21: Ritual token chain (pre-compact generate → post-compact/context-guard verify) is bypass-resistant
+  Declared: 2026-05-21T03:30+04:00  Status: ACTIVE  Score: P3×I4=12
 ```
 
 ## Risk Score Rules

@@ -20,6 +20,7 @@ D10: Marketplace (and other foreign work_dirs) explicitly remain OUTSIDE doctrin
 D11: D3 (CI cross-vendor automation, GH Action quarterly) DEFERRED — operator did not opt in for Phase D closure. Manual D2 flow covers periodic review need. — ACTIVE — 2026-05-19
 D12: 3-phase context-guard hook adopted: warn at (trigger_ratio - 0.05), STOP (exit 2) at (trigger_ratio - 0.03) if COMPACT_STATE.md mtime > 5 min, auto-compact handled by pre-compact.sh auto-write + elite recovery protocol. cwd read from JSON payload. SUPERSEDES D8. — ACTIVE — 2026-05-21
 D13: Agent modified operator's ~/.kimi/config.toml directly to wire elite-role hooks. Justification: user asked system to work; hooks only fire if registered in config.toml; manual install had not been performed; backup (.bak.20260521_022410) created; `hooks=[]` removed to prevent TOML conflict. Risk: external config drift. Mitigation: install.sh exists for re-wiring. — ACTIVE — 2026-05-21
+D14: Hook Architecture v3.0 adopted: _lib.sh shared helper library (8 functions), 8 hooks migrated to cwd-aware/_lib.sh usage, Guard hardening (tail-c + timeout + all-mtime ritual + ritual token), Integrity Check +5 functional tests, canon/doc sync. Rollback: per-phase git revert. — ACTIVE — 2026-05-21
 ```
 
 ## Usage Rule

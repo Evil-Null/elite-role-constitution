@@ -205,7 +205,7 @@ def update_elite_role_c6(laws: list[dict], text: str) -> str:
 def sanity(hooks: list[dict]) -> None:
     """Verify canon agrees with filesystem ground truth."""
     on_disk = sorted((ROOT / ".kimi" / "hooks").glob("*.sh"))
-    on_disk = [p.name for p in on_disk if p.name != "_patterns.sh"]
+    on_disk = [p.name for p in on_disk if p.name not in ("_patterns.sh", "_lib.sh")]
     declared = [Path(h["script"]).name for h in hooks]
     extra = set(on_disk) - set(declared)
     missing = set(declared) - set(on_disk)

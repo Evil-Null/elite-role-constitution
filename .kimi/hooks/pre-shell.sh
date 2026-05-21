@@ -2,30 +2,22 @@
 # pre-shell.sh — Elite Role hook for Kimi CLI 1.43+
 #
 # Event: PreToolUse  (matcher: Shell)
-# Purpose: close the bypass gap identified by independent review #3
-# (R3 Finding 3) — the WriteFile-only PreToolUse hook could not see
-# Shell-tool writes like `cat secrets > .env` or `cp creds /tmp/`.
+# Purpose: close the bypass gap for Shell-tool writes.
 #
-# Strategy: parse the command for write-side syntax (>, >>, tee, cp,
-# mv, install, sed -i, dd of=, install -m...) and run the same
-# protected-file matcher on every plausible target path.
+# v3.0: C4 state dir uses global ~/.kimi/state/elite-role/ via _lib.sh.
 
 set -euo pipefail
 shopt -s nocasematch
 
-# Source canon-generated patterns (B7 — single source of truth via canon/patterns.yaml).
 HOOKS_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-# shellcheck source=/dev/null
 source "$HOOKS_DIR/_patterns.sh"
+source "$HOOKS_DIR/_lib.sh"
 
 # C4 L4 PEV approval check — duplicated from pre-tool-use.sh.
-# Acceptable duplication: short helper, both files exist for tightly
-# different events; canonicalising via canon/approval.yaml is a Phase G
-# refactor target if approval logic grows.
 c4_check_approval() {
     local session_id="$1"
     local state_dir
-    state_dir="$(cd "$HOOKS_DIR/../state" 2>/dev/null && pwd || echo "$HOOKS_DIR/../state")"
+    state_dir=$(er_get_state_dir)
     local strict_sentinel="$state_dir/c4-strict-mode"
     local prompt_file="$state_dir/prompt-${session_id}.txt"
     [ -z "$session_id" ] && return 0
@@ -78,12 +70,7 @@ if [ -z "$CMD" ]; then
     exit 0
 fi
 
-# C4 — apply L4 PEV gate only to state-mutating shell patterns. A pure
-# read like `ls` or `cat` should never need approval. We detect mutation
-# via the same redirection/copy/move/sed/dd/destructive patterns used
-# below. The `\b(rm|shred|truncate|chmod|chown|chgrp)\b` group catches
-# delete/zero/permission-flip variants that bypass the write-redirect
-# detector (gap closed 2026-05-19 after Tier-1 elite test T2.3/T2.4).
+# C4 — apply L4 PEV gate only to state-mutating shell patterns.
 if printf '%s' "$CMD" | grep -qE '(>>?|tee|^cp\b|^mv\b|^install\b|sed -i|sed --in-place|dd\s+of=|\b(rm|shred|truncate|chmod|chown|chgrp)\b)'; then
     SESSION_ID="$(printf '%s' "$INPUT" | python3 -c "
 import sys, json
@@ -95,11 +82,6 @@ except Exception: pass
     fi
 fi
 
-# B7 refactor: pattern arrays come from canon/patterns.yaml via _patterns.sh.
-# The pre-B7 version of this script had a strictly smaller pattern list
-# than pre-tool-use.sh (missed *.credentials.*, secring.gpg, gcloud-key*.json,
-# *terraform.tfstate). Sourcing the same _patterns.sh eliminates that gap
-# by construction.
 is_protected() {
     local raw="$1"
     local base="${raw##*/}"
@@ -108,25 +90,17 @@ is_protected() {
     local real_base="${real##*/}"
     local safe
     for safe in "${WHITELIST_PATTERNS[@]}"; do
-        # shellcheck disable=SC2254  # case-glob expansion is intentional
         case "$base"      in $safe) return 1 ;; esac
-        # shellcheck disable=SC2254
         case "$real_base" in $safe) return 1 ;; esac
     done
     local pat
     for pat in "${PROTECTED_PATTERNS[@]}"; do
-        # shellcheck disable=SC2254  # case-glob expansion is intentional
         case "$base"      in $pat) return 0 ;; esac
-        # shellcheck disable=SC2254
         case "$real_base" in $pat) return 0 ;; esac
     done
     return 1
 }
 
-# Catastrophic-path matcher (added 2026-05-19 to close the rm/shred/
-# truncate gap surfaced by elite test T2.4). Matches the FULL path
-# (not basename) — so `/`, `/etc`, `/root` block but `/tmp/foo` does not.
-# Trailing slashes are stripped before comparison so `/etc/` ≡ `/etc`.
 is_catastrophic() {
     local raw="$1"
     local norm="${raw%/}"
@@ -138,72 +112,52 @@ is_catastrophic() {
     return 1
 }
 
-# Tokenise the command line so we can examine each argument. Use python
-# shlex for robust quoting handling instead of trying to do it in bash.
-# The command is passed via env var so the heredoc cannot steal stdin.
 TARGETS="$(KIMI_PRESHELL_CMD="$CMD" python3 <<'PY' 2>/dev/null || true
 import os, shlex, re
-
 cmd = os.environ.get('KIMI_PRESHELL_CMD', '')
 try:
     tokens = shlex.split(cmd, posix=True)
 except ValueError:
-    # Unbalanced quotes — fall back to whitespace split
     tokens = cmd.split()
-
 targets = []
 i = 0
 while i < len(tokens):
     t = tokens[i]
-    # Redirection forms: >, >>, &> with the next token as target
     if t in ('>', '>>', '&>'):
         if i + 1 < len(tokens): targets.append(tokens[i+1])
         i += 2; continue
-    # Combined form like >file or 2>file
     m = re.match(r'^[12&]?>{1,2}(.+)$', t)
     if m and m.group(1) and m.group(1) not in ('&1', '&2'):
         targets.append(m.group(1))
-    # tee / dd of= / install -m ... target / sed -i target / cp / mv
     if t == 'tee' or t.endswith('/tee'):
-        # everything after this token that doesn't start with - is a target
         j = i + 1
         while j < len(tokens) and not tokens[j].startswith('-'):
             targets.append(tokens[j]); j += 1
     if t.startswith('of='):
         targets.append(t[3:])
     if t in ('cp', 'mv', 'install') or t.endswith('/cp') or t.endswith('/mv') or t.endswith('/install'):
-        # last non-option token is the destination
         j = len(tokens) - 1
         while j > i and tokens[j].startswith('-'):
             j -= 1
         if j > i: targets.append(tokens[j])
     if t == 'sed' or t.endswith('/sed'):
-        # sed -i, sed --in-place — argument after the script(s) is the file
-        # Conservatively: any later token that exists in the filesystem
         for u in tokens[i+1:]:
             if not u.startswith('-'):
                 targets.append(u)
-    # Destructive commands (rm, shred, truncate) — every non-option arg
-    # is a target. Catches `rm /root/.ssh/id_rsa`, `shred .env`, etc.
     if t in ('rm', 'shred', 'truncate') or t.endswith('/rm') or t.endswith('/shred') or t.endswith('/truncate'):
         for u in tokens[i+1:]:
             if not u.startswith('-'):
                 targets.append(u)
-    # Permission/ownership flip — chmod 000, chown root:root, chgrp. The
-    # first non-option after the command is the mode/owner spec; the
-    # remaining non-option tokens are the targets.
     if t in ('chmod', 'chown', 'chgrp') or t.endswith('/chmod') or t.endswith('/chown') or t.endswith('/chgrp'):
         j = i + 1
         while j < len(tokens) and tokens[j].startswith('-'):
             j += 1
-        # Skip the mode/owner spec (one positional token)
         if j < len(tokens):
             j += 1
         for u in tokens[j:]:
             if not u.startswith('-'):
                 targets.append(u)
     i += 1
-
 for tg in targets:
     if tg:
         print(tg)
@@ -212,8 +166,6 @@ PY
 
 while IFS= read -r tgt; do
     [ -z "$tgt" ] && continue
-    # Catastrophic-path check runs first — these full-path matches block
-    # regardless of whether the basename is in PROTECTED_PATTERNS.
     if is_catastrophic "$tgt"; then
         cat <<EOF >&2
 BLOCKED by elite-role pre-shell hook (L7 Absolute Contract — catastrophic):
@@ -221,9 +173,7 @@ Shell command targets a catastrophic system path: '$tgt'
 Full command was:
   $CMD
 
-The path '$tgt' is on the catastrophic-paths list (/, /etc, /var, /usr,
-/bin, /sbin, /lib, /lib64, /boot, /sys, /proc, /dev, /root, /home, /opt).
-Deletion or permission-flip of these paths would brick the host.
+The path '$tgt' is on the catastrophic-paths list.
 No agent operation is permitted against them.
 EOF
         exit 2
@@ -236,9 +186,7 @@ Full command was:
   $CMD
 
 Sensitive files (.env, credentials, SSH keys, certificates, kubeconfig,
-terraform state, etc.) must not be modified by the agent — including
-indirectly via Shell redirection, copy, deletion, or permission flip.
-If you need to edit one of these, do it manually outside this session.
+terraform state, etc.) must not be modified by the agent.
 EOF
         exit 2
     fi

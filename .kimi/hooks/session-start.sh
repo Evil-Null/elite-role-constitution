@@ -6,19 +6,16 @@
 # RESUME, CONTEXT, ASSUMPTIONS — into the agent context so the AI does
 # not have to remember to do it.
 #
-# Protocol: Kimi pipes a JSON context object on stdin; we ignore the
-# payload here because the action is independent of the trigger source.
-# stdout on exit 0 is added to the agent context; exit 2 would block.
+# v3.0: cwd-aware — loads memory from the current working directory
+# (from JSON payload), not hardcoded to elite-role-constitution.
 
 set -euo pipefail
 
-# Consume stdin so the parent does not block on a closed pipe.
-cat >/dev/null || true
+INPUT=$(cat 2>/dev/null || echo '{}')
+source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/_lib.sh"
 
-# Resolve project root from this script's location.
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-PROJECT_ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
-cd "$PROJECT_ROOT"
+CWD=$(er_get_cwd "$INPUT")
+cd "$CWD"
 
 # Default read order per memory/README.md Authority Hierarchy.
 READ_ORDER=(memory/README.md memory/RESUME.md memory/CONTEXT.md memory/ASSUMPTIONS.md)
@@ -32,7 +29,7 @@ MAX_INLINE_LINES=120
 
 echo "=== Elite Role · SessionStart memory context ==="
 echo ""
-echo "Project root: $PROJECT_ROOT"
+echo "Project root: $CWD"
 echo "Loaded at:    $(TZ=UTC date -u -Iseconds)"
 echo ""
 
@@ -61,8 +58,8 @@ echo "=== end of memory context ==="
 # regressed > 20pp. Silent on the no-alert path so a clean session
 # stays clean. Failure of the alert script itself must not block the
 # session — wrap in `|| true`.
-if [ -x "$PROJECT_ROOT/scripts/compliance_alert.sh" ]; then
-    bash "$PROJECT_ROOT/scripts/compliance_alert.sh" 2>/dev/null || true
+if [ -x ".kimi/audit/compliance_alert.sh" ]; then
+    bash ".kimi/audit/compliance_alert.sh" 2>/dev/null || true
 fi
 
 exit 0

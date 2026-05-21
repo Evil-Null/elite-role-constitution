@@ -30,7 +30,7 @@ hooks:
     matcher: ""
     script: .kimi/hooks/pre-compact.sh
     timeout: 10
-    doc: "Emit reminder of SESSION_RITUAL.md Ritual 3 (agent must write memory/COMPACT_STATE.md before compact proceeds)"
+    doc: "Auto-write memory/COMPACT_STATE.md with snapshot + ritual token before compact proceeds; emit elite recovery protocol to AI context"
 
   - name: post-compact
     event: PostCompact

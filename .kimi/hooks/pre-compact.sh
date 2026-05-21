@@ -3,17 +3,25 @@
 #
 # Event: PreCompact
 # Purpose: AUTOMATICALLY write memory/COMPACT_STATE.md before compaction.
-# The snapshot is written to the project cwd (from stdin JSON), NOT to
-# the elite-role-constitution repo. This fixes the design flaw where the
-# hook only emitted a reminder that the agent could never act on during
-# automatic compaction.
+# Also generates a ritual token for post-compact verification.
+#
+# v3.0 hardening:
+#   - Uses _lib.sh helpers (cwd, atomic write, token generation)
+#   - Fixes TASK extraction (matches "## Current Task", not just "## Active Task")
+#   - Generates random ritual token for bypass resistance
 
 set -euo pipefail
 
 INPUT=$(cat 2>/dev/null || echo '{}')
-TRIGGER=$(echo "$INPUT" | python3 -c "import sys,json; print(json.load(sys.stdin).get('trigger','manual'))" 2>/dev/null || echo "manual")
-TOKEN_COUNT=$(echo "$INPUT" | python3 -c "import sys,json; print(json.load(sys.stdin).get('token_count','?'))" 2>/dev/null || echo "?")
-CWD=$(echo "$INPUT" | python3 -c "import sys,json; print(json.load(sys.stdin).get('cwd',''))" 2>/dev/null || echo "")
+source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/_lib.sh"
+
+TRIGGER=$(er_json_str "$INPUT" "trigger")
+[ -z "$TRIGGER" ] && TRIGGER="manual"
+
+TOKEN_COUNT=$(er_json_str "$INPUT" "token_count")
+[ -z "$TOKEN_COUNT" ] && TOKEN_COUNT="?"
+
+CWD=$(er_get_cwd "$INPUT")
 
 if [ -z "$CWD" ] || [ ! -d "$CWD" ]; then
     echo "WARN: PreCompact — no valid cwd in event payload, cannot write COMPACT_STATE.md" >&2
@@ -31,7 +39,7 @@ fi
 # Extract active task from CONTEXT.md if it exists
 TASK=""
 if [ -f "memory/CONTEXT.md" ]; then
-    TASK=$(grep -i "^## Active Task\|^## Current Phase" "memory/CONTEXT.md" | head -2 | sed 's/^## //' | tr '\n' '; ' || true)
+    TASK=$(grep -iE "^## Current Task|^## Active Task|^## Current Phase" "memory/CONTEXT.md" | head -2 | sed 's/^## //' | tr '\n' '; ' || true)
 fi
 
 # Extract latest assumptions if they exist
@@ -40,13 +48,19 @@ if [ -f "memory/ASSUMPTIONS.md" ]; then
     ASSUMPTIONS=$(tail -n 5 "memory/ASSUMPTIONS.md" 2>/dev/null | grep "^- \|^[0-9]\. " | head -3 || true)
 fi
 
-# Write COMPACT_STATE.md
+# Generate ritual token for post-compact verification
+RITUAL_TOKEN=$(er_generate_ritual_token)
+
+# Write COMPACT_STATE.md atomically
 TIMESTAMP=$(date -Iseconds)
-cat > "memory/COMPACT_STATE.md" <<EOF
+
+{
+    cat <<EOF
 # COMPACT_STATE
 
-> **Generated:** $TIMESTAMP  
-> **Trigger:** $TRIGGER · **Token count:** $TOKEN_COUNT  
+> **Generated:** $TIMESTAMP
+> **Trigger:** $TRIGGER · **Token count:** $TOKEN_COUNT
+> **Ritual Token:** $RITUAL_TOKEN
 > **Max Size:** 40 lines
 
 ## Active Task
@@ -57,15 +71,14 @@ ${ASSUMPTIONS:-"(none recorded)"}
 
 ## Files Present
 EOF
-
-for f in memory/CONTEXT.md memory/RESUME.md memory/ASSUMPTIONS.md memory/DECISIONS.md memory/AUDIT_LOG.md; do
-    if [ -f "$f" ]; then
-        echo "- $f: $(wc -l <"$f") lines" >> "memory/COMPACT_STATE.md"
-    fi
-done
-
-echo "" >> "memory/COMPACT_STATE.md"
-echo "---" >> "memory/COMPACT_STATE.md"
+    for f in memory/CONTEXT.md memory/RESUME.md memory/ASSUMPTIONS.md memory/DECISIONS.md memory/AUDIT_LOG.md; do
+        if [ -f "$f" ]; then
+            echo "- $f: $(wc -l <"$f") lines"
+        fi
+    done
+    echo ""
+    echo "---"
+} | er_atomic_write "memory/COMPACT_STATE.md"
 
 LINES=$(wc -l <"memory/COMPACT_STATE.md")
 echo "PreCompact: COMPACT_STATE.md written ($LINES lines)"

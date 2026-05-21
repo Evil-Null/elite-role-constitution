@@ -6,37 +6,25 @@
 #
 # Purpose: cache the most recent user prompt to disk, keyed by
 # session_id, so PreToolUse can read it later to enforce the L4 PEV
-# [APPROVED] gate (C4). The hook NEVER blocks — caching is its only
-# job — so use exit 0 unconditionally.
+# [APPROVED] gate (C4). The hook NEVER blocks.
+#
+# v3.0: uses global state dir (~/.kimi/state/elite-role/) instead of
+# hardcoded elite-role-constitution repo path.
 
 set -euo pipefail
 
 INPUT=$(cat 2>/dev/null || echo '{}')
+source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/_lib.sh"
 
-SESSION_ID=$(printf '%s' "$INPUT" | python3 -c "
-import sys, json
-try:
-    print(json.load(sys.stdin).get('session_id', ''))
-except Exception:
-    pass
-" 2>/dev/null || echo "")
+SESSION_ID=$(er_get_session_id "$INPUT")
 
 if [ -z "$SESSION_ID" ]; then
     exit 0
 fi
 
-PROMPT=$(printf '%s' "$INPUT" | python3 -c "
-import sys, json
-try:
-    print(json.load(sys.stdin).get('prompt', ''))
-except Exception:
-    pass
-" 2>/dev/null || echo "")
+PROMPT=$(er_json_str "$INPUT" "prompt")
 
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-PROJECT_ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
-STATE_DIR="$PROJECT_ROOT/.kimi/state"
-mkdir -p "$STATE_DIR" 2>/dev/null || exit 0
+STATE_DIR=$(er_get_state_dir)
 
 # Atomic write so a concurrent PreToolUse never reads a half-written file.
 TMP="$STATE_DIR/.prompt-${SESSION_ID}.tmp.$$"

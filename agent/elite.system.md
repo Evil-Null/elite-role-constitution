@@ -85,7 +85,7 @@ Located under `.kimi/hooks/`, configured in `~/.kimi/config.toml` (see `.kimi/ho
 |---|---|---|---|
 | `SessionStart` | (any) | Reads `memory/{README,RESUME,CONTEXT,ASSUMPTIONS}.md` and prints them into the new session's context. | Verify the loaded state matches the task; re-read on demand. |
 | `SessionEnd` | (any) | Updates a single `**Last hook autosave:**` timestamp line in `memory/RESUME.md` (only if within cap). | Write the substantive RESUME.md and CONTEXT.md content yourself before the session ends — the hook is a touch, not a save. |
-| `PreCompact` | (any) | Emits a reminder of the compact ritual into context. Does **not** write any file. | Perform Ritual 3 from SESSION_RITUAL.md: write `memory/COMPACT_STATE.md` before `/compact` proceeds. |
+| `PreCompact` | (any) | Auto-writes `memory/COMPACT_STATE.md` with snapshot + ritual token; emits recovery protocol to AI context. | Verify the snapshot contains the current task and ritual token is present. |
 | `PostCompact` | (any) | **Exits 2 (BLOCK)** if `memory/COMPACT_STATE.md` is missing. Warns on size or task-mismatch. | Author the snapshot before relying on it. |
 | `PreToolUse` | `WriteFile\|StrReplaceFile\|MultiEdit` | Fails closed on parse error; resolves symlinks; case-insensitive protected-file match against `.env / id_rsa / credentials / .pem / kubeconfig / .tfstate` and more; V3 secret-pattern scan on content. | Do not try to bypass — the right path for a sensitive file is to edit it manually. |
 | `PreToolUse` | `Shell` | (`pre-shell.sh`) Parses the command with python shlex; blocks if any redirection/copy/move/sed target matches the protected pattern set. | Don't rely on `> .env` to evade the WriteFile guard — same rules apply. |

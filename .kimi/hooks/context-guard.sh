@@ -3,61 +3,44 @@
 #
 # Event: UserPromptSubmit (before every user turn)
 # Purpose: 3-phase context protection gate:
-#   Phase 1 (warn):  at (trigger_ratio - 0.05) → advisory warning to begin
-#                    save-state ritual (exit 0).
-#   Phase 2 (stop):  at (trigger_ratio - 0.03) → BLOCK (exit 2) if the elite
+#   Phase 1 (warn):  at (trigger_ratio - 0.05) → advisory warning.
+#   Phase 2 (stop):  at (trigger_ratio - 0.03) → BLOCK (exit 2) if the
 #                    save-state ritual has NOT been performed recently.
-#                    Ritual freshness is detected by COMPACT_STATE.md mtime
-#                    (< 5 min). Once fresh, allow with reminder (exit 0).
+#                    Ritual freshness = ALL memory files mtime < 5 min.
 #   Phase 3 (compact): at trigger_ratio → Kimi auto-compacts; PreCompact
 #                    hook handles post-compact recovery.
 #
-# Hook protocol: exit 0 = allow; exit 2 + stderr = BLOCK; stdout on
-# exit 0 is appended to agent context.
+# v3.0 hardening:
+#   - tail -c 100K + timeout 5s on find/grep (no timeout fail-open)
+#   - Portable config parsing (no grep -P)
+#   - All-memory-files mtime check (not just COMPACT_STATE.md)
+#   - cwd-aware COMPACT_STATE location
 
 set -euo pipefail
 
 INPUT=$(cat 2>/dev/null || echo '{}')
-SESSION_ID=$(echo "$INPUT" | python3 -c "import sys,json; print(json.load(sys.stdin).get('session_id',''))" 2>/dev/null || echo "")
+source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/_lib.sh"
+
+SESSION_ID=$(er_get_session_id "$INPUT")
 
 # If we cannot identify the session, silently allow.
 if [ -z "$SESSION_ID" ]; then
     exit 0
 fi
 
-# Locate the context file for this session.
-CONTEXT_FILE=$(find ~/.kimi/sessions -path "*/${SESSION_ID}/context.jsonl" -type f 2>/dev/null | head -1)
-if [ -z "$CONTEXT_FILE" ] || [ ! -f "$CONTEXT_FILE" ]; then
-    exit 0
-fi
-
-# Extract the latest token_count from _usage records.
-TOKEN_COUNT=$(grep '"_usage"' "$CONTEXT_FILE" 2>/dev/null | tail -1 | python3 -c "
-import sys, json
-try:
-    print(json.load(sys.stdin).get('token_count', 0))
-except Exception:
-    print(0)
-" 2>/dev/null || echo "0")
+# Extract token count (optimised: tail -c 100K, timeout 5s on find).
+TOKEN_COUNT=$(er_get_token_count "$SESSION_ID")
 
 # Validate numeric token count.
 if ! [[ "$TOKEN_COUNT" =~ ^[0-9]+$ ]] || [ "$TOKEN_COUNT" -eq 0 ]; then
     exit 0
 fi
 
-# Read model configuration from Kimi CLI config.
-CONFIG_FILE="${HOME}/.kimi/config.toml"
-MAX_CTX=262144
-RATIO=0.85
+# Read model configuration from Kimi CLI config (portable, no grep -P).
+MAX_CTX=$(er_get_config_value "max_context_size" "262144")
+RATIO=$(er_get_config_value "compaction_trigger_ratio" "0.85")
 
-if [ -f "$CONFIG_FILE" ]; then
-    CFG_MAX=$(grep -oP '(?<=^max_context_size = )\d+' "$CONFIG_FILE" 2>/dev/null | head -1 || true)
-    CFG_RATIO=$(grep -oP '(?<=^compaction_trigger_ratio = )[0-9.]+' "$CONFIG_FILE" 2>/dev/null | head -1 || true)
-    [ -n "$CFG_MAX" ] && MAX_CTX="$CFG_MAX"
-    [ -n "$CFG_RATIO" ] && RATIO="$CFG_RATIO"
-fi
-
-# Compute 3-phase thresholds relative to the configured trigger ratio.
+# Compute 3-phase thresholds.
 WARN_RATIO=$(python3 -c "r = float('$RATIO') - 0.05; print(r if r > 0 else 0.50)" 2>/dev/null || echo "0.80")
 STOP_RATIO=$(python3 -c "r = float('$RATIO') - 0.03; print(r if r > 0 else 0.52)" 2>/dev/null || echo "0.82")
 WARN_TOKENS=$(python3 -c "print(int($MAX_CTX * $WARN_RATIO))" 2>/dev/null || echo "0")
@@ -66,44 +49,36 @@ COMPACT_TOKENS=$(python3 -c "print(int($MAX_CTX * float('$RATIO')))" 2>/dev/null
 
 PERCENT=$(python3 -c "print(f'{(int($TOKEN_COUNT) / int($MAX_CTX)) * 100:.1f}')" 2>/dev/null || echo "?")
 
-# Resolve cwd from JSON payload (like pre-compact.sh does) for correct
-# COMPACT_STATE.md location. Falls back to script's repo root.
-CWD=$(echo "$INPUT" | python3 -c "import sys,json; print(json.load(sys.stdin).get('cwd',''))" 2>/dev/null || echo "")
-
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-PROJECT_ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
-
-# Use cwd if available and valid, else fall back to repo root
-if [ -n "$CWD" ] && [ -d "$CWD" ]; then
-    COMPACT_STATE="$CWD/memory/COMPACT_STATE.md"
-else
-    COMPACT_STATE="$PROJECT_ROOT/memory/COMPACT_STATE.md"
-fi
+# Resolve cwd from JSON payload for correct COMPACT_STATE.md location.
+CWD=$(er_get_cwd "$INPUT")
+COMPACT_STATE="$CWD/memory/COMPACT_STATE.md"
 
 # ── PHASE 3: CRITICAL — STOP if ritual not performed ─────────────────
 if [ "$TOKEN_COUNT" -ge "$STOP_TOKENS" ]; then
-    # Check if save-state ritual was already performed recently.
-    # We detect this by COMPACT_STATE.md mtime within last 5 minutes.
+    # Ritual freshness: ALL memory files must be updated within 5 minutes.
+    # This closes the 'touch COMPACT_STATE.md only' bypass.
     RITUAL_FRESH=0
     RITUAL_AGE=""
-    if [ -f "$COMPACT_STATE" ]; then
-        NOW=$(date +%s)
-        MTIME=$(stat -c %Y "$COMPACT_STATE" 2>/dev/null || echo 0)
-        if [ "$MTIME" -gt 0 ]; then
-            AGE=$(( NOW - MTIME ))
-            if [ "$AGE" -lt 300 ] && [ "$AGE" -ge 0 ]; then
-                RITUAL_FRESH=1
-                RITUAL_AGE="$AGE"
-            fi
+    if [ -d "$CWD/memory" ]; then
+        if er_check_all_mtimes "$CWD/memory" 300; then
+            RITUAL_FRESH=1
+            RITUAL_AGE="<300s"
+        fi
+    fi
+
+    # Also accept if COMPACT_STATE.md has a valid ritual token from
+    # a recent pre-compact (post-compact path).
+    if [ "$RITUAL_FRESH" -eq 0 ] && [ -f "$COMPACT_STATE" ]; then
+        if er_verify_ritual_token "$COMPACT_STATE"; then
+            RITUAL_FRESH=1
+            RITUAL_AGE="token-valid"
         fi
     fi
 
     if [ "$RITUAL_FRESH" -eq 1 ]; then
-        # Ritual already done recently — allow with a light reminder.
         cat <<EOF
 elite-role · Context Guard (phase 3 — acknowledged)
-  COMPACT_STATE.md updated ${RITUAL_AGE}s ago. Save-state ritual is fresh.
-  Continuing under L6 self-check. Remain vigilant until compact resolves.
+  Ritual fresh ($RITUAL_AGE). Save-state complete. Continuing under L6.
 EOF
         exit 0
     fi
@@ -118,17 +93,22 @@ EOF
 ╠════════════════════════════════════════════════════════════════════╣
 ║  SAVE-STATE RITUAL IS MANDATORY BEFORE PROCEEDING.                ║
 ║                                                                    ║
-║  Perform the FULL elite ritual NOW:                               ║
+║  Perform the FULL elite ritual NOW — ALL of these files must be   ║
+║  updated (not just touched) within the last 5 minutes:            ║
+║                                                                    ║
 ║  1. memory/CONTEXT.md      → active task + progress + file state  ║
 ║  2. memory/ASSUMPTIONS.md  → active risks with P×I scores        ║
 ║  3. memory/DECISIONS.md    → recent decisions                     ║
-║  4. memory/COMPACT_STATE.md → compact-safe snapshot (this file    ║
-║                                must be touched to unlock Phase 3) ║
+║  4. memory/COMPACT_STATE.md → compact-safe snapshot               ║
 ║  5. memory/RESUME.md       → checkpoint summary                   ║
+║                                                                    ║
+║  ⚠️  touch memory/*.md is NOT sufficient — content must change.   ║
+║      The hook checks filesystem mtime of ALL files, not just one. ║
+║                                                                    ║
 ║  6. Confirm: "Elite save-state complete. Acknowledged."           ║
 ╠════════════════════════════════════════════════════════════════════╣
 ║  This turn is BLOCKED until the ritual is performed.               ║
-║  Once COMPACT_STATE.md is fresh (< 5 min), continuation unlocks.  ║
+║  Once all memory files are fresh (< 5 min), continuation unlocks. ║
 ╚════════════════════════════════════════════════════════════════════╝
 EOF
     exit 2

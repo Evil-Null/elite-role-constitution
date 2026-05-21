@@ -3,22 +3,18 @@
 #
 # Event: SessionEnd  (matcher: reason)
 # Purpose: capture the "save state" ritual — write a minimal checkpoint
-# into memory/RESUME.md without violating its 40-line cap. Heavier
-# writes (DECISIONS.md, AUDIT_LOG.md) are left to the agent's explicit
-# discretion, since the hook lacks the semantic context to summarise
-# task progress correctly.
+# into memory/RESUME.md without violating its 40-line cap.
 #
-# Protocol: exit 0 (allow); stdout NOT added to context for SessionEnd.
-# The hook side-effects (file writes) are the deliverable.
+# v3.0: cwd-aware — updates RESUME.md in the current working directory
+# (from JSON payload), not hardcoded to elite-role-constitution.
 
 set -euo pipefail
 
-# Consume stdin (payload not used by this hook)
-cat >/dev/null || true
+INPUT=$(cat 2>/dev/null || echo '{}')
+source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/_lib.sh"
 
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-PROJECT_ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
-cd "$PROJECT_ROOT"
+CWD=$(er_get_cwd "$INPUT")
+cd "$CWD"
 
 if [ ! -f memory/RESUME.md ]; then
     # Don't create the file from scratch — that's a structural change
@@ -27,29 +23,17 @@ if [ ! -f memory/RESUME.md ]; then
 fi
 
 # Touch the "Last updated" line if present without exceeding the cap.
-# This is a minimal, idempotent mutation. The agent is still
-# responsible for the *content* of the checkpoint.
 TIMESTAMP=$(date -Iseconds)
 
-# If RESUME.md has a "**Last hook autosave:**" line, update it; otherwise
-# append one line (only if doing so stays under the declared cap).
-# NB: `|| echo "40"` after a pipe never fires (head returns 0 on empty
-# input). Default with parameter expansion AFTER the pipe is the only
-# correct pattern (R2 #4).
 MAX="$(grep -oP '(?<=^> \*\*Max Size:\*\* )\d+(?= lines)' memory/RESUME.md 2>/dev/null | head -1 || true)"
 MAX="${MAX:-40}"
 CURRENT=$(awk 'END{print NR}' memory/RESUME.md)
 
 if grep -q "^\*\*Last hook autosave:\*\*" memory/RESUME.md; then
-    # Atomic in-place rewrite via a SAME-FILESYSTEM tempfile so that
-    # `mv` is a rename (atomic), not a copy. R2 #5 fix: mktemp under
-    # /tmp could be on a different filesystem; the move would be a
-    # copy-then-unlink that can leave RESUME.md half-written on
-    # interruption.
     tmpf="memory/.RESUME.md.hook.$$"
-    # shellcheck disable=SC2064  # expansion at trap-set time is intentional
+    # shellcheck disable=SC2064
     trap "rm -f '$tmpf'" EXIT
-    sed "s|^\*\*Last hook autosave:\*\*.*|**Last hook autosave:** $TIMESTAMP|" memory/RESUME.md >"$tmpf"
+    sed "s|^\*\*Last hook autosave:\*\*.*|\*\*Last hook autosave:\*\* $TIMESTAMP|" memory/RESUME.md >"$tmpf"
     mv "$tmpf" memory/RESUME.md
     trap - EXIT
 elif [ "$CURRENT" -lt "$MAX" ]; then

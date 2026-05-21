@@ -3,29 +3,31 @@
 > **Role:** Session break checkpoint — where we stopped. Overwrite entirely.  
 > **Read:** At start of new session after break.  
 > **Updated:** At end of session or when context critical.  
-> **Authority:** Operational (Rank 4).  
+> **Authority:** Checkpoint (Rank 5).  
 > **Max Size:** 40 lines.
 
 ---
 
 ## Session State
 
-**Session ended:** 2026-05-19T08:44+02:00
-**Active Task:** ROADMAP_ELITE_v2.md Phase A→F hardening execution (A-F shipped; E1-E9 operator-mediated pending; G optional)
-**Last Completed:** Phase F compliance instrumentation shipped; Day 4 stress log committed
-**Next Step:** Operator-mediated stress days E5-E9; Tier-2 review D2; OPTIONAL Phase G
-**Pending Assumptions:** A5-A15 (8 active)
+**Session ended:** 2026-05-21T02:45+04:00
+**Active Task:** 3-phase context-guard hook system — implementation DONE, live verification PENDING
+**Last Completed:** 
+- context-guard.sh (warn/stop/ack) + pre-compact.sh (auto-write + recovery)
+- Critical cwd bug fixed: context-guard now reads cwd from JSON payload
+- ~/.kimi/config.toml wired with 11 hooks (backup: .bak.20260521_022410)
+- Memory updated: CONTEXT.md, DECISIONS.md (D12), ASSUMPTIONS.md (A16-A17)
+- CI: Integrity Check PASS (11/11)
+**Next Step:** Live verification — continue session until 175,636 tokens (67%) to observe STOP gate
 **Blockers:** None.
 
-## Files Modified (recent)
+## Next Session Read Order
 
-- memory/STRESS_LOG_DAY_4.md — Day 4 stress entries
-- memory/RESUME.md — this checkpoint
-- memory/CONTEXT.md — refreshed state
+1. **README.md** → authority hierarchy
+2. **RESUME.md** → this checkpoint
+3. **CONTEXT.md** → active task (3-phase guard, ~95% progress)
+4. **ASSUMPTIONS.md** → risks A16-A17
 
-## Resume Protocol
-
-On "resume": Read README.md → RESUME.md → CONTEXT.md → ASSUMPTIONS.md.
 Do NOT read archive files during default resume.
 
-**Last hook autosave:** 2026-05-19T09:10:51+02:00
+**Last hook autosave:** 2026-05-21T02:45:00+04:00

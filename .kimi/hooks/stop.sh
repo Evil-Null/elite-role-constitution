@@ -1,22 +1,18 @@
 #!/bin/bash
 # stop.sh — Elite Role hook for Kimi CLI 1.43+
 #
-# Event: Stop  (turn end, no error)
-# Purpose: act as the doctrine's "L6 anti-self-deception check"
-# reminder. The Stop payload exposes only {hook_event_name, session_id,
-# cwd, stop_hook_active} (verified C1, kimi_cli/hooks/events.py:73);
-# the agent's response text is NOT visible, so L6 cannot be
-# mechanically verified for the primary agent. The hook keeps the
-# procedure visible by emitting a structured reminder. SubagentStop
-# (response IS visible there) would be where mechanical verification
-# could land in a future phase.
+# Event: Stop
+# Purpose: L6 anti-self-deception reminder.
+#
+# v3.0: sources _lib.sh for consistency (cwd-aware if future needs arise).
 
 set -euo pipefail
 
 INPUT=$(cat 2>/dev/null || echo '{}')
+source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/_lib.sh"
+
 ACTIVE=$(echo "$INPUT" | python3 -c "import sys,json; print(json.load(sys.stdin).get('stop_hook_active',False))" 2>/dev/null || echo "false")
 
-# Prevent infinite-recursion if Kimi re-invokes after our reminder.
 if [ "$ACTIVE" = "True" ] || [ "$ACTIVE" = "true" ]; then
     exit 0
 fi

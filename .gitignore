@@ -45,3 +45,6 @@ memory/compliance/
 # when a synthetic challenge task ("design a job queue …") prompts the
 # agent to materialise a Python module. Not part of the tracked codebase.
 queue/
+
+# Claude local settings
+.claude/
