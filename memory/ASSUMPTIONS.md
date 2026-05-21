@@ -11,14 +11,6 @@
 ## Active Assumptions
 
 ```
-A5: Memory file read/write latency is acceptable for turn-by-turn workflow
-  Declared: 2026-05-17T04:00+04:00  Status: ACTIVE  Score: P2×I3=6
-A6: Challenge-grade response will fit within context window with system prompt loaded
-  Declared: 2026-05-17T11:35+04:00  Status: ACTIVE  Score: P3×I3=9
-A7: User has permission to create/edit files in working directory
-  Declared: 2026-05-17T11:35+04:00  Status: ACTIVE  Score: P2×I4=8
-A8: Archive files maintain append-only integrity across rollups
-  Declared: 2026-05-17T11:35+04:00  Status: ACTIVE  Score: P2×I3=6
 A12: Default read surface remains ≤300 lines after multiple rollups
   Declared: 2026-05-17T11:35+04:00  Status: ACTIVE  Score: P2×I4=8
 A13: Session continuity survives user-initiated /compact commands
@@ -31,6 +23,8 @@ A16: context-guard.sh cwd-from-payload correctly locates COMPACT_STATE.md in for
   Declared: 2026-05-21T02:40+04:00  Status: ACTIVE  Score: P2×I4=8
 A17: COMPACT_STATE.md mtime < 5 min is sufficient proxy for save-state ritual freshness
   Declared: 2026-05-21T02:40+04:00  Status: ACTIVE  Score: P3×I4=12
+A18: STOP gate (exit 2) will correctly block AI turn in live Kimi session at 67% threshold
+  Declared: 2026-05-21T02:50+04:00  Status: ACTIVE  Score: P3×I5=15
 ```
 
 ## Risk Score Rules
@@ -43,6 +37,6 @@ Every session start: flag ACTIVE assumptions > 7 days old as STALE.
 
 ## Archive Reference
 
-- **Archived assumptions:** 27
+- **Archived assumptions:** 31
 - **Archive location:** `memory/archive/assumptions_archive.md`
-- **Last rollup:** 2026-05-17T11:35+04:00
+- **Last rollup:** 2026-05-21T02:50+04:00

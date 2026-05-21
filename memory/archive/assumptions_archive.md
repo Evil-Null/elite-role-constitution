@@ -125,3 +125,19 @@ A4: Context window (~128K tokens) is sufficient for system prompt + task executi
 - **Last Rollup:** 2026-05-17T11:35+04:00
 - **Total Archived:** 27
 - **Source File:** memory/ASSUMPTIONS.md
+
+A5: Memory file read/write latency is acceptable for turn-by-turn workflow
+  Declared: 2026-05-17T04:00+04:00  Status: CONFIRMED  Score: P2×I3=6
+  Verified: YES — 4+ days of active use, no latency issues observed
+
+A6: Challenge-grade response will fit within context window with system prompt loaded
+  Declared: 2026-05-17T11:35+04:00  Status: CONFIRMED  Score: P3×I3=9
+  Verified: YES — challenge-grade audits completed without truncation
+
+A7: User has permission to create/edit files in working directory
+  Declared: 2026-05-17T11:35+04:00  Status: CONFIRMED  Score: P2×I4=8
+  Verified: YES — continuous file I/O across all sessions without permission errors
+
+A8: Archive files maintain append-only integrity across rollups
+  Declared: 2026-05-17T11:35+04:00  Status: CONFIRMED  Score: P2×I3=6
+  Verified: YES — multiple rollups executed, archive append-only preserved
