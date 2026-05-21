@@ -10,7 +10,9 @@ set -euo pipefail
 shopt -s nocasematch
 
 HOOKS_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+# shellcheck disable=SC1091
 source "$HOOKS_DIR/_patterns.sh"
+# shellcheck disable=SC1091
 source "$HOOKS_DIR/_lib.sh"
 
 # C4 L4 PEV approval check (advisory by default; strict-mode via sentinel).
@@ -111,13 +113,17 @@ check_protected() {
 
     local safe_p
     for safe_p in "${WHITELIST_PATTERNS[@]}"; do
+        # shellcheck disable=SC2254
         case "$base"      in $safe_p) return 1 ;; esac
+        # shellcheck disable=SC2254
         case "$real_base" in $safe_p) return 1 ;; esac
     done
 
     local pat
     for pat in "${PROTECTED_PATTERNS[@]}"; do
+        # shellcheck disable=SC2254
         case "$base"      in $pat) return 0 ;; esac
+        # shellcheck disable=SC2254
         case "$real_base" in $pat) return 0 ;; esac
     done
     return 1

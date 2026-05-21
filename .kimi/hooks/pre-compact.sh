@@ -13,6 +13,7 @@
 set -euo pipefail
 
 INPUT=$(cat 2>/dev/null || echo '{}')
+# shellcheck disable=SC1091
 source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/_lib.sh"
 
 TRIGGER=$(er_json_str "$INPUT" "trigger")

@@ -12,6 +12,7 @@
 set -euo pipefail
 
 INPUT=$(cat 2>/dev/null || echo '{}')
+# shellcheck disable=SC1091
 source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/_lib.sh"
 
 CWD=$(er_get_cwd "$INPUT")

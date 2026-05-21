@@ -9,6 +9,7 @@
 set -euo pipefail
 
 INPUT=$(cat 2>/dev/null || echo '{}')
+# shellcheck disable=SC1091
 source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/_lib.sh"
 
 ACTIVE=$(echo "$INPUT" | python3 -c "import sys,json; print(json.load(sys.stdin).get('stop_hook_active',False))" 2>/dev/null || echo "false")

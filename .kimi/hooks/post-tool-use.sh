@@ -10,6 +10,7 @@
 set -euo pipefail
 
 INPUT=$(cat)
+# shellcheck disable=SC1091
 source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/_lib.sh"
 
 TOOL=$(er_json_str "$INPUT" "tool_name")
@@ -50,6 +51,7 @@ L2_HAS_CITE="false"
 L2_FLAGGED="false"
 if [ -n "$CONTENT" ]; then
     if printf '%s' "$CONTENT" | grep -qiE '\b(verified|confirmed|i checked|tested|should work|i made sure)\b'; then
+        # shellcheck disable=SC2016
         if printf '%s' "$CONTENT" | grep -qE '[a-zA-Z0-9_./-]+:[0-9]+|`[^`]+`|https?://'; then
             L2_HAS_CITE="true"
         else
