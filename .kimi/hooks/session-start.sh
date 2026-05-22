@@ -59,8 +59,10 @@ echo "=== end of memory context ==="
 # regressed > 20pp. Silent on the no-alert path so a clean session
 # stays clean. Failure of the alert script itself must not block the
 # session — wrap in `|| true`.
-if [ -x ".kimi/audit/compliance_alert.sh" ]; then
-    bash ".kimi/audit/compliance_alert.sh" 2>/dev/null || true
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+PROJECT_ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
+if [ -x "$PROJECT_ROOT/scripts/compliance_alert.sh" ]; then
+    bash "$PROJECT_ROOT/scripts/compliance_alert.sh" 2>/dev/null || true
 fi
 
 exit 0
