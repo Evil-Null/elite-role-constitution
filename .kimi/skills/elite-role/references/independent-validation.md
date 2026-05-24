@@ -163,7 +163,7 @@ IND<N>: <artifact> — <reviewer> — <YYYY-MM-DD> — <ACK | objections: a,b,c>
 Example:
 
 ```
-IND1: IMPROVEMENT_PLAN.md v1.1 — peer reviewer (Evil-Null) — 2026-05-19 — ACK, one
+IND1: IMPROVEMENT_PLAN.md v1.1 — peer reviewer (null0xxx) — 2026-05-19 — ACK, one
       note: Phase D.3 Compatibility line could also reference 00_ROLE.md author.
 ```
 

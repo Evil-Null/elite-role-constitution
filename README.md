@@ -4,7 +4,7 @@
 > follow strict engineering discipline: plan before acting, cite evidence,
 > never write secrets, save state between sessions.
 
-[![Integrity Check](https://github.com/Evil-Null/elite-role-constitution/actions/workflows/integrity.yml/badge.svg)](https://github.com/Evil-Null/elite-role-constitution/actions/workflows/integrity.yml)
+[![Integrity Check](https://github.com/null0xxx/elite-role-constitution/actions/workflows/integrity.yml/badge.svg)](https://github.com/null0xxx/elite-role-constitution/actions/workflows/integrity.yml)
 
 ---
 
@@ -45,7 +45,7 @@ line.
 ## Install
 
 ```bash
-git clone https://github.com/Evil-Null/elite-role-constitution.git
+git clone https://github.com/null0xxx/elite-role-constitution.git
 cd elite-role-constitution
 bash install.sh --yes
 ```

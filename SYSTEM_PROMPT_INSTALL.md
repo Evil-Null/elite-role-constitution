@@ -36,7 +36,7 @@ If below 1.43, follow §6 (paste-in fallback) instead.
 ## Step 1 — Get the repo on disk
 
 ```bash
-git clone https://github.com/Evil-Null/elite-role-constitution.git
+git clone https://github.com/null0xxx/elite-role-constitution.git
 cd elite-role-constitution
 bash SYSTEM_INTEGRITY_CHECK.sh    # expect "ALL CHECKS PASS" (10/10)
 chmod +x .kimi/hooks/*.sh         # if the +x bit did not survive a copy/zip

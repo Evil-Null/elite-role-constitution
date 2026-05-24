@@ -49,7 +49,7 @@ Close the gaps identified by the 2026-05-18 audit while preserving the v2.4 cont
 
 **0.1.** Before Phase A executes, the user must obtain at least one independent reviewer pass on **this plan**. Acceptable forms:
   - A second Claude session (different conversation, no shared memory) reads v1.1 and either ACK or contradicts.
-  - A human peer review (Evil-Null reads top-to-bottom, marks disagreement inline).
+  - A human peer review (null0xxx reads top-to-bottom, marks disagreement inline).
   - A different LLM (Kimi, Gemini, GPT) given the plan as input and asked to find ≥1 flaw not already in §13.
 
 **Why blocking:** the original 47/60 audit and this plan are both single-reviewer artifacts; the doctrine's stated weakness #1 is single-session validation. Skipping Phase 0 perpetuates the exact flaw the doctrine names.
